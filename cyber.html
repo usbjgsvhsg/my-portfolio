@@ -16,7 +16,6 @@
         
         .tips-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; }
         
-        /* تصميم البطاقات التفاعلية القابلة للضغط */
         .tip-card { background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; overflow: hidden; transition: border-color 0.2s; }
         .tip-header { padding: 14px 15px; font-size: 14px; font-weight: 600; color: #4ade80; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; background-color: #0f172a; }
         .tip-header:hover { background-color: #162032; }
@@ -42,8 +41,7 @@
         <div class="section-title">إرشادات الحماية التفاعلية</div>
         
         <div class="tips-list">
-            <!-- البطاقة الأولى -->
-            <div class="tip-card" id="card1" onclick="toggleCard('card1')">
+            <div class="tip-card active" id="card1" onclick="toggleCard('card1')">
                 <div class="tip-header">
                     <span>1. المصادقة الثنائية (2FA)</span>
                     <span class="arrow">▼</span>
@@ -53,18 +51,16 @@
                 </div>
             </div>
 
-            <!-- البطاقة الثانية -->
             <div class="tip-card" id="card2" onclick="toggleCard('card2')">
                 <div class="tip-header">
                     <span>2. التصيد والاحتيال (Phishing)</span>
                     <span class="arrow">▼</span>
                 </div>
                 <div class="tip-content">
-                    لا تضغط على الروابط المجهولة المرسلة عبر الرسائل الوهمية التي تدعي ربح جوائز أو تحديث بيانات بنكية، وتأكد دائماً من الروابط الرسمية للموافقة قبل إدخال أي بيانات حساسة.
+                    لا تضغط على الروابط المجهولة المرسلة عبر الرسائل الوهمية التي تدعي ربح جوائز أو تحديث بيانات بنكية، وتأكد دائماً من الروابط الرسمية للمواقع قبل إدخال أي بيانات حساسة.
                 </div>
             </div>
 
-            <!-- البطاقة الثالثة -->
             <div class="tip-card" id="card3" onclick="toggleCard('card3')">
                 <div class="tip-header">
                     <span>3. تأمين الحسابات وكلمات المرور</span>
@@ -90,14 +86,12 @@
     <script>
         function toggleCard(cardId) {
             const selectedCard = document.getElementById(cardId);
-            // إغلاق باقي البطاقات (اختياري لفتح بطاقة واحدة تلو الأخرى بسلاسة)
             const cards = document.querySelectorAll('.tip-card');
             cards.forEach(card => {
                 if (card.id !== cardId) {
                     card.classList.remove('active');
                 }
             });
-            // تبديل حالة البطاقة المختارة
             selectedCard.classList.toggle('active');
         }
     </script>
