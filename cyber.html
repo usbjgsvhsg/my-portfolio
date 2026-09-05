@@ -12,11 +12,19 @@
         .developer-tag { text-align: center; font-size: 13px; color: #38bdf8; margin-bottom: 15px; font-weight: 600; }
         p.subtitle { font-size: 13px; color: #94a3b8; text-align: center; margin-bottom: 25px; }
 
-        .section-title { font-size: 15px; color: #38bdf8; margin-bottom: 10px; font-weight: 600; border-right: 3px solid #0284c7; padding-right: 8px; }
+        .section-title { font-size: 15px; color: #38bdf8; margin-bottom: 12px; font-weight: 600; border-right: 3px solid #0284c7; padding-right: 8px; }
         
-        .tips-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
-        .tip-card { background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px 15px; font-size: 13px; line-height: 1.6; color: #cbd5e1; }
-        .tip-card b { color: #4ade80; }
+        .tips-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; }
+        
+        /* تصميم البطاقات التفاعلية القابلة للضغط */
+        .tip-card { background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; overflow: hidden; transition: border-color 0.2s; }
+        .tip-header { padding: 14px 15px; font-size: 14px; font-weight: 600; color: #4ade80; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; background-color: #0f172a; }
+        .tip-header:hover { background-color: #162032; }
+        .tip-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease-out; padding: 0 15px; font-size: 13px; line-height: 1.6; color: #cbd5e1; background-color: #0b1120; }
+        
+        .arrow { transition: transform 0.3s; font-size: 12px; color: #38bdf8; }
+        .tip-card.active .tip-content { max-height: 150px; padding: 12px 15px; border-top: 1px solid #334155; }
+        .tip-card.active .arrow { transform: rotate(180deg); }
 
         .nav-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 20px; font-size: 12px; border-top: 1px solid #334155; padding-top: 15px; text-align: center; }
         .nav-link { color: #38bdf8; text-decoration: none; font-weight: 600; background: #0f172a; padding: 8px; border-radius: 6px; border: 1px solid #334155; transition: background 0.2s; }
@@ -29,19 +37,42 @@
     <div class="container">
         <h1>بوابة الأمن السيبراني العراقي 🛡️</h1>
         <div class="developer-tag">إشراف وتطوير: قصي كاظم منديل</div>
-        <p class="subtitle">إرشادات توعوية متقدمة لتأمين الفضاء الرقمي وحماية الحسابات الشخصية</p>
+        <p class="subtitle">انقر على أي إرشاد أدناه لعرض التفاصيل الأمنية المتقدمة</p>
         
-        <div class="section-title">أبرز إرشادات الحماية الرقمية</div>
+        <div class="section-title">إرشادات الحماية التفاعلية</div>
         
         <div class="tips-list">
-            <div class="tip-card">
-                <b>1. المصادقة الثنائية (2FA):</b> فعّل التحقق بخطوتين على كافة حساباتك الحساسة (مثل البريد، وسائل التواصل) باستخدام تطبيقات المصادقة مثل Google Authenticator لضمان عدم الاختراق حتى لو تسربت كلمة المرور.
+            <!-- البطاقة الأولى -->
+            <div class="tip-card" id="card1" onclick="toggleCard('card1')">
+                <div class="tip-header">
+                    <span>1. المصادقة الثنائية (2FA)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="tip-content">
+                    فعّل التحقق بخطوتين على كافة حساباتك الحساسة (مثل البريد، وسائل التواصل) باستخدام تطبيقات المصادقة مثل Google Authenticator لضمان عدم الاختراق حتى لو تسربت كلمة المرور.
+                </div>
             </div>
-            <div class="tip-card">
-                <b>2. التصيد والاحتيال (Phishing):</b> لا تضغط على الروابط المجهولة المرسلة عبر الرسائل الوهمية التي تدعي ربح جوائز أو تحديث بيانات بنكية، وتأكد دائماً من الروابط الرسمية للمواقع قبل إدخال أي بيانات.
+
+            <!-- البطاقة الثانية -->
+            <div class="tip-card" id="card2" onclick="toggleCard('card2')">
+                <div class="tip-header">
+                    <span>2. التصيد والاحتيال (Phishing)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="tip-content">
+                    لا تضغط على الروابط المجهولة المرسلة عبر الرسائل الوهمية التي تدعي ربح جوائز أو تحديث بيانات بنكية، وتأكد دائماً من الروابط الرسمية للموافقة قبل إدخال أي بيانات حساسة.
+                </div>
             </div>
-            <div class="tip-card">
-                <b>3. تأمين الحسابات وكلمات المرور:</b> تجنب استخدام كلمات مرور مكررة أو سهلة التخمين، واحرص على دمج الرموز، الأرقام، والحروف الكبيرة والصغيرة لتعقيد الحسابات وجعلها مستحيلة الاختراق.
+
+            <!-- البطاقة الثالثة -->
+            <div class="tip-card" id="card3" onclick="toggleCard('card3')">
+                <div class="tip-header">
+                    <span>3. تأمين الحسابات وكلمات المرور</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="tip-content">
+                    تجنب استخدام كلمات مرور مكررة أو سهلة التخمين، واحرص على دمج الرموز، الأرقام، والحروف الكبيرة والصغيرة لتعقيد الحسابات وجعلها مستحيلة الاختراق.
+                </div>
             </div>
         </div>
 
@@ -55,6 +86,21 @@
             جميع الحقوق محفوظة © 2026 - قصي كاظم منديل
         </div>
     </div>
+
+    <script>
+        function toggleCard(cardId) {
+            const selectedCard = document.getElementById(cardId);
+            // إغلاق باقي البطاقات (اختياري لفتح بطاقة واحدة تلو الأخرى بسلاسة)
+            const cards = document.querySelectorAll('.tip-card');
+            cards.forEach(card => {
+                if (card.id !== cardId) {
+                    card.classList.remove('active');
+                }
+            });
+            // تبديل حالة البطاقة المختارة
+            selectedCard.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
 
