@@ -7,7 +7,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .container { background-color: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); width: 100%; max-width: 450px; border: 1px solid #334155; }
+        .container { background-color: #1e293b; padding: 30px; border-radius: 14px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); width: 100%; max-width: 460px; border: 1px solid #334155; }
         h1 { font-size: 22px; margin-bottom: 5px; color: #38bdf8; text-align: center; }
         .developer-tag { text-align: center; font-size: 13px; color: #38bdf8; margin-bottom: 10px; font-weight: 600; }
         p.subtitle { font-size: 13px; color: #94a3b8; text-align: center; margin-bottom: 25px; }
@@ -15,9 +15,11 @@
         label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: #cbd5e1; }
         input[type="email"] { width: 100%; padding: 12px 15px; background-color: #0f172a; border: 1px solid #475569; border-radius: 8px; color: #fff; font-size: 15px; outline: none; }
         input[type="email"]:focus { border-color: #38bdf8; }
-        button { width: 100%; padding: 12px; background-color: #0284c7; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        button:hover { background-color: #0369a1; }
-        .result-box { margin-top: 20px; padding: 15px; background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; display: none; font-size: 14px; line-height: 1.6; }
+        button.check-btn { width: 100%; padding: 12px; background-color: #0284c7; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        button.check-btn:hover { background-color: #0369a1; }
+        .result-box { margin-top: 20px; padding: 16px; background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; display: none; font-size: 14px; line-height: 1.6; }
+        .copy-btn { margin-top: 15px; width: 100%; padding: 10px; background-color: #0369a1; color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; display: block; text-align: center; }
+        .copy-btn:hover { background-color: #0284c7; }
         .footer { text-align: center; margin-top: 25px; font-size: 12px; color: #64748b; border-top: 1px solid #334155; padding-top: 12px; }
     </style>
 </head>
@@ -32,9 +34,12 @@
             <input type="email" id="emailInput" placeholder="example@domain.com">
         </div>
         
-        <button onclick="checkEmail()">بدء الفحص</button>
+        <button class="check-btn" onclick="checkEmail()">بدء الفحص</button>
         
-        <div id="resultBox" class="result-box"></div>
+        <div id="resultBox" class="result-box">
+            <div id="resultText"></div>
+            <button class="copy-btn" onclick="copyResults()">📋 نسخ تقرير الفحص</button>
+        </div>
         
         <div class="footer">
             جميع الحقوق محفوظة © 2026 - قصي كاظم منديل
@@ -45,11 +50,12 @@
         function checkEmail() {
             const email = document.getElementById('emailInput').value.trim();
             const resultDiv = document.getElementById('resultBox');
+            const resultText = document.getElementById('resultText');
             
             if (!email || !email.includes('@')) {
                 resultDiv.style.display = 'block';
-                resultDiv.style.color = '#f87171';
-                resultDiv.innerHTML = '⚠️ الرجاء إدخال بريد إلكتروني صحيح!';
+                resultText.style.color = '#f87171';
+                resultText.innerHTML = '⚠️ الرجاء إدخال بريد إلكتروني صحيح!';
                 return;
             }
 
@@ -69,8 +75,9 @@
             }
 
             resultDiv.style.display = 'block';
-            resultDiv.style.color = '#f8fafc';
-            resultDiv.innerHTML = `
+            resultText.style.color = '#f8fafc';
+            
+            resultText.innerHTML = `
                 <b style="color: #38bdf8;">📊 نتائج الفحص لـ:</b> ${email}<br>
                 - <b>اسم المستخدم:</b> ${username} (طوله: ${username.length} حروف)<br>
                 - <b>الدومين:</b> ${domain}<br>
@@ -78,6 +85,20 @@
                 - <b>الصيغة:</b> صحيحة وفعالة ✔️<br>
                 - <b>الحالة الأمنية:</b> غير مسرب في القواعد الوهمية (محاكاة) 🛡️
             `;
+        }
+
+        function copyResults() {
+            const resultText = document.getElementById('resultText').innerText;
+            navigator.clipboard.writeText(resultText).then(() => {
+                const copyBtn = document.querySelector('.copy-btn');
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '✅ تم النسخ بنجاح!';
+                copyBtn.style.backgroundColor = '#059669';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.style.backgroundColor = '#0369a1';
+                }, 2000);
+            });
         }
     </script>
 </body>
