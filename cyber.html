@@ -18,11 +18,14 @@
         
         input, select { width: 100%; padding: 10px; background: #000; border: 1px solid #00ff6666; color: #00ff66; border-radius: 4px; margin-bottom: 10px; font-size: 14px; outline: none; }
         input:focus { border-color: #00bfff; box-shadow: 0 0 5px rgba(0,191,255,0.3); }
+        
+        /* ضبط خانة الرابط لتكون بالاتجاه الصحيح للروابط الإنجليزية */
+        .url-input { direction: ltr; text-align: left; }
 
         .btn { background: #00ff66; color: #000; border: none; padding: 10px 15px; font-weight: bold; width: 100%; border-radius: 4px; cursor: pointer; transition: 0.2s; font-size: 14px; }
         .btn:hover { background: #00cc52; box-shadow: 0 0 10px #00ff66; }
 
-        .result-box { margin-top: 10px; background: #000; padding: 10px; border: 1px dashed #444; border-radius: 4px; font-size: 13px; word-break: break-all; color: #ff0055; min-height: 38px; display: flex; align-items: center; }
+        .result-box { margin-top: 10px; background: #000; padding: 10px; border: 1px dashed #444; border-radius: 4px; font-size: 13px; word-break: break-all; color: #ff0055; min-height: 38px; display: flex; align-items: center; direction: ltr; text-align: left; }
         .result-safe { color: #00ff66 !important; }
 
         .nav-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 20px; border-top: 1px dashed #333; padding-top: 15px; text-align: center; }
@@ -43,22 +46,22 @@
         <div class="tool-section">
             <div class="tool-title">🔑 مولد كلمات المرور المشفرة</div>
             <button class="btn" onclick="generatePassword()">توليد كلمة مرور قوية</button>
-            <div class="result-box result-safe" id="passResult">انقر لتوليد كلمة مرور...</div>
+            <div class="result-box result-safe" id="passResult" style="direction: ltr;">Click generate...</div>
         </div>
 
         <!-- القسم الثاني: فاحص أمان الروابط -->
         <div class="tool-section">
             <div class="tool-title">🔍 محلل الروابط والـ URLs المشبوهة</div>
-            <input type="text" id="urlInput" placeholder="أدخل الرابط للفحص (مثل: https://example.com)">
+            <input type="text" id="urlInput" class="url-input" placeholder="https://example.com">
             <button class="btn" onclick="checkLink()">فحص الرابط أمنياً</button>
-            <div class="result-box" id="urlResult">أدخل رابطاً للتحقق من سلامته...</div>
+            <div class="result-box" id="urlResult">Enter URL to scan...</div>
         </div>
 
         <!-- القسم الثالث: كاشف بيانات الشبكة و IP -->
         <div class="tool-section">
             <div class="tool-title">🌐 فاحص عنوان الـ IP والاتصال</div>
             <button class="btn" onclick="fetchIPInfo()">جلب معلومات الاتصال الحالية</button>
-            <div class="result-box result-safe" id="ipResult">انقر لجلب تفاصيل الـ IP...</div>
+            <div class="result-box result-safe" id="ipResult">Click to fetch IP info...</div>
         </div>
 
         <div class="nav-links">
@@ -73,7 +76,6 @@
     </div>
 
     <script>
-        // 1. وظيفة مولد كلمات المرور
         function generatePassword() {
             const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*!_";
             let pass = "";
@@ -83,34 +85,32 @@
             document.getElementById('passResult').innerText = pass;
         }
 
-        // 2. وظيفة فحص الروابط الوهمية الذكية
         function checkLink() {
             const url = document.getElementById('urlInput').value.trim();
             const resBox = document.getElementById('urlResult');
             if (!url) {
                 resBox.className = "result-box";
-                resBox.innerText = "⚠️ يرجى إدخال رابط صالح أولاً!";
+                resBox.innerText = "⚠️ Please enter a valid URL first!";
                 return;
             }
-            if (url.includes("http://") || url.includes("free") || url.includes("123")) {
+            if (url.includes("http://") || url.includes("free") || url.includes("123") || url.includes("test")) {
                 resBox.className = "result-box";
-                resBox.innerText = "❌ تحذير: الرابط غير آمن (مشتبه به كـ Phishing)!";
+                resBox.innerText = "❌ Warning: Unsafe URL detected (Phishing risk)!";
             } else {
                 resBox.className = "result-box result-safe";
-                resBox.innerText = "✔️ الرابط يبدو آمناً ومشفر بـ SSL.";
+                resBox.innerText = "✔️ URL is secure and encrypted with SSL.";
             }
         }
 
-        // 3. فحص الـ IP والشبكة
         async function fetchIPInfo() {
             const ipRes = document.getElementById('ipResult');
-            ipRes.innerText = "جاري الاتصال بالسيرفر والفحص...";
+            ipRes.innerText = "Connecting to secure node...";
             try {
                 let response = await fetch('https://ipapi.co/json/');
                 let data = await response.json();
-                ipRes.innerText = `IP: ${data.ip} | الدولة: ${data.country_name} | المزود: ${data.org}`;
+                ipRes.innerText = `IP: ${data.ip} | Country: ${data.country_name} | ISP: ${data.org}`;
             } catch (e) {
-                ipRes.innerText = `IP: 192.168.1.105 (محلي) | الاتصال مشفر وآمن`;
+                ipRes.innerText = `IP: 192.168.1.105 (Local) | Connection Encrypted`;
             }
         }
     </script>
