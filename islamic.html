@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القرآن الكريم والأذكار | Islamic Utility Site</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background-color: #1e293b; padding: 30px; border-radius: 14px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); width: 100%; max-width: 520px; border: 1px solid #334155; text-align: center; }
+        h1 { font-size: 22px; margin-bottom: 5px; color: #38bdf8; }
+        .developer-tag { font-size: 13px; color: #38bdf8; margin-bottom: 15px; font-weight: 600; }
+        p.subtitle { font-size: 13px; color: #94a3b8; margin-bottom: 20px; }
+
+        .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 20px; }
+        .tab-btn { background-color: #0f172a; border: 1px solid #334155; color: #cbd5e1; padding: 10px 5px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn.active { background-color: #0284c7; color: white; border-color: #0284c7; }
+
+        .section-content { display: none; background-color: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 20px; min-height: 160px; text-align: right; }
+        .section-content.active { display: block; }
+
+        /* تصميم المسبحة */
+        .tasbih-box { text-align: center; }
+        .tasbih-count { font-size: 48px; font-weight: bold; color: #4ade80; margin: 15px 0; }
+        .tasbih-btn { background-color: #16a34a; color: white; border: none; padding: 12px 30px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .tasbih-btn:active { transform: scale(0.95); }
+        .tasbih-reset { background: none; border: none; color: #f87171; font-size: 12px; margin-top: 10px; cursor: pointer; display: block; margin-left: auto; margin-right: auto; }
+
+        /* النصوص والآيات */
+        .card-text { font-size: 15px; line-height: 1.8; color: #e2e8f0; text-align: center; }
+
+        .nav-links { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 20px; font-size: 11px; border-top: 1px solid #334155; padding-top: 15px; text-align: center; }
+        .nav-link { color: #38bdf8; text-decoration: none; font-weight: 600; background: #0f172a; padding: 8px 4px; border-radius: 6px; border: 1px solid #334155; transition: background 0.2s; }
+        .nav-link:hover { background: #1e293b; border-color: #38bdf8; }
+        
+        .footer { text-align: center; margin-top: 15px; font-size: 12px; color: #64748b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>القرآن الكريم والأذكار 📿</h1>
+        <div class="developer-tag">إشراف وتطوير: قصي كاظم منديل</div>
+        <p class="subtitle">ملاذ هادئ لذكر الله وتلاوة آيات الذكر الحكيم</p>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(0)">المسبحة الإلكترونية</button>
+            <button class="tab-btn" onclick="switchTab(1)">أذكار الصباح</button>
+            <button class="tab-btn" onclick="switchTab(2)">آيات مختارة</button>
+        </div>
+
+        <!-- قسم المسبحة -->
+        <div class="section-content tasbih-box active" id="tab0">
+            <div style="color: #38bdf8; font-size: 14px; font-weight: bold;">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</div>
+            <div class="tasbih-count" id="countDisplay">0</div>
+            <button class="tasbih-btn" onclick="incrementTasbih()">سبّح</button>
+            <button class="tasbih-reset" onclick="resetTasbih()">إعادة العداد</button>
+        </div>
+
+        <!-- قسم الأذكار -->
+        <div class="section-content" id="tab1">
+            <div class="card-text">
+                "أصبحنا وأصبح الملك لله، والحمد لله، لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير."<br><br>
+                <span style="color: #38bdf8; font-size: 13px;">(تُقرأ مرة واحدة صباحاً)</span>
+            </div>
+        </div>
+
+        <!-- قسم الآيات -->
+        <div class="section-content" id="tab2">
+            <div class="card-text" style="font-family: 'Amiri', serif;">
+                "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تأخذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ"<br><br>
+                <span style="color: #4ade80; font-size: 13px;">[سورة البقرة - آية 255]</span>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">فحص الإيميل</a>
+            <a href="weather.html" class="nav-link">الطقس</a>
+            <a href="password.html" class="nav-link">مولد السر</a>
+            <a href="cyber.html" class="nav-link">الأمن</a>
+        </div>
+        
+        <div class="footer">
+            جميع الحقوق محفوظة © 2026 - قصي كاظم منديل
+        </div>
+    </div>
+
+    <script>
+        let count = 0;
+        function incrementTasbih() {
+            count++;
+            document.getElementById('countDisplay').innerText = count;
+        }
+
+        function resetTasbih() {
+            count = 0;
+            document.getElementById('countDisplay').innerText = count;
+        }
+
+        function switchTab(index) {
+            const contents = document.querySelectorAll('.section-content');
+            const buttons = document.querySelectorAll('.tab-btn');
+            
+            contents.forEach((content, i) => {
+                if (i === index) {
+                    content.classList.add('active');
+                    buttons[i].classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                    buttons[i].classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
