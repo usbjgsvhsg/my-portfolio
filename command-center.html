@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي العمليات السيبرانية وغرفة العمليات | Qusay Mandeel</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #050505; color: #00ff66; min-height: 100vh; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 750px; background: #0a0a0a; border: 1px solid #00ff6655; border-radius: 10px; padding: 25px; box-shadow: 0 0 25px rgba(0,255,102,0.15); }
+        
+        header { text-align: center; margin-bottom: 25px; border-bottom: 1px dashed #00ff6644; padding-bottom: 15px; }
+        h1 { font-size: 20px; color: #00ff66; margin-bottom: 5px; font-weight: bold; }
+        .dev-tag { font-size: 13px; color: #00bfff; }
+
+        .section { background: #111; border-radius: 8px; padding: 15px; margin-bottom: 15px; border: 1px solid #222; }
+        .section-title { font-size: 14px; font-weight: bold; color: #00bfff; margin-bottom: 10px; }
+        
+        .grid-buttons { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+        @media (max-width: 480px) { .grid-buttons { grid-template-columns: 1fr; } }
+
+        .btn { background: #000; border: 1px solid #00ff66; color: #00ff66; padding: 10px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 12px; text-align: center; }
+        .btn:hover { background: #00ff66; color: #000; box-shadow: 0 0 10px #00ff66; }
+
+        .siem-screen { margin-top: 10px; background: #000; padding: 15px; border: 1px dashed #444; border-radius: 6px; font-size: 12px; color: #00ff66; direction: ltr; text-align: left; height: 180px; overflow-y: auto; font-family: monospace; line-height: 1.5; }
+        
+        .nav-link { display: block; text-align: center; margin-top: 20px; color: #00bfff; text-decoration: none; font-size: 13px; }
+        .nav-link:hover { text-decoration: underline; }
+        
+        .footer { text-align: center; font-size: 12px; color: #666; margin-top: 20px; border-top: 1px dashed #333; padding-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚨 غرفة العمليات الأمنية (SOC Command Center)</h1>
+            <div class="dev-tag">إشراف وتطوير: قصي كاظم منديل</div>
+        </header>
+
+        <div class="section">
+            <div class="section-title">⚡ حدد سيناريو الهجوم الميداني (Red Team Simulation)</div>
+            <div class="grid-buttons">
+                <button class="btn" onclick="startSimulation('ddos')">هجوم حجب الخدمة (DDoS)</button>
+                <button class="btn" onclick="startSimulation('sqli')">حقن قواعد البيانات (SQLi)</button>
+                <button class="btn" onclick="startSimulation('ransomware')">برمجيات فدية (Ransomware)</button>
+            </div>
+            <div class="siem-screen" id="siemLog">[Waiting for incident simulation trigger...]</div>
+        </div>
+
+        <a href="index.html" class="nav-link">← العودة إلى لوحة التحكم الرئيسية</a>
+
+        <div class="footer">
+            جميع الحقوق محفوظة © 2026 - قصي كاظم منديل
+        </div>
+    </div>
+
+    <script>
+        function startSimulation(type) {
+            const logBox = document.getElementById('siemLog');
+            logBox.innerHTML = "[~] Initializing SIEM sensors and capturing packet telemetry...\n";
+            
+            let logs = [];
+            if (type === 'ddos') {
+                logs = [
+                    "[!] ALERT: High volume of SYN packets detected on port 443.",
+                    "[!] Source IPs: 185.220.x.x (Tor exit node / Botnet swarm)",
+                    "[!] Bandwidth consumption spikes to 45 Gbps.",
+                    "[SOC Action] Triggering Rate Limiting & Cloudflare WAF Shield...",
+                    "[✔] Status: Attack mitigated successfully. Traffic normalized."
+                ];
+            } else if (type === 'sqli') {
+                logs = [
+                    "[!] ALERT: Suspicious SQL payload detected in HTTP GET parameter.",
+                    "[!] Payload: ' OR 1=1 -- [Target: /auth/login.php]",
+                    "[!] Database error thrown: Unclosed quotation mark after character string.",
+                    "[SOC Action] Isolating session and blacklisting attacker fingerprint...",
+                    "[✔] Status: Injection blocked. Input sanitization enforced."
+                ];
+            } else if (type === 'ransomware') {
+                logs = [
+                    "[!] CRITICAL ALERT: Rapid file modification rate on Endpoint #104.",
+                    "[!] Process spawned: unknown_payload.exe writing .locked extensions.",
+                    "[!] Lateral movement attempt intercepted on SMB port 445.",
+                    "[SOC Action] Executing emergency network isolation on Endpoint #104...",
+                    "[✔] Status: Host contained. Zero-day execution halted."
+                ];
+            }
+
+            let i = 0;
+            let interval = setInterval(() => {
+                if (i < logs.length) {
+                    logBox.innerHTML += logs[i] + "\n";
+                    logBox.scrollTop = logBox.scrollHeight;
+                    i++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 700);
+        }
+    </script>
+</body>
+</html>
+
