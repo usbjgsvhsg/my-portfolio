@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محطة الطقس العراقية والعالمية | Weather Station</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background-color: #1e293b; padding: 30px; border-radius: 14px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); width: 100%; max-width: 520px; border: 1px solid #334155; }
+        h1 { font-size: 22px; margin-bottom: 5px; color: #38bdf8; text-align: center; }
+        .developer-tag { text-align: center; font-size: 13px; color: #38bdf8; margin-bottom: 15px; font-weight: 600; }
+        p.subtitle { font-size: 13px; color: #94a3b8; text-align: center; margin-bottom: 20px; }
+
+        .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
+        input { flex: 1; background-color: #0f172a; border: 1px solid #334155; padding: 12px; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+        input:focus { border-color: #38bdf8; }
+        button { background-color: #0284c7; color: white; border: none; padding: 0 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        button:hover { background-color: #0369a1; }
+
+        .quick-cities { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 20px; }
+        .city-btn { background-color: #0f172a; border: 1px solid #334155; color: #cbd5e1; padding: 8px 4px; border-radius: 6px; font-size: 12px; cursor: pointer; text-align: center; transition: all 0.2s; }
+        .city-btn:hover { background-color: #162032; border-color: #38bdf8; color: #38bdf8; }
+
+        .weather-card { background-color: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 20px; text-align: center; display: none; }
+        .weather-card.active { display: block; }
+        .city-name { font-size: 20px; font-weight: bold; color: #4ade80; margin-bottom: 10px; }
+        .temp { font-size: 42px; font-weight: bold; color: #f8fafc; margin-bottom: 5px; }
+        .desc { font-size: 15px; color: #38bdf8; margin-bottom: 15px; text-transform: capitalize; }
+        .details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px; color: #94a3b8; border-top: 1px solid #334155; padding-top: 12px; }
+
+        .nav-links { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 20px; font-size: 11px; border-top: 1px solid #334155; padding-top: 15px; text-align: center; }
+        .nav-link { color: #38bdf8; text-decoration: none; font-weight: 600; background: #0f172a; padding: 8px 4px; border-radius: 6px; border: 1px solid #334155; transition: background 0.2s; }
+        .nav-link:hover { background: #1e293b; border-color: #38bdf8; }
+        
+        .footer { text-align: center; margin-top: 15px; font-size: 12px; color: #64748b; }
+        .error-msg { color: #f87171; font-size: 13px; text-align: center; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>محطة الطقس العراقية والعالمية 🌤️</h1>
+        <div class="developer-tag">إشراف وتطوير: قصي كاظم منديل</div>
+        <p class="subtitle">تابع حالة الطقس ودرجات الحرارة لحظة بلحظة</p>
+        
+        <div class="search-box">
+            <input type="text" id="cityInput" placeholder="ادخل اسم المدينة (مثلاً: Basra, Baghdad)...">
+            <button onclick="getWeather()">بحث</button>
+        </div>
+
+        <div class="quick-cities">
+            <div class="city-btn" onclick="fetchCity('Basra')">البصرة</div>
+            <div class="city-btn" onclick="fetchCity('Baghdad')">بغداد</div>
+            <div class="city-btn" onclick="fetchCity('Erbil')        </div>
+            <div class="city-btn" onclick="fetchCity('Najaf')">النجف</div>
+        </div>
+
+        <div id="errorMsg" class="error-msg">عذراً، لم يتم العثور على المدينة المطلوبة. تأكد من الإملاء بالإنجليزية.</div>
+
+        <div id="weatherCard" class="weather-card">
+            <div class="city-name" id="displayCity">--</div>
+            <div class="temp" id="displayTemp">--°C</div>
+            <div class="desc" id="displayDesc">--</div>
+            <div class="details">
+                <div>الرطوبة: <span id="displayHumidity">--</span>%</div>
+                <div>سرعة الرياح: <span id="displayWind">--</span> م/ث</div>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">فحص الإيميل</a>
+            <a href="counter.html" class="nav-link">العدادات</a>
+            <a href="password.html" class="nav-link">مولد السر</a>
+            <a href="cyber.html" class="nav-link">الأمن</a>
+        </div>
+        
+        <div class="footer">
+            جميع الحقوق محفوظة © 2026 - قصي كاظم منديل
+        </div>
+    </div>
+
+    <script>
+        const apiKey = 'YOUR_API_KEY'; // ملاحظة: سنستخدم واجهة مجانية عامة للطقس لا تتطلب مفتاح معقد أو نربطها بـ wttr.in لسهولة وسرعة التشغيل
+
+        async function fetchCity(cityName) {
+            document.getElementById('cityInput').value = cityName;
+            getWeather();
+        }
+
+        async function getWeather() {
+            const city = document.getElementById('cityInput').value.trim();
+            const card = document.getElementById('weatherCard');
+            const errorMsg = document.getElementById('errorMsg');
+            
+            if (!city) return;
+
+            try {
+                // استخدام خدمة wttr.in المجانية بصيغة JSON لسهولة العرض المباشر بدون تعقيد مفاتيح الـ API
+                const response = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=j1`);
+                if (!response.ok) throw new Error('City not found');
+                
+                const data = await response.json();
+                const current = data.current_condition[0];
+                
+                document.getElementById('displayCity').innerText = city.toUpperCase();
+                document.getElementById('displayTemp').innerText = current.temp_C + '°C';
+                document.getElementById('displayDesc').innerText = current.weatherDesc[0].value;
+                document.getElementById('displayHumidity').innerText = current.humidity;
+                document.getElementById('displayWind').innerText = current.windspeedKmph;
+
+                card.classList.add('active');
+                errorMsg.style.display = 'none';
+            } catch (error) {
+                card.classList.remove('active');
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // جلب طقس البصرة افتراضياً عند فتح الصفحة
+        window.onload = () => {
+            fetchCity('Basra');
+        };
+    </script>
+</body>
+</html>
+
