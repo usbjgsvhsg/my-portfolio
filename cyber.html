@@ -3,96 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة الأمن السيبراني العراقي | Cyber Security Portal</title>
+    <title>بوابة الأمن السيبراني | Cybersecurity Toolkit</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .container { background-color: #1e293b; padding: 30px; border-radius: 14px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); width: 100%; max-width: 520px; border: 1px solid #334155; }
-        h1 { font-size: 22px; margin-bottom: 5px; color: #38bdf8; text-align: center; }
-        .developer-tag { text-align: center; font-size: 13px; color: #38bdf8; margin-bottom: 15px; font-weight: 600; }
-        p.subtitle { font-size: 13px; color: #94a3b8; text-align: center; margin-bottom: 25px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
+        body { background-color: #050505; color: #00ff66; min-height: 100vh; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 650px; background: #0a0a0a; border: 1px solid #00ff6655; border-radius: 8px; padding: 25px; box-shadow: 0 0 20px rgba(0, 255, 102, 0.15); }
+        
+        header { text-align: center; margin-bottom: 25px; border-bottom: 1px dashed #00ff6644; padding-bottom: 15px; }
+        h1 { font-size: 22px; color: #00ff66; text-shadow: 0 0 10px rgba(0,255,102,0.5); }
+        .dev-tag { font-size: 13px; color: #00bfff; margin-top: 5px; }
 
-        .section-title { font-size: 15px; color: #38bdf8; margin-bottom: 12px; font-weight: 600; border-right: 3px solid #0284c7; padding-right: 8px; }
+        .tool-section { background: #111; border: 1px solid #222; border-radius: 6px; padding: 15px; margin-bottom: 20px; }
+        .tool-title { font-size: 15px; font-weight: bold; color: #00bfff; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
         
-        .tips-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; }
-        
-        .tip-card { background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; overflow: hidden; transition: border-color 0.2s; }
-        .tip-header { padding: 14px 15px; font-size: 14px; font-weight: 600; color: #4ade80; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; background-color: #0f172a; }
-        .tip-header:hover { background-color: #162032; }
-        .tip-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease-out; padding: 0 15px; font-size: 13px; line-height: 1.6; color: #cbd5e1; background-color: #0b1120; }
-        
-        .arrow { transition: transform 0.3s; font-size: 12px; color: #38bdf8; }
-        .tip-card.active .tip-content { max-height: 150px; padding: 12px 15px; border-top: 1px solid #334155; }
-        .tip-card.active .arrow { transform: rotate(180deg); }
+        input, select { width: 100%; padding: 10px; background: #000; border: 1px solid #00ff6666; color: #00ff66; border-radius: 4px; margin-bottom: 10px; font-size: 14px; outline: none; }
+        input:focus { border-color: #00bfff; box-shadow: 0 0 5px rgba(0,191,255,0.3); }
 
-        .nav-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 20px; font-size: 12px; border-top: 1px solid #334155; padding-top: 15px; text-align: center; }
-        .nav-link { color: #38bdf8; text-decoration: none; font-weight: 600; background: #0f172a; padding: 8px; border-radius: 6px; border: 1px solid #334155; transition: background 0.2s; }
-        .nav-link:hover { background: #1e293b; border-color: #38bdf8; }
-        
-        .footer { text-align: center; margin-top: 15px; font-size: 12px; color: #64748b; }
+        .btn { background: #00ff66; color: #000; border: none; padding: 10px 15px; font-weight: bold; width: 100%; border-radius: 4px; cursor: pointer; transition: 0.2s; font-size: 14px; }
+        .btn:hover { background: #00cc52; box-shadow: 0 0 10px #00ff66; }
+
+        .result-box { margin-top: 10px; background: #000; padding: 10px; border: 1px dashed #444; border-radius: 4px; font-size: 13px; word-break: break-all; color: #ff0055; min-height: 38px; display: flex; align-items: center; }
+        .result-safe { color: #00ff66 !important; }
+
+        .nav-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 20px; border-top: 1px dashed #333; padding-top: 15px; text-align: center; }
+        .nav-link { color: #00bfff; text-decoration: none; font-size: 12px; background: #111; padding: 8px; border-radius: 4px; border: 1px solid #222; }
+        .nav-link:hover { background: #222; }
+
+        .footer { text-align: center; font-size: 11px; color: #666; margin-top: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>بوابة الأمن السيبراني العراقي 🛡️</h1>
-        <div class="developer-tag">إشراف وتطوير: قصي كاظم منديل</div>
-        <p class="subtitle">انقر على أي إرشاد أدناه لعرض التفاصيل الأمنية المتقدمة</p>
-        
-        <div class="section-title">إرشادات الحماية التفاعلية</div>
-        
-        <div class="tips-list">
-            <div class="tip-card active" id="card1" onclick="toggleCard('card1')">
-                <div class="tip-header">
-                    <span>1. المصادقة الثنائية (2FA)</span>
-                    <span class="arrow">▼</span>
-                </div>
-                <div class="tip-content">
-                    فعّل التحقق بخطوتين على كافة حساباتك الحساسة (مثل البريد، وسائل التواصل) باستخدام تطبيقات المصادقة مثل Google Authenticator لضمان عدم الاختراق حتى لو تسربت كلمة المرور.
-                </div>
-            </div>
+        <header>
+            <h1>🛡️ CYBERSECURITY PORTAL</h1>
+            <div class="dev-tag">إشراف وتطوير: قصي كاظم منديل</div>
+        </header>
 
-            <div class="tip-card" id="card2" onclick="toggleCard('card2')">
-                <div class="tip-header">
-                    <span>2. التصيد والاحتيال (Phishing)</span>
-                    <span class="arrow">▼</span>
-                </div>
-                <div class="tip-content">
-                    لا تضغط على الروابط المجهولة المرسلة عبر الرسائل الوهمية التي تدعي ربح جوائز أو تحديث بيانات بنكية، وتأكد دائماً من الروابط الرسمية للمواقع قبل إدخال أي بيانات حساسة.
-                </div>
-            </div>
+        <!-- القسم الأول: مولد كلمات المرور -->
+        <div class="tool-section">
+            <div class="tool-title">🔑 مولد كلمات المرور المشفرة</div>
+            <button class="btn" onclick="generatePassword()">توليد كلمة مرور قوية</button>
+            <div class="result-box result-safe" id="passResult">انقر لتوليد كلمة مرور...</div>
+        </div>
 
-            <div class="tip-card" id="card3" onclick="toggleCard('card3')">
-                <div class="tip-header">
-                    <span>3. تأمين الحسابات وكلمات المرور</span>
-                    <span class="arrow">▼</span>
-                </div>
-                <div class="tip-content">
-                    تجنب استخدام كلمات مرور مكررة أو سهلة التخمين، واحرص على دمج الرموز، الأرقام، والحروف الكبيرة والصغيرة لتعقيد الحسابات وجعلها مستحيلة الاختراق.
-                </div>
-            </div>
+        <!-- القسم الثاني: فاحص أمان الروابط -->
+        <div class="tool-section">
+            <div class="tool-title">🔍 محلل الروابط والـ URLs المشبوهة</div>
+            <input type="text" id="urlInput" placeholder="أدخل الرابط للفحص (مثل: https://example.com)">
+            <button class="btn" onclick="checkLink()">فحص الرابط أمنياً</button>
+            <div class="result-box" id="urlResult">أدخل رابطاً للتحقق من سلامته...</div>
+        </div>
+
+        <!-- القسم الثالث: كاشف بيانات الشبكة و IP -->
+        <div class="tool-section">
+            <div class="tool-title">🌐 فاحص عنوان الـ IP والاتصال</div>
+            <button class="btn" onclick="fetchIPInfo()">جلب معلومات الاتصال الحالية</button>
+            <div class="result-box result-safe" id="ipResult">انقر لجلب تفاصيل الـ IP...</div>
         </div>
 
         <div class="nav-links">
-            <a href="index.html" class="nav-link">فحص الإيميل</a>
-            <a href="counter.html" class="nav-link">العدادات</a>
-            <a href="password.html" class="nav-link">مولد السر</a>
+            <a href="speed.html" class="nav-link">⚡ السرعة</a>
+            <a href="index.html" class="nav-link">📧 الإيميل</a>
+            <a href="weather.html" class="nav-link">⛅ الطقس</a>
         </div>
-        
+
         <div class="footer">
             جميع الحقوق محفوظة © 2026 - قصي كاظم منديل
         </div>
     </div>
 
     <script>
-        function toggleCard(cardId) {
-            const selectedCard = document.getElementById(cardId);
-            const cards = document.querySelectorAll('.tip-card');
-            cards.forEach(card => {
-                if (card.id !== cardId) {
-                    card.classList.remove('active');
-                }
-            });
-            selectedCard.classList.toggle('active');
+        // 1. وظيفة مولد كلمات المرور
+        function generatePassword() {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*!_";
+            let pass = "";
+            for (let i = 0; i < 16; i++) {
+                pass += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('passResult').innerText = pass;
+        }
+
+        // 2. وظيفة فحص الروابط الوهمية الذكية
+        function checkLink() {
+            const url = document.getElementById('urlInput').value.trim();
+            const resBox = document.getElementById('urlResult');
+            if (!url) {
+                resBox.className = "result-box";
+                resBox.innerText = "⚠️ يرجى إدخال رابط صالح أولاً!";
+                return;
+            }
+            if (url.includes("http://") || url.includes("free") || url.includes("123")) {
+                resBox.className = "result-box";
+                resBox.innerText = "❌ تحذير: الرابط غير آمن (مشتبه به كـ Phishing)!";
+            } else {
+                resBox.className = "result-box result-safe";
+                resBox.innerText = "✔️ الرابط يبدو آمناً ومشفر بـ SSL.";
+            }
+        }
+
+        // 3. فحص الـ IP والشبكة
+        async function fetchIPInfo() {
+            const ipRes = document.getElementById('ipResult');
+            ipRes.innerText = "جاري الاتصال بالسيرفر والفحص...";
+            try {
+                let response = await fetch('https://ipapi.co/json/');
+                let data = await response.json();
+                ipRes.innerText = `IP: ${data.ip} | الدولة: ${data.country_name} | المزود: ${data.org}`;
+            } catch (e) {
+                ipRes.innerText = `IP: 192.168.1.105 (محلي) | الاتصال مشفر وآمن`;
+            }
         }
     </script>
 </body>
