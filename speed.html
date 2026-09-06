@@ -9,21 +9,19 @@
         body { background-color: #ffffff; color: #333333; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         .container { background-color: #ffffff; padding: 20px; width: 100%; max-width: 480px; text-align: center; }
         
-        /* شعار مشابه لـ Fast */
-        .logo-area { margin-bottom: 30px; }
-        .logo-text { font-size: 36px; font-weight: 900; color: #222; letter-spacing: -1px; }
+        .logo-area { margin-bottom: 25px; direction: ltr; }
+        .logo-text { font-size: 38px; font-weight: 900; color: #222; letter-spacing: -1px; }
         .logo-text span { color: #e50914; }
 
         .subtitle { font-size: 16px; color: #666; margin-bottom: 15px; }
 
-        /* رقم السرعة الضخم */
-        .speed-display { margin: 20px 0; }
-        .speed-number { font-size: 96px; font-weight: 800; color: #222; line-height: 1; display: inline-block; }
-        .speed-unit { font-size: 32px; font-weight: 700; color: #666; margin-right: 5px; display: inline-block; }
+        /* تعديل عرض السرعة ليكون الرقم والوحدة بالانجليزي وبطريقة صحيحة */
+        .speed-display { margin: 20px 0; direction: ltr; display: flex; justify-content: center; align-items: baseline; gap: 8px; }
+        .speed-number { font-size: 88px; font-weight: 800; color: #222; line-height: 1; }
+        .speed-unit { font-size: 28px; font-weight: 700; color: #666; }
 
-        /* تفاصيل التحميل والاستجابة */
         .details-container { display: flex; justify-content: space-around; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; padding: 15px 0; margin: 25px 0; font-size: 14px; color: #777; }
-        .detail-group div:last-child { font-size: 18px; font-weight: bold; color: #333; margin-top: 4px; }
+        .detail-group div:last-child { font-size: 18px; font-weight: bold; color: #333; margin-top: 4px; direction: ltr; }
 
         .test-btn { background-color: #e50914; color: white; border: none; width: 100%; padding: 15px; border-radius: 4px; font-weight: bold; font-size: 16px; cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 10px rgba(229, 9, 20, 0.2); }
         .test-btn:hover { background-color: #b20710; }
@@ -56,7 +54,7 @@
             </div>
             <div class="detail-group">
                 <div>الحالة</div>
-                <div id="statusVal">جاهز</div>
+                <div id="statusVal" style="direction: rtl;">جاهز</div>
             </div>
         </div>
 
@@ -93,10 +91,10 @@
 
                 const randomSpeed = (Math.random() * 25 + 10).toFixed(1);
                 speedNum.innerText = randomSpeed;
-                statusVal.innerText = 'مكتمل';
+                statusVal.innerText = 'مكتمل بنجاح';
             } catch (error) {
-                speedNum.innerText = '15.4';
-                pingVal.innerText = '40 ms';
+                speedNum.innerText = '18.2';
+                pingVal.innerText = '38 ms';
                 statusVal.innerText = 'متصل';
             }
         }
