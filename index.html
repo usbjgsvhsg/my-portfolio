@@ -3,90 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محلل الأمان المتقدم | Qusay Mandeel</title>
+    <title>لوحة التحكم السيبرانية الذكية - Smart IoT Dashboard</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #050505; color: #00ff66; min-height: 100vh; padding: 20px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 650px; background: #0a0a0a; border: 1px solid #00ff6655; border-radius: 10px; padding: 25px; box-shadow: 0 0 20px rgba(0,255,102,0.1); }
-        
-        header { text-align: center; margin-bottom: 25px; border-bottom: 1px dashed #00ff6644; padding-bottom: 15px; }
-        h1 { font-size: 22px; color: #00ff66; margin-bottom: 5px; font-weight: bold; }
-        .dev-tag { font-size: 13px; color: #00bfff; }
-
-        .section { background: #111; border-radius: 8px; padding: 15px; margin-bottom: 15px; border: 1px solid #222; }
-        .section-title { font-size: 14px; font-weight: bold; color: #00bfff; margin-bottom: 10px; }
-        
-        input { width: 100%; padding: 12px; background: #000; border: 1px solid #00ff6666; color: #00ff66; border-radius: 6px; margin-bottom: 10px; font-size: 14px; outline: none; direction: ltr; text-align: left; }
-        input:focus { border-color: #00bfff; }
-
-        .btn { background: #00ff66; color: #000; border: none; padding: 12px; font-weight: bold; width: 100%; border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 14px; }
-        .btn:hover { background: #00cc52; box-shadow: 0 0 10px #00ff66; }
-
-        .result-box { margin-top: 10px; background: #000; padding: 12px; border: 1px dashed #444; border-radius: 6px; font-size: 13px; color: #00ff66; direction: ltr; text-align: left; min-height: 50px; word-break: break-all; font-family: monospace; }
-        
-        .nav-link { display: block; text-align: center; margin-top: 20px; color: #00bfff; text-decoration: none; font-size: 13px; }
-        .nav-link:hover { text-decoration: underline; }
-        
-        .footer { text-align: center; font-size: 12px; color: #666; margin-top: 20px; border-top: 1px dashed #333; padding-top: 15px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        body {
+            background-color: #050505;
+            color: #00ff66;
+            padding: 15px;
+            direction: rtl;
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px dashed #00ff66;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        header h1 {
+            font-size: 1.4rem;
+            text-shadow: 0 0 10px #00ff66;
+        }
+        header p {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: #0d0d0d;
+            border: 1px solid #00ff6633;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.05);
+        }
+        .card h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #00ffaa;
+            border-bottom: 1px solid #222;
+            padding-bottom: 5px;
+        }
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            background: #222;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #00ff66;
+            width: 50%;
+            transition: width 0.5s ease;
+        }
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        button {
+            background: #000;
+            color: #00ff66;
+            border: 1px solid #00ff66;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #00ff66;
+            color: #000;
+            box-shadow: 0 0 10px #00ff66;
+        }
+        .terminal-log {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 10px;
+            height: 120px;
+            overflow-y: auto;
+            font-size: 0.75rem;
+            color: #00ff66;
+            line-height: 1.4;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #555;
+            margin-top: 20px;
+            border-top: 1px solid #111;
+            padding-top: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🛡️ فاحص الأمان السيبراني الحقيقي</h1>
-            <div class="dev-tag">إشراف وتطوير: قصي كاظم منديل</div>
-        </header>
 
-        <div class="section">
-            <div class="section-title">🔍 فحص تشفير أمان النطاق (SSL & Headers)</div>
-            <input type="text" id="targetUrl" placeholder="https://example.com">
-            <button class="btn" onclick="inspectSecurity()">بدء الفحص الأمني الحقيقي</button>
-            <div class="result-box" id="secResult">أدخل رابطاً لفحص بروتوكول الحماية وحالة السيرفر...</div>
+    <header>
+        <h1>⚡ Smart IoT & System Dashboard</h1>
+        <p>إشراف وتطوير: قصي كاظم منديل</p>
+    </header>
+
+    <div class="dashboard-grid">
+        <!-- مؤشر المعالج -->
+        <div class="card">
+            <h3>استهلاك المعالج (CPU Load)</h3>
+            <div class="metric-value" id="cpu-text">34%</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="cpu-bar" style="width: 34%;"></div>
+            </div>
         </div>
 
-        <a href="index.html" class="nav-link">← العودة إلى لوحة التحكم الرئيسية</a>
+        <!-- مؤشر الذاكرة -->
+        <div class="card">
+            <h3>استهلاك الذاكرة العشوائية (RAM)</h3>
+            <div class="metric-value" id="ram-text">68% (5.4GB / 8GB)</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="ram-bar" style="width: 68%; background: #ffaa00;"></div>
+            </div>
+        </div>
 
-        <div class="footer">
-            جميع الحقوق محفوظة © 2026 - قصي كاظم منديل
+        <!-- أزرار التحكم -->
+        <div class="card">
+            <h3>لوحة التحكم البرمجية (Actions)</h3>
+            <div class="controls-grid">
+                <button onclick="triggerAction('تطهير الكاش (Cache Cleared)')">تطهير الكاش</button>
+                <button onclick="triggerAction('فحص الجدار الناري (Firewall OK)')">فحص الحماية</button>
+                <button onclick="triggerAction('إعادة ضبط الاتصال (Reconnected)')">إعادة الاتصال</button>
+                <button onclick="triggerAction('تأمين السيرفر (Secured)')">تأمين شامل</button>
+            </div>
+        </div>
+
+        <!-- سجل التنبيهات -->
+        <div class="card">
+            <h3>سجل العمليات والتنبيهات (System Logs)</h3>
+            <div class="terminal-log" id="terminal">
+                [+] System initialized successfully...<br>
+                [+] Connected to local secure node...<br>
+            </div>
         </div>
     </div>
 
+    <div class="footer">
+        جميع الحقوق محفوظة © 2026 - قصي كاظم منديل
+    </div>
+
     <script>
-        async function inspectSecurity() {
-            let urlInput = document.getElementById('targetUrl').value.trim();
-            const resBox = document.getElementById('secResult');
+        // محاكاة تغير مؤشرات الأداء بشكل حي
+        setInterval(() => {
+            let cpuVal = Math.floor(Math.random() * 40) + 20; // بين 20% و 60%
+            let ramVal = Math.floor(Math.random() * 10) + 65; // بين 65% و 75%
             
-            if (!urlInput) {
-                resBox.style.color = "#ff0055";
-                resBox.innerText = "[-] الرجاء إدخال رابط صحيح (يحتوي على https://)";
-                return;
-            }
+            document.getElementById('cpu-text').innerText = cpuVal + '%';
+            document.getElementById('cpu-bar').style.width = cpuVal + '%';
+            
+            document.getElementById('ram-text').innerText = ramVal + '% (5.' + Math.floor(ramVal/10) + 'GB / 8GB)';
+            document.getElementById('ram-bar').style.width = ramVal + '%';
+        }, 3000);
 
-            if (!urlInput.startsWith('http://') && !urlInput.startsWith('https://')) {
-                urlInput = 'https://' + urlInput;
-            }
-
-            resBox.style.color = "#00bfff";
-            resBox.innerText = `[~] جاري الاتصال الآمن وفحص النطاق...`;
-
-            const startTime = performance.now();
-            try {
-                let response = await fetch(urlInput, { mode: 'no-cors', cache: 'no-cache' });
-                const endTime = performance.now();
-                let pingTime = Math.round(endTime - startTime);
-
-                resBox.style.color = "#00ff66";
-                resBox.innerHTML = `[✔] Target: ${urlInput}<br>` +
-                                   `[✔] SSL / TLS Encryption: Active (Valid Certificate)<br>` +
-                                   `[✔] Server Status: Online & Responsive<br>` +
-                                   `[⚡] Response Latency (Ping): ~${pingTime}ms`;
-            } catch (error) {
-                resBox.style.color = "#ff0055";
-                resBox.innerHTML = `[-] Target: ${urlInput}<br>` +
-                                   `[-] Error: فشل الاتصال المباشر (قد يكون الرابط خاطئاً أو يمنع الجلب الخارجي CORS).`;
-            }
+        // وظيفة أزرار التحكم وإضافة سجلات تتبع
+        function triggerAction(actionName) {
+            let terminal = document.getElementById('terminal');
+            let time = new Date().toLocaleTimeString();
+            terminal.innerHTML += `[${time}] &gt; ${actionName}<br>`;
+            terminal.scrollTop = terminal.scrollHeight; // النزول لآخر سطر تلقائياً
         }
     </script>
+
 </body>
 </html>
 
