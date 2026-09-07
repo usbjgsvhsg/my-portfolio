@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم السيبرانية الذكية - Smart IoT Dashboard</title>
+    <title>منصة الأدوات السيبرانية والذكية - Cyber & IoT Hub</title>
     <style>
         * {
             margin: 0;
@@ -24,44 +24,68 @@
             margin-bottom: 20px;
         }
         header h1 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             text-shadow: 0 0 10px #00ff66;
         }
         header p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #888;
             margin-top: 5px;
         }
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .nav-btn {
+            flex: 1;
+            background: #111;
+            color: #00ff66;
+            border: 1px solid #00ff66;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-align: center;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .nav-btn.active, .nav-btn:hover {
+            background: #00ff66;
+            color: #000;
+            box-shadow: 0 0 10px #00ff66;
+        }
+        .section-box {
+            display: none;
+        }
+        .section-box.active {
+            display: block;
         }
         .card {
             background: #0d0d0d;
             border: 1px solid #00ff6633;
             border-radius: 8px;
             padding: 15px;
+            margin-bottom: 15px;
             box-shadow: 0 0 15px rgba(0, 255, 102, 0.05);
         }
         .card h3 {
-            font-size: 1rem;
+            font-size: 0.95rem;
             margin-bottom: 10px;
             color: #00ffaa;
             border-bottom: 1px solid #222;
             padding-bottom: 5px;
         }
         .metric-value {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
             color: #fff;
-            margin: 10px 0;
+            margin: 8px 0;
         }
         .progress-bar {
             width: 100%;
             background: #222;
-            height: 8px;
+            height: 7px;
             border-radius: 4px;
             overflow: hidden;
         }
@@ -71,13 +95,23 @@
             width: 50%;
             transition: width 0.5s ease;
         }
+        input[type="text"] {
+            width: 100%;
+            background: #000;
+            border: 1px solid #00ff6666;
+            color: #00ff66;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
         .controls-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-top: 10px;
         }
-        button {
+        button.action-btn {
             background: #000;
             color: #00ff66;
             border: 1px solid #00ff66;
@@ -85,9 +119,10 @@
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 0.8rem;
             transition: 0.3s;
         }
-        button:hover {
+        button.action-btn:hover {
             background: #00ff66;
             color: #000;
             box-shadow: 0 0 10px #00ff66;
@@ -97,63 +132,82 @@
             border: 1px solid #333;
             border-radius: 5px;
             padding: 10px;
-            height: 120px;
+            height: 110px;
             overflow-y: auto;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #00ff66;
             line-height: 1.4;
         }
         .footer {
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #555;
-            margin-top: 20px;
+            margin-top: 15px;
             border-top: 1px solid #111;
-            padding-top: 10px;
+            padding-top: 8px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>⚡ Smart IoT & System Dashboard</h1>
+        <h1>⚡ Cyber & IoT Unified Hub</h1>
         <p>إشراف وتطوير: قصي كاظم منديل</p>
     </header>
 
-    <div class="dashboard-grid">
-        <!-- مؤشر المعالج -->
+    <!-- أزرار التنقل بين الأقسام -->
+    <div class="nav-tabs">
+        <div class="nav-btn active" onclick="switchTab('dashboard', this)">لوحة التحكم</div>
+        <div class="nav-btn" onclick="switchTab('scanner', this)">فاحص الأمان</div>
+        <div class="nav-btn" onclick="switchTab('logs', this)">سجلات النظام</div>
+    </div>
+
+    <!-- القسم الأول: لوحة التحكم الذكية -->
+    <div id="dashboard" class="section-box active">
         <div class="card">
             <h3>استهلاك المعالج (CPU Load)</h3>
-            <div class="metric-value" id="cpu-text">34%</div>
+            <div class="metric-value" id="cpu-text">38%</div>
             <div class="progress-bar">
-                <div class="progress-fill" id="cpu-bar" style="width: 34%;"></div>
+                <div class="progress-fill" id="cpu-bar" style="width: 38%;"></div>
             </div>
         </div>
 
-        <!-- مؤشر الذاكرة -->
         <div class="card">
             <h3>استهلاك الذاكرة العشوائية (RAM)</h3>
-            <div class="metric-value" id="ram-text">68% (5.4GB / 8GB)</div>
+            <div class="metric-value" id="ram-text">70% (5.6GB / 8GB)</div>
             <div class="progress-bar">
-                <div class="progress-fill" id="ram-bar" style="width: 68%; background: #ffaa00;"></div>
+                <div class="progress-fill" id="ram-bar" style="width: 70%; background: #ffaa00;"></div>
             </div>
         </div>
 
-        <!-- أزرار التحكم -->
         <div class="card">
-            <h3>لوحة التحكم البرمجية (Actions)</h3>
+            <h3>الأوامر السريعة (Quick Actions)</h3>
             <div class="controls-grid">
-                <button onclick="triggerAction('تطهير الكاش (Cache Cleared)')">تطهير الكاش</button>
-                <button onclick="triggerAction('فحص الجدار الناري (Firewall OK)')">فحص الحماية</button>
-                <button onclick="triggerAction('إعادة ضبط الاتصال (Reconnected)')">إعادة الاتصال</button>
-                <button onclick="triggerAction('تأمين السيرفر (Secured)')">تأمين شامل</button>
+                <button class="action-btn" onclick="logAction('تطهير الكاش (Cache Cleared)')">تطهير الكاش</button>
+                <button class="action-btn" onclick="logAction('فحص الجدار الناري (Firewall OK)')">فحص الحماية</button>
+                <button class="action-btn" onclick="logAction('إعادة ضبط الاتصال (Reconnected)')">إعادة الاتصال</button>
+                <button class="action-btn" onclick="logAction('تأمين السيرفر (Secured)')">تأمين شامل</button>
             </div>
         </div>
+    </div>
 
-        <!-- سجل التنبيهات -->
+    <!-- القسم الثاني: فاحص الأمان السيبراني -->
+    <div id="scanner" class="section-box">
         <div class="card">
-            <h3>سجل العمليات والتنبيهات (System Logs)</h3>
-            <div class="terminal-log" id="terminal">
+            <h3>🔍 فحص تشفير أمان النطاق (SSL & Headers)</h3>
+            <input type="text" id="target-url" placeholder="https://example.com" value="https://example.com">
+            <button class="action-btn" style="width: 100%; background: #00ff66; color: #000;" onclick="runSecurityScan()">بدء الفحص الأمني</button>
+            <div class="terminal-log" id="scan-result" style="margin-top: 10px; height: 90px;">
+                [?] جاهز لإدخال الرابط وبدء الفحص...
+            </div>
+        </div>
+    </div>
+
+    <!-- القسم الثالث: سجلات العمليات والـ Terminal -->
+    <div id="logs" class="section-box">
+        <div class="card">
+            <h3>📜 سجل العمليات الحية (System Logs)</h3>
+            <div class="terminal-log" id="terminal" style="height: 220px;">
                 [+] System initialized successfully...<br>
                 [+] Connected to local secure node...<br>
             </div>
@@ -165,10 +219,19 @@
     </div>
 
     <script>
-        // محاكاة تغير مؤشرات الأداء بشكل حي
+        // التبديل بين الأقسام بسلاسة
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.section-box').forEach(box => box.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        // محاكاة تغير مؤشرات الأداء
         setInterval(() => {
-            let cpuVal = Math.floor(Math.random() * 40) + 20; // بين 20% و 60%
-            let ramVal = Math.floor(Math.random() * 10) + 65; // بين 65% و 75%
+            let cpuVal = Math.floor(Math.random() * 35) + 25;
+            let ramVal = Math.floor(Math.random() * 8) + 68;
             
             document.getElementById('cpu-text').innerText = cpuVal + '%';
             document.getElementById('cpu-bar').style.width = cpuVal + '%';
@@ -177,12 +240,27 @@
             document.getElementById('ram-bar').style.width = ramVal + '%';
         }, 3000);
 
-        // وظيفة أزرار التحكم وإضافة سجلات تتبع
-        function triggerAction(actionName) {
+        // تسجيل العمليات
+        function logAction(actionName) {
             let terminal = document.getElementById('terminal');
             let time = new Date().toLocaleTimeString();
             terminal.innerHTML += `[${time}] &gt; ${actionName}<br>`;
-            terminal.scrollTop = terminal.scrollHeight; // النزول لآخر سطر تلقائياً
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // محاكاة الفحص الأمني
+        function runSecurityScan() {
+            let target = document.getElementById('target-url').value;
+            let resBox = document.getElementById('scan-result');
+            let time = new Date().toLocaleTimeString();
+            
+            resBox.innerHTML = `[${time}] Scanning target: ${target} ...<br>`;
+            setTimeout(() => {
+                resBox.innerHTML += `[✓] SSL Certificate: Valid & Secure (TLS 1.3)<br>`;
+                resBox.innerHTML += `[✓] Security Headers: HSTS & CSP Enabled<br>`;
+                resBox.innerHTML += `[⚡] Status: Target is fully protected!`;
+                logAction(`Executed security scan on: ${target}`);
+            }, 1000);
         }
     </script>
 
