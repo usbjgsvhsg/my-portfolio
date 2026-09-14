@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة تحليل الروابط المشبوهة والتصيد | Qusay Mandeel</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #050505; color: #00ff66; min-height: 100vh; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 700px; background: #0a0a0a; border: 1px solid #00ff6655; border-radius: 10px; padding: 25px; box-shadow: 0 0 25px rgba(0,255,102,0.15); }
+        
+        header { text-align: center; margin-bottom: 25px; border-bottom: 1px dashed #00ff6644; padding-bottom: 15px; }
+        h1 { font-size: 20px; color: #00ff66; margin-bottom: 5px; font-weight: bold; }
+        .dev-tag { font-size: 13px; color: #00bfff; }
+
+        .section { background: #111; border-radius: 8px; padding: 15px; margin-bottom: 15px; border: 1px solid #222; }
+        .section-title { font-size: 14px; font-weight: bold; color: #00bfff; margin-bottom: 10px; }
+        
+        input { width: 100%; padding: 12px; background: #000; border: 1px solid #00ff6666; color: #00ff66; border-radius: 6px; margin-bottom: 10px; font-size: 14px; outline: none; direction: ltr; text-align: left; }
+        input:focus { border-color: #00bfff; }
+
+        .btn { background: #00ff66; color: #000; border: none; padding: 12px; font-weight: bold; width: 100%; border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 14px; }
+        .btn:hover { background: #00cc52; box-shadow: 0 0 10px #00ff66; }
+
+        .result-box { margin-top: 10px; background: #000; padding: 15px; border: 1px dashed #444; border-radius: 6px; font-size: 13px; color: #00ff66; direction: ltr; text-align: left; min-height: 120px; font-family: monospace; line-height: 1.6; }
+        
+        .nav-link { display: block; text-align: center; margin-top: 20px; color: #00bfff; text-decoration: none; font-size: 13px; }
+        .nav-link:hover { text-decoration: underline; }
+        
+        .footer { text-align: center; font-size: 12px; color: #666; margin-top: 20px; border-top: 1px dashed #333; padding-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ منصة استخبارات وتهديدات الروابط (Phishing Inspector)</h1>
+            <div class="dev-tag">إشراف وتطوير: قصي كاظم منديل</div>
+        </header>
+
+        <div class="section">
+            <div class="section-title">🔍 أضف رابطاً مشبوباً أو نطاقاً لتحليله أمنياً</div>
+            <input type="text" id="urlInput" placeholder="https://example.com/login/verify" value="https://secure-login-update-account.com">
+            <button class="btn" onclick="analyzeURL()">بدء فحص وتحليل التصيد</button>
+            <div class="result-box" id="analysisResult">اضغط الزر أعلاه لفحص الرابط وتوليد مؤشر الخطورة (Risk Score)...</div>
+        </div>
+
+        <a href="index.html" class="nav-link">← العودة إلى لوحة التحكم الرئيسية</a>
+
+        <div class="footer">
+            جميع الحقوق محفوظة © 2026 - قصي كاظم منديل
+        </div>
+    </div>
+
+    <script>
+        function analyzeURL() {
+            let rawUrl = document.getElementById('urlInput').value.trim();
+            const resBox = document.getElementById('analysisResult');
+
+            if (!rawUrl) {
+                resBox.style.color = "#ff0055";
+                resBox.innerHTML = "[-] الرجاء إدخال رابط صالح للتحليل.";
+                return;
+            }
+
+            resBox.style.color = "#00bfff";
+            resBox.innerHTML = "[~] جاري تفكيك هيكل الرابط وفحص قواعد التصيد والاحتيال...";
+
+            setTimeout(() => {
+                try {
+                    let urlObj = new URL(rawUrl.includes('://') ? rawUrl : 'https://' + rawUrl);
+                    let domain = urlObj.hostname;
+                    let path = urlObj.pathname;
+                    let riskScore = 0;
+                    let findings = [];
+
+                    // فحص طول الرابط
+                    if (rawUrl.length > 75) {
+                        riskScore += 25;
+                        findings.warn.push("طول الرابط مريب جداً (أكثر من 75 حرفاً)");
+                    } else {
+                        findings.push("[✔] طول الرابط في المعدل الطبيعي.");
+                    }
+
+                    // فحص استخدام بروتوكول HTTP بدل HTTPS
+                    if (urlObj.protocol === 'http:') {
+                        riskScore += 30;
+                        findings.push("[!] الرابط يستخدم بروتوكول غير آمن (HTTP).");
+                    } else {
+                        findings.push("[✔] يستخدم بروتوكول مشفر (HTTPS).");
+                    }
+
+                    // فحص وجود كلمات مفتاحية للتصيد
+                    const phishingKeywords = ['login', 'verify', 'update', 'secure', 'account', 'banking', 'signin', 'confirm', 'password'];
+                    let foundKeywords = phishingKeywords.filter(keyword => rawUrl.toLowerCase().includes(keyword));
+                    if (foundKeywords.length > 0) {
+                        riskScore += (foundKeywords.length * 15);
+                        findings.push(`[!] تم رصد كلمات مفتاحية تستخدم عادة في التصيد: (${foundKeywords.join(', ')})`);
+                    } else {
+                        findings.push("[✔] لم يتم رصد كلمات مفتاحية مشبوهة.");
+                    }
+
+                    // فحص وجود عدد كبير من الشرطات أو النقاط
+                    let hyphens = (domain.match(/-/g) || []).length;
+                    if (hyphens > 2) {
+                        riskScore += 20;
+                        findings.push(`[!] وجود عدد كبير من الشرطات في النطاق (${hyphens}) يشير لاحتمال تصيد.`);
+                    }
+
+                    // تحديد مستوى الخطورة النهائي
+                    let riskLevel = "منخفض جداً (آمن)";
+                    let color = "#00ff66";
+                    if (riskScore >= 40 && riskScore < 70) {
+                        riskLevel = "متوسط الخطورة (يحتاج حذر)";
+                        color = "#ffcc00";
+                    } else if (riskScore >= 70) {
+                        riskLevel = "خطير جداً (رابط تصيد احتيالي محتمل Phishing!)";
+                        color = "#ff0055";
+                    }
+
+                    resBox.style.color = color;
+                    resBox.innerHTML = `[✔] Target Domain: ${domain}<br>` +
+                                       `[✔] Path/Endpoint: ${path}<br>` +
+                                       `[⚡] Risk Score: ${riskScore} / 100<br>` +
+                                       `[⚡] Security Classification: ${riskLevel}<br>` +
+                                       `----------------------------------------<br>` +
+                                       findings.join('<br>');
+
+                } catch (e) {
+                    resBox.style.color = "#ff0055";
+                    resBox.innerHTML = "[-] صيغة الرابط غير صالحة. تأكد من كتابة الرابط بشكل صحيح.";
+                }
+            }, 600);
+        }
+    </script>
+</body>
+</html>
+

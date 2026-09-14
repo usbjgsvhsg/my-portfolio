@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد الـ QR الكودي الحقيقي | Qusay Mandeel</title>
+    <!-- مكتبة توليد الـ QR الحقيقية -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #050505; color: #00ff66; min-height: 100vh; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 650px; background: #0a0a0a; border: 1px solid #00ff6655; border-radius: 10px; padding: 25px; box-shadow: 0 0 20px rgba(0,255,102,0.1); }
+        
+        header { text-align: center; margin-bottom: 25px; border-bottom: 1px dashed #00ff6644; padding-bottom: 15px; }
+        h1 { font-size: 20px; color: #00ff66; margin-bottom: 5px; font-weight: bold; }
+        .dev-tag { font-size: 13px; color: #00bfff; }
+
+        .section { background: #111; border-radius: 8px; padding: 15px; margin-bottom: 15px; border: 1px solid #222; }
+        .section-title { font-size: 14px; font-weight: bold; color: #00bfff; margin-bottom: 10px; }
+        
+        input { width: 100%; padding: 12px; background: #000; border: 1px solid #00ff6666; color: #00ff66; border-radius: 6px; margin-bottom: 10px; font-size: 14px; outline: none; direction: ltr; text-align: left; }
+        input:focus { border-color: #00bfff; }
+
+        .btn { background: #00ff66; color: #000; border: none; padding: 12px; font-weight: bold; width: 100%; border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 14px; }
+        .btn:hover { background: #00cc52; box-shadow: 0 0 10px #00ff66; }
+
+        .qr-container { text-align: center; margin-top: 15px; padding: 15px; background: #000; border: 1px dashed #444; border-radius: 6px; }
+        .qr-container img, .qr-container svg { display: block; margin: 0 auto; max-width: 100%; border-radius: 4px; }
+        
+        .nav-link { display: block; text-align: center; margin-top: 20px; color: #00bfff; text-decoration: none; font-size: 13px; }
+        .nav-link:hover { text-decoration: underline; }
+        
+        .footer { text-align: center; font-size: 12px; color: #666; margin-top: 20px; border-top: 1px dashed #333; padding-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔲 مولد رموز الـ QR السريع والحقيقي</h1>
+            <div class="dev-tag">إشراف وتطوير: قصي كاظم منديل</div>
+        </header>
+
+        <div class="section">
+            <div class="section-title">⚡ أدخل رابطاً أو نصاً لتحويله إلى باركود</div>
+            <input type="text" id="textInput" placeholder="https://example.com" value="https://usbjgsvhsg.github.io/my-portfolio/">
+            <button class="btn" onclick="generateQR()">توليد رمز الـ QR</button>
+            <div class="qr-container" id="qrResult">سيظهر رمز الـ QR هنا...</div>
+        </div>
+
+        <a href="index.html" class="nav-link">← العودة إلى الصفحة الرئيسية</a>
+
+        <div class="footer">
+            جميع الحقوق محفوظة © 2026 - قصي كاظم منديل
+        </div>
+    </div>
+
+    <script>
+        function generateQR() {
+            let text = document.getElementById('textInput').value.trim();
+            const qrBox = document.getElementById('qrResult');
+
+            if (!text) {
+                qrBox.innerHTML = "<span style='color:#ff0055;'>[-] الرجاء إدخال نص أو رابط أولاً.</span>";
+                return;
+            }
+
+            try {
+                // إنشاء كود QR باستخدام المكتبة برمجياً
+                let qr = qrcode(0, 'M');
+                qr.addData(text);
+                qr.make();
+
+                qrBox.innerHTML = qr.createImgTag(4); // تكبير حجم الباركود
+            } catch (error) {
+                qrBox.innerHTML = "<span style='color:#ff0055;'>[-] حدث خطأ أثناء توليد الرمز.</span>";
+            }
+        }
+        
+        // توليد تلقائي عند فتح الصفحة للرابط الرئيسي
+        window.onload = generateQR;
+    </script>
+</body>
+</html>
+

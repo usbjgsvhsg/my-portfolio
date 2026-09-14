@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق الطقس السيبراني - Weather Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        body {
+            background-color: #050505;
+            color: #00ff66;
+            padding: 20px;
+            direction: rtl;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: #0d0d0d;
+            border: 1px solid #00ff6644;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.1);
+        }
+        h2 {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #00ffaa;
+            text-shadow: 0 0 10px #00ff66;
+        }
+        .search-box {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            background: #000;
+            border: 1px solid #00ff6666;
+            color: #00ff66;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        button {
+            background: #00ff66;
+            color: #000;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            box-shadow: 0 0 10px #00ff66;
+        }
+        .weather-card {
+            text-align: center;
+            padding: 15px;
+            background: #050505;
+            border-radius: 8px;
+            border: 1px solid #222;
+        }
+        .city-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        .temp {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00ff66;
+            margin: 10px 0;
+            text-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+        }
+        .desc {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+        .details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 0.8rem;
+            border-top: 1px dashed #333;
+            padding-top: 10px;
+        }
+        .detail-item {
+            background: #0d0d0d;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #555;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>⚡ Weather System Hub</h2>
+        
+        <div class="search-box">
+            <input type="text" id="city-input" placeholder="أدخل اسم المدينة (مثلاً: Basrah)...">
+            <button onclick="getWeather()">بحث</button>
+        </div>
+
+        <div class="weather-card" id="weather-display">
+            <div class="city-name" id="display-city">جاري تحميل طقس البصرة...</div>
+            <div class="temp" id="display-temp">--°C</div>
+            <div class="desc" id="display-desc">---</div>
+            
+            <div class="details">
+                <div class="detail-item">الرطوبة: <span id="display-humidity">--%</span></div>
+                <div class="detail-item">الرياح: <span id="display-wind">-- كم/س</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        إشراف وتطوير: قصي كاظم منديل © 2026
+    </div>
+
+    <script>
+        // جلب الطقس تلقائياً لمدينة البصرة عند فتح التطبيق
+        window.onload = function() {
+            fetchWeather("Basrah");
+        };
+
+        function getWeather() {
+            let city = document.getElementById('city-input').value.trim();
+            if(!city) city = "Basrah"; // إذا ترك الحقل فارغاً يبحث عن البصرة افتراضياً
+            fetchWeather(city);
+        }
+
+        function fetchWeather(city) {
+            // استخدام واجهة مجانية لجلب بيانات الطقس الحقيقية بدون مفتاح معقد
+            let url = `https://wttr.in/${encodeURIComponent(city)}?format=j1`;
+            
+            document.getElementById('display-city').innerText = `جاري البحث عن (${city})...`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    let current = data.current_condition[0];
+                    let temp = current.temp_C;
+                    let desc = current.weatherDesc[0].value;
+                    let humidity = current.humidity;
+                    let wind = current.windspeedKmph;
+
+                    document.getElementById('display-city').innerText = city.toUpperCase();
+                    document.getElementById('display-temp').innerText = temp + '°C';
+                    document.getElementById('display-desc').innerText = desc;
+                    document.getElementById('display-humidity').innerText = humidity + '%';
+                    document.getElementById('display-wind').innerText = wind + ' كم/س';
+                })
+                .catch(error => {
+                    document.getElementById('display-city').innerText = "خطأ في الاتصال أو المدينة غير موجودة";
+                    document.getElementById('display-temp').innerText = "--°C";
+                    document.getElementById('display-desc').innerText = "تأكد من اسم المدينة";
+                });
+        }
+    </script>
+
+</body>
+</html>
+

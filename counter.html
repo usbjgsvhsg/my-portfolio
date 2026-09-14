@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة العدادات المتعددة | Multi-Counter</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background-color: #1e293b; padding: 30px; border-radius: 14px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); width: 100%; max-width: 480px; border: 1px solid #334155; }
+        h1 { font-size: 22px; margin-bottom: 5px; color: #38bdf8; text-align: center; }
+        .developer-tag { text-align: center; font-size: 13px; color: #38bdf8; margin-bottom: 15px; font-weight: 600; }
+        p.subtitle { font-size: 13px; color: #94a3b8; text-align: center; margin-bottom: 25px; }
+        
+        .add-section { display: flex; gap: 10px; margin-bottom: 25px; }
+        input[type="text"] { flex: 1; padding: 12px 15px; background-color: #0f172a; border: 1px solid #475569; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+        input[type="text"]:focus { border-color: #38bdf8; }
+        button.add-btn { padding: 12px 20px; background-color: #0284c7; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        button.add-btn:hover { background-color: #0369a1; }
+
+        .counters-list { display: flex; flex-direction: column; gap: 15px; max-height: 350px; overflow-y: auto; }
+        .counter-card { background-color: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .counter-header { display: flex; justify-content: space-between; align-items: center; }
+        .counter-title { font-size: 15px; font-weight: 600; color: #cbd5e1; }
+        .counter-value { font-size: 20px; font-weight: bold; color: #38bdf8; }
+        
+        .counter-actions { display: flex; gap: 8px; }
+        .btn-inc { flex: 2; background-color: #059669; color: white; border: none; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-inc:hover { background-color: #047857; }
+        .btn-dec { flex: 1; background-color: #d97706; color: white; border: none; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-dec:hover { background-color: #b45309; }
+        .btn-del { flex: 1; background-color: #dc2626; color: white; border: none; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-del:hover { background-color: #b91c1c; }
+
+        .nav-link { display: block; text-align: center; margin-top: 20px; font-size: 13px; color: #38bdf8; text-decoration: none; }
+        .nav-link:hover { text-decoration: underline; }
+        
+        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #64748b; border-top: 1px solid #334155; padding-top: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>لوحة العدادات المتعددة ⏱️</h1>
+        <div class="developer-tag">تطوير: قصي كاظم منديل</div>
+        <p class="subtitle">أضف عدادات لمهامك، أهدافك، أو نقاطك وتتبعها بكل سهولة</p>
+        
+        <div class="add-section">
+            <input type="text" id="counterNameInput" placeholder="اسم العداد الجديد (مثلاً: أهداف، مهام...)">
+            <button class="add-btn" onclick="addCounter()">إضافة</button>
+        </div>
+        
+        <div id="countersList" class="counters-list">
+            <!-- العدادات ستظهر هنا ديناميكياً -->
+        </div>
+
+        <a href="index.html" class="nav-link">⬅️ الانتقال إلى أداة فحص البريد الإلكتروني</a>
+        
+        <div class="footer">
+            جميع الحقوق محفوظة © 2026 - قصي كاظم منديل
+        </div>
+    </div>
+
+    <script>
+        let counters = JSON.parse(localStorage.getItem('my_counters')) || [];
+
+        function saveAndRender() {
+            localStorage.setItem('my_counters', JSON.stringify(counters));
+            renderCounters();
+        }
+
+        function addCounter() {
+            const nameInput = document.getElementById('counterNameInput');
+            const name = nameInput.value.trim();
+            if (!name) return;
+
+            counters.push({ id: Date.now(), name: name, value: 0 });
+            nameInput.value = '';
+            saveAndRender();
+        }
+
+        function updateValue(id, change) {
+            const counter = counters.find(c => c.id === id);
+            if (counter) {
+                counter.value += change;
+                if (counter.value < 0) counter.value = 0;
+                saveAndRender();
+            }
+        }
+
+        function deleteCounter(id) {
+            counters = counters.filter(c => c.id !== id);
+            saveAndRender();
+        }
+
+        function renderCounters() {
+            const listDiv = document.getElementById('countersList');
+            if (counters.length === 0) {
+                listDiv.innerHTML = '<p style="text-align: center; color: #64748b; font-size: 13px;">لا توجد عدادات مضافة حالياً. ابدأ بإضافة واحد!</p>';
+                return;
+            }
+
+            listDiv.innerHTML = '';
+            counters.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'counter-card';
+                card.innerHTML = `
+                    <div class="counter-header">
+                        <span class="counter-title">${c.name}</span>
+                        <span class="counter-value">${c.value}</span>
+                    </div>
+                    <div class="counter-actions">
+                        <button class="btn-inc" onclick="updateValue(${c.id}, 1)">+ زيادة</button>
+                        <button class="btn-dec" onclick="updateValue(${c.id}, -1)">- نقصان</button>
+                        <button class="btn-del" onclick="deleteCounter(${c.id})">حذف</button>
+                    </div>
+                `;
+                listDiv.appendChild(card);
+            });
+        }
+
+        // تحميل العدادات عند فتح الصفحة
+        renderCounters();
+    </script>
+</body>
+</html>
+

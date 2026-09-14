@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تتبع صيانة المركبات - Vehicle Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        body {
+            background-color: #050505;
+            color: #00ff66;
+            padding: 20px;
+            direction: rtl;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: #0d0d0d;
+            border: 1px solid #00ff6644;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.1);
+        }
+        h2 {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #00ffaa;
+            text-shadow: 0 0 10px #00ff66;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            color: #aaa;
+        }
+        input, select {
+            width: 100%;
+            background: #000;
+            border: 1px solid #00ff6666;
+            color: #00ff66;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            background: #00ff66;
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            box-shadow: 0 0 15px #00ff66;
+        }
+        .history-section {
+            margin-top: 25px;
+            border-top: 1px dashed #333;
+            padding-top: 15px;
+        }
+        h3 {
+            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .log-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .log-item {
+            background: #050505;
+            border: 1px solid #222;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .log-info span {
+            color: #fff;
+            font-weight: bold;
+        }
+        .delete-btn {
+            background: #ff3333;
+            color: #fff;
+            border: none;
+            padding: 5px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            width: auto;
+            margin: 0;
+        }
+        .delete-btn:hover {
+            box-shadow: 0 0 8px #ff3333;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #555;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🛠️ Vehicle Maintenance Tracker</h2>
+        
+        <div class="form-group">
+            <label>نوع الصيانة أو القطعة:</label>
+            <select id="service-type">
+                <option value="تبديل زيت المحرك (عصارة/دهن)">تبديل زيت المحرك (دهن)</option>
+                <option value="فحص وضبط صمامات المحرك (الفالفات)">فحص وضبط الصمامات (الفالفات)</option>
+                <option value="تغيير فلتر الهواء / التنظيف">تغيير / تنظيف فلتر الهواء</option>
+                <option value="فحص وتنظيف شمعة الإشعال (البلك)">فحص وتنظيف البلك</option>
+                <option value="صيانة منظومة الإطارات والفرامل">صيانة الإطارات والفرامل</option>
+                <option value="صيانة عامة أخرى">صيانة عامة أخرى</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>عداد العداد (الكيلومتر - KM):</label>
+            <input type="number" id="service-km" placeholder="مثلاً: 14500">
+        </div>
+
+        <div class="form-group">
+            <label>ملاحظات إضافية:</label>
+            <input type="text" id="service-notes" placeholder="نوع الزيت، السعر، أو ملاحظة...">
+        </div>
+
+        <button onclick="addMaintenanceRecord()">تسجيل الصيانة</button>
+
+        <div class="history-section">
+            <h3>سجل الصيانة السابق:</h3>
+            <div class="log-list" id="log-list">
+                <!-- سيتم تعبئة السجلات تلقائياً هنا -->
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        إشراف وتطوير: قصي كاظم منديل © 2026
+    </div>
+
+    <script>
+        // تحميل السجلات عند فتح الصفحة
+        window.onload = function() {
+            displayRecords();
+        };
+
+        function addMaintenanceRecord() {
+            let type = document.getElementById('service-type').value;
+            let km = document.getElementById('service-km').value.trim();
+            let notes = document.getElementById('service-notes').value.trim();
+
+            if(!km) {
+                alert("يرجى إدخال قراءة العداد (الكيلومتر)!");
+                return;
+            }
+
+            let record = {
+                id: Date.now(),
+                type: type,
+                km: km,
+                notes: notes || "لا توجد ملاحظات",
+                date: new Date().toLocaleDateString('ar-EG')
+            };
+
+            let records = JSON.parse(localStorage.getItem('vehicle_records')) || [];
+            records.unshift(record); // إضافة السجل الجديد في البداية
+            localStorage.setItem('vehicle_records', JSON.stringify(records));
+
+            // تفريغ الحقول وإعادة العرض
+            document.getElementById('service-km').value = '';
+            document.getElementById('service-notes').value = '';
+            displayRecords();
+        }
+
+        function displayRecords() {
+            let logList = document.getElementById('log-list');
+            let records = JSON.parse(localStorage.getItem('vehicle_records')) || [];
+            
+            if(records.length === 0) {
+                logList.innerHTML = '<div style="text-align:center; color:#555; font-size:0.8rem; padding:10px;">لا توجد سجلات محفوظة حالياً</div>';
+                return;
+            }
+
+            let html = '';
+            records.forEach(item => {
+                html += `
+                    <div class="log-item">
+                        <div class="log-info">
+                            <span>${item.type}</span><br>
+                            العداد: ${item.km} كم | التاريخ: ${item.date}<br>
+                            <span style="color:#888;">${item.notes}</span>
+                        </div>
+                        <button class="delete-btn" onclick="deleteRecord(${item.id})">حذف</button>
+                    </div>
+                `;
+            });
+            logList.innerHTML = html;
+        }
+
+        function deleteRecord(id) {
+            let records = JSON.parse(localStorage.getItem('vehicle_records')) || [];
+            records = records.filter(item => item.id !== id);
+            localStorage.setItem('vehicle_records', JSON.stringify(records));
+            displayRecords();
+        }
+    </script>
+
+</body>
+</html>
+
