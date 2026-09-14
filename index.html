@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قصي كاظم | بورتفوليو الأمن السيبراني والبرمجة</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --accent-color: #58a6ff;
+            --border-color: #30363d;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #238636;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #2ea043;
+        }
+        section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        section h2 {
+            color: #ffffff;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+        .skills-grid, .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .skill-card, .project-card {
+            background: #0d1117;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .project-card h3 {
+            color: var(--accent-color);
+            margin-bottom: 8px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #8b949e;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الواجهة الرئيسية (Hero Section) -->
+    <header>
+        <h1>قصي كاظم منديل</h1>
+        <p>مطور برمجيات | مختص أمن سيبراني واختبار اختراق</p>
+        <a href="#projects" class="btn">استعرض أعمالي</a>
+        <a href="#contact" class="btn" style="background-color: var(--accent-color);">تواصل معي</a>
+    </header>
+
+    <!-- قسم من أنا (About Me) -->
+    <section id="about">
+        <h2>من أنا</h2>
+        <p>مرحباً! أنا شغوف بعالم التكنولوجيا، برمجة وتطوير سكربتات بلغة Python، وتطبيق مفاهيم الأمن السيبراني والرقمي. أمتلك خبرة عملية في التعامل مع بيئات أنظمة التشغيل عبر سطر الأوامر (Termux)، وتطوير تطبيقات الويب، وتحليل الأنظمة بطريقة احترافية.</p>
+    </section>
+
+    <!-- قسم المهارات والتقنيات (Skills) -->
+    <section id="skills">
+        <h2>المهارات والتقنيات</h2>
+        <div class="skills-grid">
+            <div class="skill-card">Python & Flask</div>
+            <div class="skill-card">Cybersecurity & Nmap</div>
+            <div class="skill-card">Termux & Linux CLI</div>
+            <div class="skill-card">Git & GitHub</div>
+            <div class="skill-card">APK & Smali Analysis</div>
+        </div>
+    </section>
+
+    <!-- قسم المشاريع والأدوات (Projects) -->
+    <section id="projects">
+        <h2>أبرز المشاريع والأدوات</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <h3>أداة فحص الشبكات</h3>
+                <p>سكربت بايثون مخصص لفحص المنافذ والاتصالات بكفاءة عالية.</p>
+            </div>
+            <div class="project-card">
+                <h3>تطبيق ويب Flask</h3>
+                <p>مشروع ويب متكامل تم تطويره ورفع إعداداته بسلاسة.</p>
+            </div>
+            <div class="project-card">
+                <h3>أدوات التحليل الأمني</h3>
+                <p>مجموعة سكربتات وأوامر لمعالجة الملفات وتحليل الأنظمة.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم التواصل (Contact) -->
+    <section id="contact">
+        <h2>تواصل معي</h2>
+        <p>يسعدني تواصلك معي عبر منصات التواصل أو زيارة مستودعاتي البرمجية:</p>
+        <br>
+        <a href="https://github.com" target="_blank" class="btn">GitHub Profile</a>
+    </section>
+
+    <footer>
+        <p>جميع الحقوق محفوظة © 2026 - قصي كاظم</p>
+    </footer>
+
+</body>
+</html>
+
