@@ -111,7 +111,17 @@
             line-height: 1.6;
             color: var(--text-color);
             opacity: 0.85;
+            text-align: right;
         }
+        .bio-box {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+
         .section-title {
             color: var(--text-color);
             font-size: 1.2em;
@@ -119,6 +129,9 @@
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 8px;
             text-align: right;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         /* Skills Matrix */
@@ -146,7 +159,7 @@
             font-size: 0.85em;
         }
 
-        /* Menu & Projects Grid */
+        /* Projects & Menu Grid */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -179,6 +192,16 @@
             font-weight: bold;
             color: var(--text-color);
             font-size: 1.05em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-title span.gh-tag {
+            font-size: 0.75em;
+            background: var(--border-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent-color);
         }
         .card-desc {
             font-size: 0.85em;
@@ -188,7 +211,7 @@
         }
         .card-icon {
             font-size: 1.5em;
-            margin-left: 10px;
+            margin-left: 12px;
         }
 
         /* Embedded Code Viewer */
@@ -263,7 +286,7 @@
         .social-links {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             margin-top: 15px;
             flex-wrap: wrap;
         }
@@ -271,12 +294,15 @@
             background: var(--bg-color);
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 6px;
             text-decoration: none;
-            font-size: 0.9em;
+            font-size: 0.85em;
             transition: 0.2s;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
         .social-btn:hover {
             border-color: var(--accent-color);
@@ -361,18 +387,24 @@
         <div class="hero-content">
             <h1>قصي كاظم منديل</h1>
             <div class="subtitle">مطور برمجيات | مختص أمن سيبراني واختبار اختراق</div>
-            <p>مرحباً بك في بورتفوليو الخاص بي. شغوف بتطوير سكريبتات Python المتقدمة، بناء أدوات الأمان الرقمي، وإدارة الأنظمة عبر سطر الأوامر ببيئات Linux و Termux.</p>
+            
+            <div class="bio-box">
+                <p style="margin: 0; text-align: center;">
+                    مهندس نظم وسكريبتات محترف، أمتلك خبرة في بناء أدوات الأمان الرقمي بلغة بايثون، إدارة السيرفرات وأنظمة التشغيل عبر بيئات Linux و Termux، مع شغف كبير بتطوير الحلول التقنية المتقدمة وصيانة الأنظمة الميكانيكية والبرمجية.
+                </p>
+            </div>
             
             <div class="social-links">
-                <a href="https://github.com/usbjgsvhsg" target="_blank" class="social-btn">GitHub 💻</a>
-                <button class="social-btn" onclick="openModal()">تواصل سريع ✉️</button>
+                <a href="https://github.com/usbjgsvhsg" target="_blank" class="social-btn">💻 GitHub Profile</a>
+                <a href="https://t.me/usbjgsvhsg" target="_blank" class="social-btn">💬 Telegram</a>
+                <button class="social-btn" onclick="openModal()">✉️ تواصل سريع</button>
             </div>
         </div>
     </div>
 
     <!-- Security Clearance Badge -->
     <div class="container">
-        <div class="section-title">🛡️ شهادة الحماية والتحقق (Visitor Security ID)</div>
+        <div class="section-title"><span>🛡️ شهادة الحماية والتحقق</span> <span style="font-size:0.8em; color:var(--accent-color);">Visitor ID</span></div>
         <div class="badge-box">
             حالة الاتصال: <span>آمن ومصرح (Secure Clearance)</span><br>
             معرف الزائر الرقمي: <span id="visitorId">QUSAY-SEC-9842</span><br>
@@ -380,9 +412,47 @@
         </div>
     </div>
 
+    <!-- Projects Hub & GitHub Integration -->
+    <div class="container">
+        <div class="section-title"><span>📂 مشاريع وأدوات المنصة</span> <span style="font-size:0.8em; color:var(--accent-color);">GitHub Hub</span></div>
+        <div class="menu-grid">
+            <a href="https://github.com/usbjgsvhsg" target="_blank" class="menu-card">
+                <div class="card-icon">🐍</div>
+                <div class="card-content">
+                    <div class="card-title">برامج أمان بايثون <span class="gh-tag">GitHub ↗</span></div>
+                    <div class="card-desc">أدوات فحص وسكريبتات أمنية متطورة ومكتوبة بلغة Python لاختبار الاختراق وفحص الثغرات.</div>
+                </div>
+            </a>
+
+            <a href="https://github.com/usbjgsvhsg" target="_blank" class="menu-card">
+                <div class="card-icon">⚡</div>
+                <div class="card-content">
+                    <div class="card-title">أدوات أتمتة Termux <span class="gh-tag">GitHub ↗</span></div>
+                    <div class="card-desc">سكربتات مخصصة لتسهيل وإدارة مهام التيرمكس وأتمتة الأوامر على أنظمة لينكس بسهولة.</div>
+                </div>
+            </a>
+
+            <a href="weather.html" class="menu-card">
+                <div class="card-icon">🌡️</div>
+                <div class="card-content">
+                    <div class="card-title">أداة الطقس الذكية</div>
+                    <div class="card-desc">أداة تفاعلية لفحص حالة الطقس اللحظية والبيانات المناخية بشكل دقيق وسريع.</div>
+                </div>
+            </a>
+
+            <a href="vehicle.html" class="menu-card">
+                <div class="card-icon">🛠️</div>
+                <div class="card-content">
+                    <div class="card-title">حاسبة صيانة المركبات</div>
+                    <div class="card-desc">حاسبة متقدمة لمتابعة صيانات الكيلومتر والـ GY6 بكفاءة عالية.</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
     <!-- Skills Matrix Section -->
     <div class="container">
-        <div class="section-title">📊 مهارات واختصاصات التقنية (Skills Matrix)</div>
+        <div class="section-title"><span>📊 مهارات واختصاصات التقنية</span> <span style="font-size:0.8em; color:var(--accent-color);">Skills Matrix</span></div>
         <div class="skills-grid">
             <div class="skill-badge">Python Development <span>95%</span></div>
             <div class="skill-badge">Cyber Security <span>90%</span></div>
@@ -393,7 +463,7 @@
 
     <!-- Embedded Code Viewer (Python Script) -->
     <div class="container">
-        <div class="section-title">💻 عارض الكود البرمجي (Python Tool Snippet)</div>
+        <div class="section-title"><span>💻 عارض الكود البرمجي المتقدم</span> <span style="font-size:0.8em; color:var(--accent-color);">Python Snippet</span></div>
         <div class="code-viewer">
             <div class="code-header">
                 <span>scanner.py - Python Port Scanner</span>
@@ -414,7 +484,7 @@
 
     <!-- System Diagnostics Dashboard -->
     <div class="container">
-        <div class="section-title">⚡ لوحة تشخيص النظام (System Diagnostics)</div>
+        <div class="section-title"><span>⚡ لوحة تشخيص النظام</span> <span style="font-size:0.8em; color:var(--accent-color);">Diagnostics</span></div>
         <div class="diag-grid">
             <div class="diag-item">
                 استقرار السيرفر (Uptime)
@@ -433,54 +503,10 @@
                 <div class="diag-value">TLS 1.3 / HTTPS</div>
             </div>
         </div>
-    </div>
 
-    <!-- Projects Hub Section -->
-    <div class="container">
-        <div class="section-title">🚀 مشاريع وأدوات المنصة (Projects Hub)</div>
-        <div class="menu-grid">
-            <a href="https://github.com/usbjgsvhsg" target="_blank" class="menu-card">
-                <div class="card-icon">🐍</div>
-                <div class="card-content">
-                    <div class="card-title">Python Security Scripts</div>
-                    <div class="card-desc">أدوات فحص وسكريبتات أمنية مطورة بلغة بايثون</div>
-                </div>
-            </a>
-
-            <a href="https://github.com/usbjgsvhsg" target="_blank" class="menu-card">
-                <div class="card-icon">⚡</div>
-                <div class="card-content">
-                    <div class="card-title">Termux Automation Tools</div>
-                    <div class="card-desc">سكربتات مخصصة لتسهيل وإدارة مهام التيرمكس</div>
-                </div>
-            </a>
-        </div>
-    </div>
-
-    <!-- Cyber Operations Hub (Tools Links) -->
-    <div class="container">
-        <div class="section-title">🛠️ الأدوات المركزية المباشرة</div>
-        <div class="menu-grid">
-            <a href="weather.html" class="menu-card">
-                <div class="card-icon">🌡️</div>
-                <div class="card-content">
-                    <div class="card-title">Weather Tool</div>
-                    <div class="card-desc">أداة فحص حالة الطقس لحظياً</div>
-                </div>
-            </a>
-
-            <a href="vehicle.html" class="menu-card">
-                <div class="card-icon">🛠️</div>
-                <div class="card-content">
-                    <div class="card-title">Vehicle Maintenance</div>
-                    <div class="card-desc">حاسبة ومتابعة صيانات الكيلومتر والـ GY6</div>
-                </div>
-            </a>
-        </div>
-        
-        <div style="text-align: center;">
+        <div style="text-align: center; margin-top: 15px;">
             <div class="visitor-counter">
-                عدد زوار المنصة: <span id="visitor-count">2,109</span> 👁️‍🗨️
+                عدد زوار المنصة: <span id="visitor-count">2,142</span> 👁️‍🗨️
             </div>
         </div>
     </div>
@@ -490,10 +516,10 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()">✕</button>
             <h3 style="margin-top:0; color:var(--text-color);">إرسال رسالة مباشرة</h3>
-            <p style="font-size: 0.85em;">أدخل رسالتك وسيتم تحويلك مباشرة للتواصل:</p>
+            <p style="font-size: 0.85em;">أدخل رسالتك وسيتم تحويلك مباشرة لتليجرام:</p>
             <input type="text" id="senderName" placeholder="اسمك الكريم...">
             <textarea id="senderMsg" rows="3" placeholder="محتوى الرسالة..."></textarea>
-            <button class="social-btn" style="width:100%; background:var(--accent-color); color:white;" onclick="sendTelegram()">إرسال عبر تيليجرام 🚀</button>
+            <button class="social-btn" style="width:100%; justify-content:center; background:var(--accent-color); color:white;" onclick="sendTelegram()">إرسال عبر تيليجرام 🚀</button>
         </div>
     </div>
 
@@ -524,10 +550,9 @@
 
         function toggleSound() {
             soundEnabled = !soundEnabled;
-            document.getElementById('soundBtn').innerText = soundEnabled ? '🔊 الصوت: مفعل' : 'muted الصوت: معطل';
+            document.getElementById('soundBtn').innerText = soundEnabled ? '🔊 الصوت: مفعل' : '🔇 الصوت: معطل';
         }
 
-        // Add sound trigger to all clickable elements
         document.querySelectorAll('a, button, .menu-card').forEach(el => {
             el.addEventListener('click', playClickSound);
         });
