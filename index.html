@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="dark">
+<html lang="ar" dir="rtl" data-theme="dark" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,14 +45,17 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .top-controls {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .theme-toggle, .sound-toggle {
+        .control-btn {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
@@ -62,7 +65,7 @@
             font-size: 0.85em;
             transition: 0.2s;
         }
-        .theme-toggle:hover, .sound-toggle:hover {
+        .control-btn:hover {
             border-color: var(--accent-color);
         }
 
@@ -111,7 +114,7 @@
             line-height: 1.6;
             color: var(--text-color);
             opacity: 0.85;
-            text-align: right;
+            text-align: inherit;
         }
         .bio-box {
             background: var(--bg-color);
@@ -128,7 +131,7 @@
             margin-bottom: 15px;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 8px;
-            text-align: right;
+            text-align: inherit;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -146,7 +149,7 @@
             border: 1px solid var(--border-color);
             padding: 10px;
             border-radius: 8px;
-            text-align: right;
+            text-align: inherit;
             font-size: 0.9em;
             font-weight: bold;
             color: var(--text-color);
@@ -159,7 +162,7 @@
             font-size: 0.85em;
         }
 
-        /* Projects & Menu Grid */
+        /* Projects Grid */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -177,7 +180,7 @@
             justify-content: space-between;
             align-items: center;
             transition: 0.2s;
-            text-align: right;
+            text-align: inherit;
         }
         .menu-card:hover {
             border-color: var(--accent-color);
@@ -185,7 +188,7 @@
             transform: translateY(-2px);
         }
         .card-content {
-            text-align: right;
+            text-align: inherit;
             width: 100%;
         }
         .card-title {
@@ -212,6 +215,7 @@
         .card-icon {
             font-size: 1.5em;
             margin-left: 12px;
+            margin-right: 12px;
         }
 
         /* Embedded Code Viewer */
@@ -252,7 +256,7 @@
             border: 1px dashed var(--accent-color);
             padding: 12px;
             border-radius: 8px;
-            text-align: right;
+            text-align: inherit;
             font-size: 0.9em;
             margin-top: 10px;
         }
@@ -267,7 +271,7 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             margin-top: 10px;
-            text-align: right;
+            text-align: inherit;
         }
         .diag-item {
             background: var(--bg-color);
@@ -325,7 +329,7 @@
             border-radius: 12px;
             width: 90%;
             max-width: 400px;
-            text-align: right;
+            text-align: inherit;
         }
         .modal-content input, .modal-content textarea {
             width: 100%;
@@ -337,6 +341,7 @@
             margin-top: 8px;
             margin-bottom: 14px;
             box-sizing: border-box;
+            text-align: inherit;
         }
         .close-btn {
             background: #d73a49;
@@ -345,8 +350,32 @@
             padding: 6px 12px;
             border-radius: 4px;
             cursor: pointer;
-            float: left;
         }
+
+        /* Toast Notification */
+        .toast {
+            visibility: hidden;
+            min-width: 220px;
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            font-size: 0.9em;
+        }
+        .toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+        @keyframes fadeout { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
 
         .visitor-counter {
             margin-top: 15px;
@@ -375,8 +404,9 @@
 
     <div class="top-bar">
         <div class="top-controls">
-            <button class="theme-toggle" onclick="toggleTheme()">🌓 المظهر</button>
-            <button class="sound-toggle" id="soundBtn" onclick="toggleSound()">🔊 الصوت: مفعل</button>
+            <button class="control-btn" onclick="toggleTheme()">🌓 <span data-i18n="theme">المظهر</span></button>
+            <button class="control-btn" id="soundBtn" onclick="toggleSound()">🔊 <span data-i18n="sound">الصوت: مفعل</span></button>
+            <button class="control-btn" onclick="toggleLanguage()" style="border-color: var(--accent-color); color: var(--accent-color);">🌐 <span id="langLabel">English</span></button>
         </div>
         <div style="font-size: 0.85em; color: var(--accent-color);">Qusay Security Hub</div>
     </div>
@@ -385,11 +415,11 @@
     <div class="container">
         <canvas id="matrix-canvas"></canvas>
         <div class="hero-content">
-            <h1>قصي كاظم منديل</h1>
-            <div class="subtitle">مطور برمجيات | مختص أمن سيبراني واختبار اختراق</div>
+            <h1 data-i18n="name">قصي كاظم منديل</h1>
+            <div class="subtitle" data-i18n="title">مطور برمجيات | مختص أمن سيبراني واختبار اختراق</div>
             
             <div class="bio-box">
-                <p style="margin: 0; text-align: center;">
+                <p style="margin: 0;" data-i18n="bio">
                     مهندس نظم وسكريبتات محترف، أمتلك خبرة في بناء أدوات الأمان الرقمي بلغة بايثون، إدارة السيرفرات وأنظمة التشغيل عبر بيئات Linux و Termux، مع شغف كبير بتطوير الحلول التقنية المتقدمة وصيانة الأنظمة الميكانيكية والبرمجية.
                 </p>
             </div>
@@ -397,54 +427,61 @@
             <div class="social-links">
                 <a href="https://github.com/usbjgsvhsg" target="_blank" class="social-btn">💻 GitHub Profile</a>
                 <a href="https://t.me/usbjgsvhsg" target="_blank" class="social-btn">💬 Telegram</a>
-                <button class="social-btn" onclick="openModal()">✉️ تواصل سريع</button>
+                <button class="social-btn" onclick="openModal()"><span data-i18n="quickContact">✉️ تواصل سريع</span></button>
+                <button class="social-btn" onclick="shareWebsite()" style="border-color: var(--accent-color);">🔗 <span data-i18n="shareBtn">مشاركة الموقع</span></button>
             </div>
         </div>
     </div>
 
     <!-- Security Clearance Badge -->
     <div class="container">
-        <div class="section-title"><span>🛡️ شهادة الحماية والتحقق</span> <span style="font-size:0.8em; color:var(--accent-color);">Visitor ID</span></div>
+        <div class="section-title">
+            <span>🛡️ <span data-i18n="secBadgeTitle">شهادة الحماية والتحقق</span></span> 
+            <span style="font-size:0.8em; color:var(--accent-color);">Visitor ID</span>
+        </div>
         <div class="badge-box">
-            حالة الاتصال: <span>آمن ومصرح (Secure Clearance)</span><br>
-            معرف الزائر الرقمي: <span id="visitorId">QUSAY-SEC-9842</span><br>
-            النظام المكتشف: <span id="visitorEnv">Mobile Client (Termux/Android Compatible)</span>
+            <span data-i18n="connStatus">حالة الاتصال</span>: <span><span data-i18n="secureClean">آمن ومصرح (Secure Clearance)</span></span><br>
+            <span data-i18n="visitorIdLabel">معرف الزائر الرقمي</span>: <span id="visitorId">QUSAY-SEC-9842</span><br>
+            <span data-i18n="envLabel">النظام المكتشف</span>: <span id="visitorEnv">Mobile Client (Termux/Android Compatible)</span>
         </div>
     </div>
 
     <!-- Projects Hub & GitHub Integration -->
     <div class="container">
-        <div class="section-title"><span>📂 مشاريع وأدوات المنصة</span> <span style="font-size:0.8em; color:var(--accent-color);">GitHub Hub</span></div>
+        <div class="section-title">
+            <span>📂 <span data-i18n="projTitle">مشاريع وأدوات المنصة</span></span> 
+            <span style="font-size:0.8em; color:var(--accent-color);">GitHub Hub</span>
+        </div>
         <div class="menu-grid">
             <a href="https://github.com/usbjgsvhsg" target="_blank" class="menu-card">
                 <div class="card-icon">🐍</div>
                 <div class="card-content">
-                    <div class="card-title">برامج أمان بايثون <span class="gh-tag">GitHub ↗</span></div>
-                    <div class="card-desc">أدوات فحص وسكريبتات أمنية متطورة ومكتوبة بلغة Python لاختبار الاختراق وفحص الثغرات.</div>
+                    <div class="card-title"><span data-i18n="p1Title">برامج أمان بايثون</span> <span class="gh-tag">GitHub ↗</span></div>
+                    <div class="card-desc" data-i18n="p1Desc">أدوات فحص وسكريبتات أمنية متطورة ومكتوبة بلغة Python لاختبار الاختراق وفحص الثغرات.</div>
                 </div>
             </a>
 
             <a href="https://github.com/usbjgsvhsg" target="_blank" class="menu-card">
                 <div class="card-icon">⚡</div>
                 <div class="card-content">
-                    <div class="card-title">أدوات أتمتة Termux <span class="gh-tag">GitHub ↗</span></div>
-                    <div class="card-desc">سكربتات مخصصة لتسهيل وإدارة مهام التيرمكس وأتمتة الأوامر على أنظمة لينكس بسهولة.</div>
+                    <div class="card-title"><span data-i18n="p2Title">أدوات أتمتة Termux</span> <span class="gh-tag">GitHub ↗</span></div>
+                    <div class="card-desc" data-i18n="p2Desc">سكربتات مخصصة لتسهيل وإدارة مهام التيرمكس وأتمتة الأوامر على أنظمة لينكس بسهولة.</div>
                 </div>
             </a>
 
             <a href="weather.html" class="menu-card">
                 <div class="card-icon">🌡️</div>
                 <div class="card-content">
-                    <div class="card-title">أداة الطقس الذكية</div>
-                    <div class="card-desc">أداة تفاعلية لفحص حالة الطقس اللحظية والبيانات المناخية بشكل دقيق وسريع.</div>
+                    <div class="card-title"><span data-i18n="p3Title">أداة الطقس الذكية</span></div>
+                    <div class="card-desc" data-i18n="p3Desc">أداة تفاعلية لفحص حالة الطقس اللحظية والبيانات المناخية بشكل دقيق وسريع.</div>
                 </div>
             </a>
 
             <a href="vehicle.html" class="menu-card">
                 <div class="card-icon">🛠️</div>
                 <div class="card-content">
-                    <div class="card-title">حاسبة صيانة المركبات</div>
-                    <div class="card-desc">حاسبة متقدمة لمتابعة صيانات الكيلومتر والـ GY6 بكفاءة عالية.</div>
+                    <div class="card-title"><span data-i18n="p4Title">حاسبة صيانة المركبات</span></div>
+                    <div class="card-desc" data-i18n="p4Desc">حاسبة متقدمة لمتابعة صيانات الكيلومتر والـ GY6 بكفاءة عالية.</div>
                 </div>
             </a>
         </div>
@@ -452,7 +489,10 @@
 
     <!-- Skills Matrix Section -->
     <div class="container">
-        <div class="section-title"><span>📊 مهارات واختصاصات التقنية</span> <span style="font-size:0.8em; color:var(--accent-color);">Skills Matrix</span></div>
+        <div class="section-title">
+            <span>📊 <span data-i18n="skillsTitle">مهارات واختصاصات التقنية</span></span> 
+            <span style="font-size:0.8em; color:var(--accent-color);">Skills Matrix</span>
+        </div>
         <div class="skills-grid">
             <div class="skill-badge">Python Development <span>95%</span></div>
             <div class="skill-badge">Cyber Security <span>90%</span></div>
@@ -463,7 +503,10 @@
 
     <!-- Embedded Code Viewer (Python Script) -->
     <div class="container">
-        <div class="section-title"><span>💻 عارض الكود البرمجي المتقدم</span> <span style="font-size:0.8em; color:var(--accent-color);">Python Snippet</span></div>
+        <div class="section-title">
+            <span>💻 <span data-i18n="codeTitle">عارض الكود البرمجي المتقدم</span></span> 
+            <span style="font-size:0.8em; color:var(--accent-color);">Python Snippet</span>
+        </div>
         <div class="code-viewer">
             <div class="code-header">
                 <span>scanner.py - Python Port Scanner</span>
@@ -472,7 +515,7 @@
             <div class="code-body">
                 <span class="keyword">import</span> socket<br>
                 <span class="keyword">def</span> <span class="function">scan_target</span>(target, ports):<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># فحص المنافذ النشطة للأمان واختبار الاختراق</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment" data-i18n="codeComment"># فحص المنافذ النشطة للأمان واختبار الاختراق</span><br>
                 &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> port <span class="keyword">in</span> ports:<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s = socket.socket()<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = s.connect_ex((target, port))<br>
@@ -484,29 +527,32 @@
 
     <!-- System Diagnostics Dashboard -->
     <div class="container">
-        <div class="section-title"><span>⚡ لوحة تشخيص النظام</span> <span style="font-size:0.8em; color:var(--accent-color);">Diagnostics</span></div>
+        <div class="section-title">
+            <span>⚡ <span data-i18n="diagTitle">لوحة تشخيص النظام</span></span> 
+            <span style="font-size:0.8em; color:var(--accent-color);">Diagnostics</span>
+        </div>
         <div class="diag-grid">
             <div class="diag-item">
-                استقرار السيرفر (Uptime)
+                <span data-i18n="d1">استقرار السيرفر (Uptime)</span>
                 <div class="diag-value">99.9% Online</div>
             </div>
             <div class="diag-item">
-                استجابة البورتفوليو
+                <span data-i18n="d2">استجابة البورتفوليو</span>
                 <div class="diag-value">14ms (Fast)</div>
             </div>
             <div class="diag-item">
-                حالة جدار الحماية
+                <span data-i18n="d3">حالة جدار الحماية</span>
                 <div class="diag-value">Active / Secured</div>
             </div>
             <div class="diag-item">
-                بروتوكول الأمان
+                <span data-i18n="d4">بروتوكول الأمان</span>
                 <div class="diag-value">TLS 1.3 / HTTPS</div>
             </div>
         </div>
 
         <div style="text-align: center; margin-top: 15px;">
             <div class="visitor-counter">
-                عدد زوار المنصة: <span id="visitor-count">2,142</span> 👁️‍🗨️
+                <span data-i18n="visitorCountLabel">عدد زوار المنصة</span>: <span id="visitor-count">2,142</span> 👁️‍🗨️
             </div>
         </div>
     </div>
@@ -514,20 +560,141 @@
     <!-- Contact Popup Modal -->
     <div class="modal" id="contactModal">
         <div class="modal-content">
-            <button class="close-btn" onclick="closeModal()">✕</button>
-            <h3 style="margin-top:0; color:var(--text-color);">إرسال رسالة مباشرة</h3>
-            <p style="font-size: 0.85em;">أدخل رسالتك وسيتم تحويلك مباشرة لتليجرام:</p>
+            <button class="close-btn" onclick="closeModal()" style="float: left;">✕</button>
+            <h3 style="margin-top:0; color:var(--text-color);" data-i18n="modalTitle">إرسال رسالة مباشرة</h3>
+            <p style="font-size: 0.85em;" data-i18n="modalDesc">أدخل رسالتك وسيتم تحويلك مباشرة لتليجرام:</p>
             <input type="text" id="senderName" placeholder="اسمك الكريم...">
             <textarea id="senderMsg" rows="3" placeholder="محتوى الرسالة..."></textarea>
-            <button class="social-btn" style="width:100%; justify-content:center; background:var(--accent-color); color:white;" onclick="sendTelegram()">إرسال عبر تيليجرام 🚀</button>
+            <button class="social-btn" style="width:100%; justify-content:center; background:var(--accent-color); color:white;" onclick="sendTelegram()"><span data-i18n="modalSend">إرسال عبر تيليجرام 🚀</span></button>
         </div>
     </div>
 
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">تم نسخ رابط الموقع بنجاح! 📋</div>
+
     <footer>
-        <p>إشراف وتطوير: قصي كاظم منديل © 2026</p>
+        <p><span data-i18n="footer">إشراف وتطوير: قصي كاظم منديل © 2026</span></p>
     </footer>
 
     <script>
+        // Localization Dictionaries
+        const translations = {
+            ar: {
+                theme: "المظهر",
+                sound: "الصوت: مفعل",
+                name: "قصي كاظم منديل",
+                title: "مطور برمجيات | مختص أمن سيبراني واختبار اختراق",
+                bio: "مهندس نظم وسكريبتات محترف، أمتلك خبرة في بناء أدوات الأمان الرقمي بلغة بايثون، إدارة السيرفرات وأنظمة التشغيل عبر بيئات Linux و Termux، مع شغف كبير بتطوير الحلول التقنية المتقدمة وصيانة الأنظمة الميكانيكية والبرمجية.",
+                quickContact: "✉️ تواصل سريع",
+                shareBtn: "مشاركة الموقع",
+                secBadgeTitle: "شهادة الحماية والتحقق",
+                connStatus: "حالة الاتصال",
+                secureClean: "آمن ومصرح (Secure Clearance)",
+                visitorIdLabel: "معرف الزائر الرقمي",
+                envLabel: "النظام المكتشف",
+                projTitle: "مشاريع وأدوات المنصة",
+                p1Title: "برامج أمان بايثون",
+                p1Desc: "أدوات فحص وسكريبتات أمنية متطورة ومكتوبة بلغة Python لاختبار الاختراق وفحص الثغرات.",
+                p2Title: "أدوات أتمتة Termux",
+                p2Desc: "سكربتات مخصصة لتسهيل وإدارة مهام التيرمكس وأتمتة الأوامر على أنظمة لينكس بسهولة.",
+                p3Title: "أداة الطقس الذكية",
+                p3Desc: "أداة تفاعلية لفحص حالة الطقس اللحظية والبيانات المناخية بشكل دقيق وسريع.",
+                p4Title: "حاسبة صيانة المركبات",
+                p4Desc: "حاسبة متقدمة لمتابعة صيانات الكيلومتر والـ GY6 بكفاءة عالية.",
+                skillsTitle: "مهارات واختصاصات التقنية",
+                codeTitle: "عارض الكود البرمجي المتقدم",
+                codeComment: "# فحص المنافذ النشطة للأمان واختبار الاختراق",
+                diagTitle: "لوحة تشخيص النظام",
+                d1: "استقرار السيرفر (Uptime)",
+                d2: "استجابة البورتفوليو",
+                d3: "حالة جدار الحماية",
+                d4: "بروتوكول الأمان",
+                visitorCountLabel: "عدد زوار المنصة",
+                modalTitle: "إرسال رسالة مباشرة",
+                modalDesc: "أدخل رسالتك وسيتم تحويلك مباشرة لتليجرام:",
+                modalSend: "إرسال عبر تيليجرام 🚀",
+                footer: "إشراف وتطوير: قصي كاظم منديل © 2026",
+                toastMsg: "تم نسخ رابط الموقع بنجاح! 📋"
+            },
+            en: {
+                theme: "Theme",
+                sound: "Sound: On",
+                name: "Qusay Kadhim Mandeel",
+                title: "Software Developer | Cybersecurity & Pentesting Specialist",
+                bio: "Professional systems & script engineer experienced in building Python security tools, server management & Linux/Termux environments, with a strong passion for advanced tech solutions and mechanical/software maintenance.",
+                quickContact: "✉️ Quick Contact",
+                shareBtn: "Share Portfolio",
+                secBadgeTitle: "Security Clearance & Verification",
+                connStatus: "Connection Status",
+                secureClean: "Secure Clearance Active",
+                visitorIdLabel: "Visitor ID",
+                envLabel: "Detected Environment",
+                projTitle: "Platform Projects & Tools",
+                p1Title: "Python Security Tools",
+                p1Desc: "Advanced penetration testing and vulnerability scanning scripts written in Python.",
+                p2Title: "Termux Automation Utilities",
+                p2Desc: "Custom scripts designed to streamline Termux tasks and Linux command automation.",
+                p3Title: "Smart Weather Utility",
+                p3Desc: "Interactive real-time weather checking and climate data visualization tool.",
+                p4Title: "Vehicle Maintenance Calculator",
+                p4Desc: "Advanced calculator for tracking GY6 scooter mileage and maintenance intervals.",
+                skillsTitle: "Skills Matrix",
+                codeTitle: "Advanced Code Viewer",
+                codeComment: "# Scan active ports for security & penetration testing",
+                diagTitle: "System Diagnostics Dashboard",
+                d1: "Server Stability (Uptime)",
+                d2: "Portfolio Latency",
+                d3: "Firewall Status",
+                d4: "Security Protocol",
+                visitorCountLabel: "Total Visitors",
+                modalTitle: "Send Direct Message",
+                modalDesc: "Enter your message and you'll be redirected to Telegram:",
+                modalSend: "Send via Telegram 🚀",
+                footer: "Supervised & Developed by Qusay Kadhim Mandeel © 2026",
+                toastMsg: "Portfolio link copied successfully! 📋"
+            }
+        };
+
+        let currentLang = 'ar';
+        function toggleLanguage() {
+            playClickSound();
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.getElementById('htmlRoot').setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+            document.getElementById('htmlRoot').setAttribute('lang', currentLang);
+            document.getElementById('langLabel').innerText = currentLang === 'ar' ? 'English' : 'العربية';
+            
+            // Update all elements with data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    el.innerText = translations[currentLang][key];
+                }
+            });
+        }
+
+        // Share Website & Copy Link Functionality
+        function shareWebsite() {
+            playClickSound();
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Qusay Security Hub',
+                    url: url
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast();
+                });
+            }
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.innerText = translations[currentLang].toastMsg;
+            toast.className = "toast show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
         // Sound Effects (Web Audio API Mechanical Keystrokes)
         let soundEnabled = true;
         function playClickSound() {
@@ -550,7 +717,7 @@
 
         function toggleSound() {
             soundEnabled = !soundEnabled;
-            document.getElementById('soundBtn').innerText = soundEnabled ? '🔊 الصوت: مفعل' : '🔇 الصوت: معطل';
+            document.getElementById('soundBtn').innerHTML = soundEnabled ? '🔊 <span data-i18n="sound">' + (currentLang === 'ar' ? 'الصوت: مفعل' : 'Sound: On') + '</span>' : '🔇 <span data-i18n="sound">' + (currentLang === 'ar' ? 'الصوت: معطل' : 'Sound: Off') + '</span>';
         }
 
         document.querySelectorAll('a, button, .menu-card').forEach(el => {
@@ -613,7 +780,7 @@
         function sendTelegram() {
             const name = document.getElementById('senderName').value;
             const msg = document.getElementById('senderMsg').value;
-            const text = `مرحباً، أنا ${name}، ${msg}`;
+            const text = currentLang === 'ar' ? `مرحباً، أنا ${name}، ${msg}` : `Hello, I am ${name}, ${msg}`;
             window.open(`https://t.me/usbjgsvhsg?text=${encodeURIComponent(text)}`, '_blank');
         }
     </script>
