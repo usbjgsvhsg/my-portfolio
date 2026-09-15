@@ -13,6 +13,7 @@
             --accent-glow: rgba(88, 166, 255, 0.4);
             --border-color: #30363d;
             --code-bg: #010409;
+            --success-color: #238636;
         }
 
         [data-theme="light"] {
@@ -46,17 +47,22 @@
             margin-bottom: 15px;
         }
 
-        .theme-toggle {
+        .top-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .theme-toggle, .sound-toggle {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 8px 14px;
+            padding: 8px 12px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 0.85em;
             transition: 0.2s;
         }
-        .theme-toggle:hover {
+        .theme-toggle:hover, .sound-toggle:hover {
             border-color: var(--accent-color);
         }
 
@@ -75,7 +81,6 @@
             transition: background 0.3s, border 0.3s;
         }
 
-        /* Matrix Canvas Header Effect */
         #matrix-canvas {
             position: absolute;
             top: 0;
@@ -186,18 +191,72 @@
             margin-left: 10px;
         }
 
-        /* Quick Tips / Code Box */
-        .tip-box {
+        /* Embedded Code Viewer */
+        .code-viewer {
             background: var(--code-bg);
             border: 1px solid var(--border-color);
-            padding: 12px;
-            border-radius: 6px;
+            border-radius: 8px;
             text-align: left;
             direction: ltr;
-            font-family: monospace;
+            font-family: 'Courier New', Courier, monospace;
             font-size: 0.85em;
-            color: var(--accent-color);
+            overflow-x: auto;
             margin-top: 10px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+        }
+        .code-header {
+            background: var(--border-color);
+            padding: 6px 12px;
+            font-size: 0.75em;
+            color: var(--text-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .code-body {
+            padding: 14px;
+            color: #d2a8ff;
+            line-height: 1.5;
+        }
+        .keyword { color: #ff7b72; }
+        .function { color: #d2a8ff; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+
+        /* Security Clearance Badge */
+        .badge-box {
+            background: var(--bg-color);
+            border: 1px dashed var(--accent-color);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: right;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .badge-box span {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        /* Diagnostics Dashboard */
+        .diag-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+            text-align: right;
+        }
+        .diag-item {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.85em;
+        }
+        .diag-value {
+            color: var(--success-color);
+            font-weight: bold;
+            margin-top: 4px;
         }
 
         /* Social & Contact Modal */
@@ -224,7 +283,6 @@
             color: var(--accent-color);
         }
 
-        /* Contact Popup Modal */
         .modal {
             display: none;
             position: fixed;
@@ -290,11 +348,14 @@
 <body>
 
     <div class="top-bar">
-        <button class="theme-toggle" onclick="toggleTheme()">🌓 تغيير المظهر</button>
+        <div class="top-controls">
+            <button class="theme-toggle" onclick="toggleTheme()">🌓 المظهر</button>
+            <button class="sound-toggle" id="soundBtn" onclick="toggleSound()">🔊 الصوت: مفعل</button>
+        </div>
         <div style="font-size: 0.85em; color: var(--accent-color);">Qusay Security Hub</div>
     </div>
 
-    <!-- Bio / Profile Section with Matrix Canvas -->
+    <!-- Bio / Profile Section -->
     <div class="container">
         <canvas id="matrix-canvas"></canvas>
         <div class="hero-content">
@@ -309,6 +370,16 @@
         </div>
     </div>
 
+    <!-- Security Clearance Badge -->
+    <div class="container">
+        <div class="section-title">🛡️ شهادة الحماية والتحقق (Visitor Security ID)</div>
+        <div class="badge-box">
+            حالة الاتصال: <span>آمن ومصرح (Secure Clearance)</span><br>
+            معرف الزائر الرقمي: <span id="visitorId">QUSAY-SEC-9842</span><br>
+            النظام المكتشف: <span id="visitorEnv">Mobile Client (Termux/Android Compatible)</span>
+        </div>
+    </div>
+
     <!-- Skills Matrix Section -->
     <div class="container">
         <div class="section-title">📊 مهارات واختصاصات التقنية (Skills Matrix)</div>
@@ -320,24 +391,46 @@
         </div>
     </div>
 
-    <!-- Certificates & Achievements -->
+    <!-- Embedded Code Viewer (Python Script) -->
     <div class="container">
-        <div class="section-title">🏆 الشهادات والإنجازات (Achievements)</div>
-        <div class="menu-grid">
-            <div class="menu-card" style="cursor: default;">
-                <div class="card-icon">🛡️</div>
-                <div class="card-content">
-                    <div class="card-title">TryHackMe Security Rooms</div>
-                    <div class="card-desc">إتمام تدريبات متقدمة في الاستجابة للحوادث وتحليل التحقيقات الرقمية.</div>
-                </div>
+        <div class="section-title">💻 عارض الكود البرمجي (Python Tool Snippet)</div>
+        <div class="code-viewer">
+            <div class="code-header">
+                <span>scanner.py - Python Port Scanner</span>
+                <span>UTF-8</span>
             </div>
+            <div class="code-body">
+                <span class="keyword">import</span> socket<br>
+                <span class="keyword">def</span> <span class="function">scan_target</span>(target, ports):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># فحص المنافذ النشطة للأمان واختبار الاختراق</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> port <span class="keyword">in</span> ports:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s = socket.socket()<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = s.connect_ex((target, port))<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> result == 0:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">print</span>(<span class="string">f"Port {port} is OPEN"</span>)
+            </div>
+        </div>
+    </div>
 
-            <div class="menu-card" style="cursor: default;">
-                <div class="card-icon">📜</div>
-                <div class="card-content">
-                    <div class="card-title">Python Automation & Flask</div>
-                    <div class="card-desc">بناء تطبيقات ويب وسكريبتات فحص شبكات متكاملة ونشرها بنجاح.</div>
-                </div>
+    <!-- System Diagnostics Dashboard -->
+    <div class="container">
+        <div class="section-title">⚡ لوحة تشخيص النظام (System Diagnostics)</div>
+        <div class="diag-grid">
+            <div class="diag-item">
+                استقرار السيرفر (Uptime)
+                <div class="diag-value">99.9% Online</div>
+            </div>
+            <div class="diag-item">
+                استجابة البورتفوليو
+                <div class="diag-value">14ms (Fast)</div>
+            </div>
+            <div class="diag-item">
+                حالة جدار الحماية
+                <div class="diag-value">Active / Secured</div>
+            </div>
+            <div class="diag-item">
+                بروتوكول الأمان
+                <div class="diag-value">TLS 1.3 / HTTPS</div>
             </div>
         </div>
     </div>
@@ -364,15 +457,6 @@
         </div>
     </div>
 
-    <!-- Quick Tips / Blog Section -->
-    <div class="container">
-        <div class="section-title">💡 نصيحة تقنية سريعة (Quick Tip)</div>
-        <p style="text-align: right; font-size: 0.95em;">أمر سريع لتحديث حزم Termux وفحص الأمان:</p>
-        <div class="tip-box">
-            pkg update && pkg upgrade -y && nmap -sV localhost
-        </div>
-    </div>
-
     <!-- Cyber Operations Hub (Tools Links) -->
     <div class="container">
         <div class="section-title">🛠️ الأدوات المركزية المباشرة</div>
@@ -396,7 +480,7 @@
         
         <div style="text-align: center;">
             <div class="visitor-counter">
-                عدد زوار المنصة: <span id="visitor-count">1,842</span> 👁️‍🗨️
+                عدد زوار المنصة: <span id="visitor-count">2,109</span> 👁️‍🗨️
             </div>
         </div>
     </div>
@@ -409,7 +493,7 @@
             <p style="font-size: 0.85em;">أدخل رسالتك وسيتم تحويلك مباشرة للتواصل:</p>
             <input type="text" id="senderName" placeholder="اسمك الكريم...">
             <textarea id="senderMsg" rows="3" placeholder="محتوى الرسالة..."></textarea>
-            <button class="social-btn" style="width:100%; background:var(--accent-color); color:white;" onclick="sendWhatsApp()">إرسال عبر واتساب / تيليجرام 🚀</button>
+            <button class="social-btn" style="width:100%; background:var(--accent-color); color:white;" onclick="sendTelegram()">إرسال عبر تيليجرام 🚀</button>
         </div>
     </div>
 
@@ -418,7 +502,49 @@
     </footer>
 
     <script>
-        // Matrix Rain Effect Script
+        // Sound Effects (Web Audio API Mechanical Keystrokes)
+        let soundEnabled = true;
+        function playClickSound() {
+            if (!soundEnabled) return;
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.04);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.04);
+            } catch(e) {}
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').innerText = soundEnabled ? '🔊 الصوت: مفعل' : 'muted الصوت: معطل';
+        }
+
+        // Add sound trigger to all clickable elements
+        document.querySelectorAll('a, button, .menu-card').forEach(el => {
+            el.addEventListener('click', playClickSound);
+        });
+
+        // Generate Dynamic Security ID for Visitor
+        const randomId = 'QUSAY-SEC-' + Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('visitorId').innerText = randomId;
+        
+        // Detect User Agent / Environment
+        const ua = navigator.userAgent;
+        let envText = "Standard Web Browser";
+        if (/Android/i.test(ua)) envText = "Android Device / Termux Ready";
+        else if (/iPhone|iPad/i.test(ua)) envText = "iOS Secure Client";
+        else if (/Windows|Macintosh/i.test(ua)) envText = "Desktop Workstation Terminal";
+        document.getElementById('visitorEnv').innerText = envText;
+
+        // Matrix Rain Effect
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = canvas.parentElement.offsetWidth;
@@ -446,6 +572,7 @@
 
         // Theme Toggle
         function toggleTheme() {
+            playClickSound();
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
             html.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
@@ -458,7 +585,7 @@
         function closeModal() {
             document.getElementById('contactModal').style.display = 'none';
         }
-        function sendWhatsApp() {
+        function sendTelegram() {
             const name = document.getElementById('senderName').value;
             const msg = document.getElementById('senderMsg').value;
             const text = `مرحباً، أنا ${name}، ${msg}`;
