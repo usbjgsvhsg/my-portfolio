@@ -2,15 +2,17 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content5="width=device-width, initial-scale=1.0">
-    <title>قصي كاظم منديل - بورتفوليو</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قصي كاظم منديل - بورتفوليو الأمن السيبراني</title>
     <style>
         :root {
             --bg-color: #0d1117;
             --card-bg: #161b22;
             --text-color: #c9d1d9;
             --accent-color: #58a6ff;
+            --accent-glow: rgba(88, 166, 255, 0.4);
             --border-color: #30363d;
+            --success-color: #238636;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,32 +26,70 @@
         }
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 24px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
             margin-bottom: 20px;
             text-align: center;
         }
         h1 {
             color: #ffffff;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            font-size: 1.8em;
         }
         .subtitle {
             color: var(--accent-color);
             font-size: 1.1em;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         p {
             line-height: 1.6;
+            color: #8b949e;
         }
+        .section-title {
+            color: #ffffff;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        /* Skills Matrix */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .skill-badge {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: right;
+            font-size: 0.95em;
+            font-weight: bold;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .skill-badge span {
+            color: var(--accent-color);
+            font-size: 0.85em;
+        }
+        /* Menu & Projects Grid */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 12px;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         .menu-card {
             background: var(--bg-color);
@@ -62,31 +102,65 @@
             justify-content: space-between;
             align-items: center;
             transition: 0.2s;
+            text-align: right;
         }
         .menu-card:hover {
             border-color: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-glow);
             transform: translateY(-2px);
         }
         .card-title {
             font-weight: bold;
             color: #ffffff;
+            font-size: 1.05em;
         }
         .card-desc {
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: #8b949e;
+            margin-top: 4px;
         }
-        .btn {
-            background-color: #238636;
-            color: white;
-            padding: 10px 20px;
+        .card-icon {
+            font-size: 1.5em;
+        }
+        /* Social Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .social-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: #ffffff;
+            padding: 8px 16px;
             border-radius: 6px;
             text-decoration: none;
+            font-size: 0.9em;
+            transition: 0.2s;
+        }
+        .social-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+        /* Visitor Counter */
+        .visitor-counter {
+            margin-top: 15px;
+            font-size: 0.85em;
+            color: #8b949e;
+            background: var(--bg-color);
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px dashed var(--border-color);
             display: inline-block;
-            margin-top: 10px;
+        }
+        .visitor-counter span {
+            color: var(--accent-color);
             font-weight: bold;
         }
         footer {
-            margin-top: 20px;
+            margin-top: 10px;
             font-size: 0.85em;
             color: #8b949e;
             text-align: center;
@@ -95,16 +169,54 @@
 </head>
 <body>
 
+    <!-- Bio / Profile Section -->
     <div class="container">
         <h1>قصي كاظم منديل</h1>
         <div class="subtitle">مطور برمجيات | مختص أمن سيبراني واختبار اختراق</div>
-        <p>مرحباً! أنا شغوف بعالم التكنولوجيا، برمجة وتطوير سكريبتات بلغة Python، وتطبيق مفاهيم الأمن السيبراني والرقمي. أمتلك خبرة عملية في التعامل مع بيئات أنظمة التشغيل عبر سطر الأوامر (Termux)، وتطوير تطبيقات الويب، وتحليل الأنظمة بطريقة احترافية.</p>
+        <p>مرحباً بك في بورتفوليو الخاص بي. شغوف بتطوير سكريبتات Python المتقدمة، بناء أدوات الأمان الرقمي، وإدارة الأنظمة عبر سطر الأوامر ببيئات الذكاء واللِمكس (Termux).</p>
+        
+        <div class="social-links">
+            <a href="https://github.com/usbjgsvhsg" target="_blank" class="social-btn">GitHub 💻</a>
+            <a href="https://t.me/" target="_blank" class="social-btn">Telegram 📱</a>
+        </div>
     </div>
 
+    <!-- Skills Matrix Section -->
     <div class="container">
-        <h2>⚡ Cyber Operations Hub</h2>
-        <div class="subtitle">لوحة التحكم والأدوات المركزية</div>
-        
+        <div class="section-title">📊 مهارات واختصاصات التقنية (Skills Matrix)</div>
+        <div class="skills-grid">
+            <div class="skill-badge">Python Development <span>95%</span></div>
+            <div class="skill-badge">Cyber Security & Pentesting <span>90%</span></div>
+            <div class="skill-badge">Termux & Linux CLI <span>95%</span></div>
+            <div class="skill-badge">Git & Version Control <span>85%</span></div>
+        </div>
+    </div>
+
+    <!-- Projects Hub Section -->
+    <div class="container">
+        <div class="section-title">🚀 مشاريع وأدوات المنصة (Projects Hub)</div>
+        <div class="menu-grid">
+            <a href="https://github.com/usbjgsvhsg" target="_blank" class="menu-card">
+                <div>
+                    <div class="card-title">Python Security Scripts</div>
+                    <div class="card-desc">أدوات فحص وسكريبتات أمنية مطورة بلغة بايثون</div>
+                </div>
+                <div class="card-icon">🐍</div>
+            </a>
+
+            <a href="https://github.com/usbjgsvhsg" target="_blank" class="menu-card">
+                <div>
+                    <div class="card-title">Termux Automation Tools</div>
+                    <div class="card-desc">سكربتات مخصصة لتسهيل وإدارة مهام التيرمكس</div>
+                </div>
+                <div class="card-icon">⚡</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Cyber Operations Hub (Tools Links) -->
+    <div class="container">
+        <div class="section-title">🛠️ الأدوات المركزية المباشرة</div>
         <div class="menu-grid">
             <a href="weather.html" class="menu-card">
                 <div>
@@ -121,6 +233,12 @@
                 </div>
                 <div class="card-icon">🛠️</div>
             </a>
+        </div>
+        
+        <div style="text-align: center;">
+            <div class="visitor-counter">
+                عدد زوار المنصة: <span id="visitor-count">1,428</span> 👁️‍🗨️
+            </div>
         </div>
     </div>
 
