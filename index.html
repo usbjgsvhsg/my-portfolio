@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +12,19 @@
             --accent-color: #58a6ff;
             --accent-glow: rgba(88, 166, 255, 0.4);
             --border-color: #30363d;
-            --success-color: #238636;
+            --code-bg: #010409;
         }
+
+        [data-theme="light"] {
+            --bg-color: #f6f8fa;
+            --card-bg: #ffffff;
+            --text-color: #24292e;
+            --accent-color: #0366d6;
+            --accent-glow: rgba(3, 102, 214, 0.3);
+            --border-color: #e1e4e8;
+            --code-bg: #f1f8ff;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -23,7 +34,32 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            transition: background 0.3s, color 0.3s;
         }
+
+        .top-bar {
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: 0.2s;
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent-color);
+        }
+
         .container {
             width: 100%;
             max-width: 650px;
@@ -31,12 +67,33 @@
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 24px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
             margin-bottom: 20px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s, border 0.3s;
         }
+
+        /* Matrix Canvas Header Effect */
+        #matrix-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            z-index: 1;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
         h1 {
-            color: #ffffff;
+            color: var(--text-color);
             margin-bottom: 6px;
             font-size: 1.8em;
         }
@@ -47,19 +104,18 @@
         }
         p {
             line-height: 1.6;
-            color: #8b949e;
+            color: var(--text-color);
+            opacity: 0.85;
         }
         .section-title {
-            color: #ffffff;
-            font-size: 1.3em;
+            color: var(--text-color);
+            font-size: 1.2em;
             margin-bottom: 15px;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 8px;
             text-align: right;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
+
         /* Skills Matrix */
         .skills-grid {
             display: grid;
@@ -73,9 +129,9 @@
             padding: 10px;
             border-radius: 8px;
             text-align: right;
-            font-size: 0.95em;
+            font-size: 0.9em;
             font-weight: bold;
-            color: #ffffff;
+            color: var(--text-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -84,6 +140,7 @@
             color: var(--accent-color);
             font-size: 0.85em;
         }
+
         /* Menu & Projects Grid */
         .menu-grid {
             display: grid;
@@ -109,20 +166,41 @@
             box-shadow: 0 0 10px var(--accent-glow);
             transform: translateY(-2px);
         }
+        .card-content {
+            text-align: right;
+            width: 100%;
+        }
         .card-title {
             font-weight: bold;
-            color: #ffffff;
+            color: var(--text-color);
             font-size: 1.05em;
         }
         .card-desc {
             font-size: 0.85em;
-            color: #8b949e;
+            color: var(--text-color);
+            opacity: 0.7;
             margin-top: 4px;
         }
         .card-icon {
             font-size: 1.5em;
+            margin-left: 10px;
         }
-        /* Social Links */
+
+        /* Quick Tips / Code Box */
+        .tip-box {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 6px;
+            text-align: left;
+            direction: ltr;
+            font-family: monospace;
+            font-size: 0.85em;
+            color: var(--accent-color);
+            margin-top: 10px;
+        }
+
+        /* Social & Contact Modal */
         .social-links {
             display: flex;
             justify-content: center;
@@ -133,22 +211,63 @@
         .social-btn {
             background: var(--bg-color);
             border: 1px solid var(--border-color);
-            color: #ffffff;
+            color: var(--text-color);
             padding: 8px 16px;
             border-radius: 6px;
             text-decoration: none;
             font-size: 0.9em;
             transition: 0.2s;
+            cursor: pointer;
         }
         .social-btn:hover {
             border-color: var(--accent-color);
             color: var(--accent-color);
         }
-        /* Visitor Counter */
+
+        /* Contact Popup Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            text-align: right;
+        }
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 8px;
+            margin-bottom: 14px;
+            box-sizing: border-box;
+        }
+        .close-btn {
+            background: #d73a49;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            float: left;
+        }
+
         .visitor-counter {
             margin-top: 15px;
             font-size: 0.85em;
-            color: #8b949e;
+            opacity: 0.8;
             background: var(--bg-color);
             padding: 8px;
             border-radius: 6px;
@@ -159,25 +278,34 @@
             color: var(--accent-color);
             font-weight: bold;
         }
+
         footer {
             margin-top: 10px;
             font-size: 0.85em;
-            color: #8b949e;
+            opacity: 0.7;
             text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <!-- Bio / Profile Section -->
+    <div class="top-bar">
+        <button class="theme-toggle" onclick="toggleTheme()">🌓 تغيير المظهر</button>
+        <div style="font-size: 0.85em; color: var(--accent-color);">Qusay Security Hub</div>
+    </div>
+
+    <!-- Bio / Profile Section with Matrix Canvas -->
     <div class="container">
-        <h1>قصي كاظم منديل</h1>
-        <div class="subtitle">مطور برمجيات | مختص أمن سيبراني واختبار اختراق</div>
-        <p>مرحباً بك في بورتفوليو الخاص بي. شغوف بتطوير سكريبتات Python المتقدمة، بناء أدوات الأمان الرقمي، وإدارة الأنظمة عبر سطر الأوامر ببيئات الذكاء واللِمكس (Termux).</p>
-        
-        <div class="social-links">
-            <a href="https://github.com/usbjgsvhsg" target="_blank" class="social-btn">GitHub 💻</a>
-            <a href="https://t.me/" target="_blank" class="social-btn">Telegram 📱</a>
+        <canvas id="matrix-canvas"></canvas>
+        <div class="hero-content">
+            <h1>قصي كاظم منديل</h1>
+            <div class="subtitle">مطور برمجيات | مختص أمن سيبراني واختبار اختراق</div>
+            <p>مرحباً بك في بورتفوليو الخاص بي. شغوف بتطوير سكريبتات Python المتقدمة، بناء أدوات الأمان الرقمي، وإدارة الأنظمة عبر سطر الأوامر ببيئات Linux و Termux.</p>
+            
+            <div class="social-links">
+                <a href="https://github.com/usbjgsvhsg" target="_blank" class="social-btn">GitHub 💻</a>
+                <button class="social-btn" onclick="openModal()">تواصل سريع ✉️</button>
+            </div>
         </div>
     </div>
 
@@ -186,9 +314,31 @@
         <div class="section-title">📊 مهارات واختصاصات التقنية (Skills Matrix)</div>
         <div class="skills-grid">
             <div class="skill-badge">Python Development <span>95%</span></div>
-            <div class="skill-badge">Cyber Security & Pentesting <span>90%</span></div>
-            <div class="skill-badge">Termux & Linux CLI <span>95%</span></div>
-            <div class="skill-badge">Git & Version Control <span>85%</span></div>
+            <div class="skill-badge">Cyber Security <span>90%</span></div>
+            <div class="skill-badge">Termux & Linux <span>95%</span></div>
+            <div class="skill-badge">Git & Version <span>85%</span></div>
+        </div>
+    </div>
+
+    <!-- Certificates & Achievements -->
+    <div class="container">
+        <div class="section-title">🏆 الشهادات والإنجازات (Achievements)</div>
+        <div class="menu-grid">
+            <div class="menu-card" style="cursor: default;">
+                <div class="card-icon">🛡️</div>
+                <div class="card-content">
+                    <div class="card-title">TryHackMe Security Rooms</div>
+                    <div class="card-desc">إتمام تدريبات متقدمة في الاستجابة للحوادث وتحليل التحقيقات الرقمية.</div>
+                </div>
+            </div>
+
+            <div class="menu-card" style="cursor: default;">
+                <div class="card-icon">📜</div>
+                <div class="card-content">
+                    <div class="card-title">Python Automation & Flask</div>
+                    <div class="card-desc">بناء تطبيقات ويب وسكريبتات فحص شبكات متكاملة ونشرها بنجاح.</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -197,20 +347,29 @@
         <div class="section-title">🚀 مشاريع وأدوات المنصة (Projects Hub)</div>
         <div class="menu-grid">
             <a href="https://github.com/usbjgsvhsg" target="_blank" class="menu-card">
-                <div>
+                <div class="card-icon">🐍</div>
+                <div class="card-content">
                     <div class="card-title">Python Security Scripts</div>
                     <div class="card-desc">أدوات فحص وسكريبتات أمنية مطورة بلغة بايثون</div>
                 </div>
-                <div class="card-icon">🐍</div>
             </a>
 
             <a href="https://github.com/usbjgsvhsg" target="_blank" class="menu-card">
-                <div>
+                <div class="card-icon">⚡</div>
+                <div class="card-content">
                     <div class="card-title">Termux Automation Tools</div>
                     <div class="card-desc">سكربتات مخصصة لتسهيل وإدارة مهام التيرمكس</div>
                 </div>
-                <div class="card-icon">⚡</div>
             </a>
+        </div>
+    </div>
+
+    <!-- Quick Tips / Blog Section -->
+    <div class="container">
+        <div class="section-title">💡 نصيحة تقنية سريعة (Quick Tip)</div>
+        <p style="text-align: right; font-size: 0.95em;">أمر سريع لتحديث حزم Termux وفحص الأمان:</p>
+        <div class="tip-box">
+            pkg update && pkg upgrade -y && nmap -sV localhost
         </div>
     </div>
 
@@ -219,26 +378,38 @@
         <div class="section-title">🛠️ الأدوات المركزية المباشرة</div>
         <div class="menu-grid">
             <a href="weather.html" class="menu-card">
-                <div>
+                <div class="card-icon">🌡️</div>
+                <div class="card-content">
                     <div class="card-title">Weather Tool</div>
                     <div class="card-desc">أداة فحص حالة الطقس لحظياً</div>
                 </div>
-                <div class="card-icon">🌡️</div>
             </a>
 
             <a href="vehicle.html" class="menu-card">
-                <div>
+                <div class="card-icon">🛠️</div>
+                <div class="card-content">
                     <div class="card-title">Vehicle Maintenance</div>
                     <div class="card-desc">حاسبة ومتابعة صيانات الكيلومتر والـ GY6</div>
                 </div>
-                <div class="card-icon">🛠️</div>
             </a>
         </div>
         
         <div style="text-align: center;">
             <div class="visitor-counter">
-                عدد زوار المنصة: <span id="visitor-count">1,428</span> 👁️‍🗨️
+                عدد زوار المنصة: <span id="visitor-count">1,842</span> 👁️‍🗨️
             </div>
+        </div>
+    </div>
+
+    <!-- Contact Popup Modal -->
+    <div class="modal" id="contactModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">✕</button>
+            <h3 style="margin-top:0; color:var(--text-color);">إرسال رسالة مباشرة</h3>
+            <p style="font-size: 0.85em;">أدخل رسالتك وسيتم تحويلك مباشرة للتواصل:</p>
+            <input type="text" id="senderName" placeholder="اسمك الكريم...">
+            <textarea id="senderMsg" rows="3" placeholder="محتوى الرسالة..."></textarea>
+            <button class="social-btn" style="width:100%; background:var(--accent-color); color:white;" onclick="sendWhatsApp()">إرسال عبر واتساب / تيليجرام 🚀</button>
         </div>
     </div>
 
@@ -246,6 +417,54 @@
         <p>إشراف وتطوير: قصي كاظم منديل © 2026</p>
     </footer>
 
+    <script>
+        // Matrix Rain Effect Script
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = 100;
+        
+        const characters = '01SYNACK0123456789ABCDEF';
+        const fontSize = 10;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+        for (let i = 0; i < columns; i++) drops[i] = 1;
+
+        function drawMatrix() {
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card-bg') + '33';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#58a6ff';
+            ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            html.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+        }
+
+        // Modal Controls
+        function openModal() {
+            document.getElementById('contactModal').style.display = 'flex';
+        }
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+        function sendWhatsApp() {
+            const name = document.getElementById('senderName').value;
+            const msg = document.getElementById('senderMsg').value;
+            const text = `مرحباً، أنا ${name}، ${msg}`;
+            window.open(`https://t.me/usbjgsvhsg?text=${encodeURIComponent(text)}`, '_blank');
+        }
+    </script>
 </body>
 </html>
 
