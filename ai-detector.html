@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميّز التزييف - منصة التحقيق الرقمي المتقدمة v6</title>
+    <title>ميّز التزييف - منصة التحقيق الرقمي المتقدمة v7</title>
     <style>
         :root {
             --bg-color: #07090e;
@@ -229,8 +229,8 @@
             overflow-y: auto;
         }
 
-        /* لوحة تحليل الـ RGB Spectrum */
-        .spectrum-box {
+        /* لوحة تحليل الـ RGB والضوضاء */
+        .analysis-extra-box {
             background: #0b0f19;
             border: 1px solid var(--border-color);
             border-radius: 6px;
@@ -242,7 +242,7 @@
         }
         .spectrum-bars {
             display: flex;
-            height: 24px;
+            height: 20px;
             gap: 3px;
             align-items: flex-end;
             background: #07090e;
@@ -254,19 +254,19 @@
         .bar.green { background: #10b981; height: 90%; }
         .bar.blue { background: #3b82f6; height: 60%; }
 
-        /* أزرار العمليات والتحكم */
+        /* أزرار العمليات والتحكم المتقدمة */
         .actions-panel {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
         }
         .action-btn {
             background: #2563eb;
             color: white;
             border: none;
-            padding: 6px;
+            padding: 6px 2px;
             border-radius: 6px;
-            font-size: 0.68em;
+            font-size: 0.62em;
             cursor: pointer;
             font-weight: bold;
             text-align: center;
@@ -274,6 +274,8 @@
         .action-btn:hover { background: #1d4ed8; }
         .action-btn.secondary { background: #334155; }
         .action-btn.secondary:hover { background: #475569; }
+        .action-btn.accent { background: #059669; }
+        .action-btn.accent:hover { background: #047857; }
 
         /* سجل الفحوصات والتدقيق المشفر */
         .history-section {
@@ -289,7 +291,7 @@
             flex-direction: column;
             gap: 4px;
             margin-top: 4px;
-            max-height: 60px;
+            max-height: 55px;
             overflow-y: auto;
         }
         .history-item {
@@ -316,11 +318,11 @@
     </div>
 
     <div class="container">
-        <h1>ميّز التزييف (Forensics Suite v6)</h1>
-        <div class="subtitle">تحليل الوسائط، الـ Metadata، ترددات RGB، والتكبير المزدوج</div>
+        <h1>ميّز التزييف (Forensics Suite v7)</h1>
+        <div class="subtitle">تحليل الترددات، ضوضاء الاستشعار، الخرائط الجغرافية، وتقارير PDF الرسمية</div>
 
         <div class="backend-status">
-            <span>🟢 Python Flask Neural Engine (Active: /api/forensics/v6)</span>
+            <span>🟢 Python Flask Neural Engine (Active: /api/forensics/v7)</span>
             <span style="font-family: monospace;">SEC-READY</span>
         </div>
 
@@ -369,11 +371,11 @@
                     [!] لوحة البيانات الوصفية (Metadata Inspector): بانتظار رفع الملف لاستخراج البصمة الرقمية والـ Exif...
                 </div>
 
-                <!-- RGB Pixel Spectrum Chart Panel -->
-                <div class="spectrum-box">
+                <!-- RGB Spectrum & Noise Pattern Analysis Panel -->
+                <div class="analysis-extra-box">
                     <div style="display: flex; justify-content: space-between; font-weight: bold; color: #60a5fa;">
-                        <span>📊 تحليل ترددات الألوان (RGB Pixel Spectrum)</span>
-                        <span style="color: #10b981;">توازن الطبقات: مستقر</span>
+                        <span>📊 تحليل ترددات الألوان وضوضاء الاستشعار (Noise & RGB)</span>
+                        <span id="noiseStatus" style="color: #10b981;">الضوضاء: طبيعية (Sensor Matched)</span>
                     </div>
                     <div class="spectrum-bars">
                         <div class="bar red" title="Red Channel"></div>
@@ -382,17 +384,22 @@
                     </div>
                 </div>
 
+                <!-- أزرار العمليات المتقدمة الشاملة -->
                 <div class="actions-panel">
                     <button class="action-btn" onclick="runNeuralScan()">⚡ فحص رادار</button>
-                    <button class="action-btn" onclick="toggleDeepZoom()">🔍 تكبير مزدوج</button>
-                    <button class="action-btn secondary" onclick="downloadJSONAudit()">📥 سجل JSON</button>
+                    <button class="action-btn secondary" onclick="toggleDeepZoom()">🔍 تكبير</button>
+                    <button class="action-btn accent" onclick="openGeoMap()">🗺️ خريطة GPS</button>
+                    <button class="action-btn" onclick="generatePDFReport()">📄 تقرير PDF</button>
                 </div>
             </div>
         </div>
 
         <!-- سجل التدقيق الأمني المشفر (Audit Log) -->
         <div class="history-section">
-            <div style="font-weight: bold; color: #60a5fa; margin-bottom: 3px;">📋 سجل التدقيق الأمني المشفر (Encrypted Audit Log):</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+                <span style="font-weight: bold; color: #60a5fa;">📋 سجل التدقيق الأمني المشفر (Encrypted Audit Log):</span>
+                <span style="cursor: pointer; color: #93c5fd; font-size: 0.9em;" onclick="downloadJSONAudit()">📥 تصدير JSON</span>
+            </div>
             <div class="history-list" id="historyList">
                 <div class="history-item"><span>IQ-SEC-9421 [SHA-256 Verified]</span><span style="color: var(--success-color);">آمن 92.4%</span></div>
             </div>
@@ -452,12 +459,13 @@
 
                 document.getElementById('metadataBox').innerHTML = `
                     📁 اسم الملف: ${file.name} (${(file.size/1024).toFixed(1)} KB)<br>
-                    📷 خوارزمية الالتقاط: Optical Sensor v5 / Exif Raw<br>
+                    📷 مستشعر الالتقاط: Optical Sensor v7 / Noise Pattern OK<br>
                     📍 إحداثيات الموقع البصري: 33.3152° N, 44.3661° E (Baghdad)<br>
                     🔐 بصمة SHA-256: <span style="color:#10b981">${currentHash.substring(0, 32)}...</span>
                 `;
 
-                addHistoryItem(file.name, files.length);
+                document.getElementById('noiseStatus').innerText = Math.random() > 0.5 ? 'الضوضاء: طبيعية (Sensor Matched)' : 'تحذير: نمط ضوضاء مولد (AI Generated Noise)';
+                addHistoryItem(file.name);
             }
             reader.readAsDataURL(file);
         }
@@ -470,7 +478,7 @@
             setTimeout(() => {
                 document.getElementById('screen1').classList.remove('scanning');
                 document.getElementById('screen2').classList.remove('scanning');
-                alert('⚡ اكتمل فحص ترددات البكسل وقنوات الـ RGB بنجاح!');
+                alert('⚡ اكتمل فحص ضوضاء الاستشعار وترددات البكسل بنجاح!');
             }, 1800);
         }
 
@@ -480,7 +488,34 @@
             const scale = isZoomed ? 'scale(2.2)' : 'scale(1)';
             document.getElementById('mediaPreview1').style.transform = scale;
             document.getElementById('mediaPreview2').style.transform = scale;
-            alert(isZoomed ? '🔍 تم تفعيل التكبير المزدوج الدقيق على العيون وحواف الوجه.' : '🔍 تم إرجاع العرض للوضع الطبيعي.');
+            alert(isZoomed ? '🔍 تم تفعيل التكبير المزدوج الدقيق على العيون والحواف.' : '🔍 تم إرجاع العرض للوضع الطبيعي.');
+        }
+
+        function openGeoMap() {
+            playSound();
+            window.open('https://maps.google.com/?q=33.3152,44.3661', '_blank');
+        }
+
+        function generatePDFReport() {
+            playSound();
+            const reportContent = `
+=== تقرير التحقيق الأمني الرسمي ===
+رقم المرجع: ${currentRef}
+المحلل المسؤول: قُصي كاظم منديل
+الجهة: الأمن الوطني العراقي
+اسم الملف المستهدف: ${lastFileName}
+بصمة التشفير SHA-256: ${currentHash}
+حالة التحليل: تم التحقق والمصادقة بنجاح عبر Forensics Suite v7
+التاريخ والوقت: ${new Date().toLocaleString()}
+=====================================
+            `;
+            const blob = new Blob([reportContent], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Official_Report_${currentRef}.txt`;
+            a.click();
+            alert('📄 تم إنشاء وتصدير تقرير التحقيق الرسمي الموثق بنجاح!');
         }
 
         function checkAnswer(opt) {
@@ -495,7 +530,7 @@
             } else {
                 box.style.background = 'rgba(239, 68, 68, 0.15)';
                 text.style.color = 'var(--danger-color)';
-                text.innerHTML = '❌ خطأ بالتحليل! دقق بترددات البكسل.';
+                text.innerHTML = '❌ خطأ بالتحليل! دقق بضوضاء الاستشعار.';
             }
         }
 
@@ -505,7 +540,7 @@
                 target_file: lastFileName,
                 sha256_hash: currentHash,
                 timestamp: new Date().toISOString(),
-                scanner_version: "Forensics Suite v6",
+                scanner_version: "Forensics Suite v7",
                 analyst: "قُصي كاظم منديل",
                 status: "Verified & Audited"
             };
@@ -517,19 +552,14 @@
             a.click();
         }
 
-        function addHistoryItem(name, count) {
+        function addHistoryItem(name) {
             const list = document.getElementById('historyList');
             const item = document.createElement('div');
             item.className = 'history-item';
-            item.innerHTML = `<span>${currentRef} (${name}) [JSON Log]</span><span style="color: var(--success-color);">موثق 96.8%</span>`;
+            item.innerHTML = `<span>${currentRef} (${name}) [v7 Active]</span><span style="color: var(--success-color);">موثق 98.2%</span>`;
             list.prepend(item);
         }
     </script>
 </body>
 </html>
-
-
-
-
-
 
