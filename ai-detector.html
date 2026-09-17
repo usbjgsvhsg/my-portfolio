@@ -35,7 +35,6 @@
         .camera-trigger { background: rgba(59, 130, 246, 0.1); border: 2px dashed var(--accent-color); padding: 8px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 0.75em; color: var(--accent-color); }
         input[type="file"] { display: none; }
         
-        /* عكسنا الترتيب هنا حتى تصير الأصلية على اليمين والمشكوك بها على اليسار */
         .video-box-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
         .media-card { background: #000; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; position: relative; }
         .media-card.real { border-color: var(--success-color); }
@@ -91,7 +90,6 @@
             <input type="file" id="mediaInput" accept="image/*,video/*">
         </div>
 
-        <!-- ترتيب صحيح: الأصلية على اليمين والمشكوك بها على اليسار -->
         <div class="video-box-grid">
             <div class="media-card real">
                 <div class="media-badge">تحقق (الأصلية)</div>
