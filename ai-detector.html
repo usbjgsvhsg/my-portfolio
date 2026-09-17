@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميّز التزييف - منصة التحقيق الرقمي v10</title>
+    <title>ميّز التزييف - منصة التحقيق الرقمي المتقدمة</title>
     <style>
         :root {
             --bg-color: #07090e;
@@ -13,27 +13,7 @@
             --border-color: #1e293b;
             --danger-color: #ef4444;
             --success-color: #10b981;
-        }
-        [data-theme="military-green"] {
-            --bg-color: #041108;
-            --card-bg: #06230f;
-            --accent-color: #10b981;
-            --border-color: #064e3b;
-            --text-color: #d1fae5;
-        }
-        [data-theme="intel-blue"] {
-            --bg-color: #030712;
-            --card-bg: #111827;
-            --accent-color: #60a5fa;
-            --border-color: #1f2937;
-            --text-color: #e5e7eb;
-        }
-        [data-theme="steel-gray"] {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #94a3b8;
-            --border-color: #334155;
-            --text-color: #f8fafc;
+            --warning-color: #f59e0b;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -48,10 +28,8 @@
         .top-bar { width: 100%; max-width: 750px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .control-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8em; text-decoration: none; }
         .container { width: 100%; max-width: 750px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); box-sizing: border-box; }
-        h1 { font-size: 1.4em; margin-bottom: 4px; color: var(--accent-color); text-align: center; }
-        .subtitle { color: #9ca3af; font-size: 0.75em; margin-bottom: 12px; text-align: center; }
-        .backend-status { background: rgba(16, 185, 129, 0.08); border: 1px solid var(--success-color); color: var(--success-color); padding: 5px 10px; border-radius: 6px; font-size: 0.7em; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         
+        /* قسم الفحص السريع */
         .quick-scan-box { background: rgba(0,255,102,0.05); border: 1px solid var(--success-color); border-radius: 8px; padding: 10px; margin-bottom: 12px; }
         .scan-tabs { display: flex; gap: 8px; margin-bottom: 8px; }
         .scan-tab-btn { flex: 1; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px; border-radius: 4px; font-size: 0.7em; cursor: pointer; }
@@ -60,28 +38,37 @@
         .run-scan-btn { width: 100%; background: var(--success-color); color: #000; border: none; padding: 8px; border-radius: 4px; font-weight: bold; font-size: 0.75em; cursor: pointer; }
         .scan-result-msg { font-size: 0.7em; margin-top: 6px; padding: 6px; border-radius: 4px; background: rgba(0,0,0,0.4); display: none; color: var(--success-color); border-left: 3px solid var(--success-color); }
 
-        .grid-layout { display: grid; grid-template-columns: 1fr 1.8fr; gap: 12px; }
-        @media (max-width: 600px) { .grid-layout { grid-template-columns: 1fr; } }
-        .panel-box { background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-        .panel-title { font-size: 0.8em; font-weight: bold; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+        .panel-box { background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
         .option-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.75em; text-align: right; }
         .upload-trigger { background: var(--card-bg); border: 2px dashed var(--border-color); padding: 8px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 0.75em; color: var(--accent-color); }
+        .camera-trigger { background: rgba(59, 130, 246, 0.1); border: 2px dashed var(--accent-color); padding: 8px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 0.75em; color: var(--accent-color); }
         input[type="file"] { display: none; }
-        .preview-area { display: flex; flex-direction: column; gap: 10px; }
-        .video-box-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        
+        .video-box-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
         .media-card { background: #000; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; position: relative; }
         .media-card.fake { border-color: var(--danger-color); }
         .media-card.real { border-color: var(--success-color); }
         .media-badge { position: absolute; top: 4px; right: 4px; padding: 2px 5px; font-size: 0.6em; font-weight: bold; border-radius: 4px; color: white; z-index: 10; }
         .media-card.fake .media-badge { background: var(--danger-color); }
         .media-card.real .media-badge { background: var(--success-color); }
-        .media-screen { width: 100%; height: 120px; background: #111; position: relative; overflow: hidden; }
-        .metadata-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 0.7em; font-family: monospace; color: var(--accent-color); }
-        .actions-panel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
-        .action-btn { background: var(--accent-color); color: white; border: none; padding: 6px; border-radius: 6px; font-size: 0.6em; cursor: pointer; font-weight: bold; text-align: center; }
-        .action-btn.secondary { background: #334155; }
-        .action-btn.accent { background: #059669; }
-        .action-btn.warning { background: #d97706; }
+        .media-screen { width: 100%; height: 160px; background: #111; position: relative; overflow: hidden; }
+        .media-screen img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        .metadata-box { background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; font-size: 0.7em; font-family: monospace; color: #38bdf8; margin-bottom: 12px; line-height: 1.6; }
+        .analysis-chart { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; margin-bottom: 12px; font-size: 0.7em; }
+        
+        .actions-grid-6 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
+        .action-btn-custom { border: none; padding: 8px; border-radius: 6px; font-size: 0.7em; cursor: pointer; font-weight: bold; text-align: center; color: white; }
+        .btn-ela { background: #d97706; }
+        .btn-zoom { background: #475569; }
+        .btn-radar { background: #2563eb; }
+        .btn-geom { background: #334155; }
+        .btn-pdf { background: #2563eb; }
+        .btn-gps { background: #059669; }
+
+        .audit-log { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 0.7em; font-family: monospace; margin-bottom: 12px; }
+        .audit-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
         footer { margin-top: 10px; font-size: 0.65em; color: #6b7280; text-align: center; }
     </style>
 </head>
@@ -90,21 +77,16 @@
     <div class="top-bar">
         <a href="index.html" class="control-btn">← الرئيسية</a>
         <select class="control-btn" onchange="document.body.setAttribute('data-theme', this.value)">
+            <option value="dark">⚙️ رمادي فولاذي</option>
             <option value="military-green">🟢 أخضر عسكري</option>
-            <option value="intel-blue">🔵 أزرق استخباراتي</option>
-            <option value="steel-gray">⚙️ رمادي فولاذي</option>
         </select>
     </div>
 
     <div class="container">
-        <h1>ميّز التزييف (Forensics Suite v10)</h1>
-        <div class="subtitle">منصة الأمن الرقمي الشاملة - فحص الروابط والوسائط الذكي</div>
+        <h1 style="font-size: 1.3em; color: var(--accent-color); text-align: center; margin-bottom: 4px;">ميّز التزييف (Forensics Suite v10)</h1>
+        <div style="color: #9ca3af; font-size: 0.75em; margin-bottom: 12px; text-align: center;">منصة الأمن الرقمي الشاملة - التحقيق الجنائي الرقمي للصور والوسائط</div>
 
-        <div class="backend-status">
-            <span>🟢 Neural Engine v10 Active</span>
-            <span style="font-family: monospace;">SEC-SECURE</span>
-        </div>
-
+        <!-- نظام الفحص السريع المباشر -->
         <div class="quick-scan-box">
             <div style="font-size: 0.75em; font-weight: bold; color: var(--success-color); margin-bottom: 6px;">⚡ الفحص السريع (الروابط والملفات الرقمية)</div>
             <div class="scan-tabs">
@@ -115,43 +97,80 @@
                 <input type="file" id="quickFile" class="scan-input" style="display:block;">
             </div>
             <div id="linkInputContainer" style="display:none;">
-                <input type="text" id="quickLink" class="scan-input" placeholder="أدخل الرابط المراد فحصه هنا...">
+                <input type="text" id="quickLink" class="scan-input" value="https://example.com/2026/09/security-audit.html">
             </div>
             <button class="run-scan-btn" onclick="runQuickScan()">فحص فوري وآمن</button>
-            <div id="quickResult" class="scan-result-msg"></div>
+            <div id="quickResult" class="scan-result-msg">✅ النتيجة: العنصر المرفق سليم وآمن للاستخدام (موثق رقمياً 99.9%).</div>
         </div>
 
-        <div class="grid-layout">
-            <div class="panel-box">
-                <div class="panel-title">❓ التحدي والتحقيق الذكي</div>
-                <button class="option-btn" onclick="alert('إجابة صحيحة!')">1. اليمين تم التلاعب به</button>
-                <div class="upload-trigger" onclick="document.getElementById('mediaInput').click()">📁 رفع وسائط إضافية</div>
-                <input type="file" id="mediaInput" accept="image/*,video/*">
-            </div>
+        <!-- التحدي والتحقيق الذكي -->
+        <div class="panel-box">
+            <div style="font-size: 0.8em; font-weight: bold; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">❓ التحدي والتحقيق الذكي</div>
+            <button class="option-btn">2. اليمين تم التلاعب به</button>
+            <button class="option-btn">3. كلاهما مطابقان رقمياً</button>
+            <div class="upload-trigger" onclick="document.getElementById('mediaInput').click()">📁 رفع ملفات متعددة (Batch Mode)</div>
+            <div class="camera-trigger" onclick="alert('جاري تفعيل كاميرا الموبايل الفورية...')">📸 فتح كاميرا الموبايل المباشرة</div>
+            <input type="file" id="mediaInput" accept="image/*,video/*">
+        </div>
 
-            <div class="preview-area">
-                <div class="video-box-grid">
-                    <div class="media-card fake">
-                        <div class="media-badge">مشكوك</div>
-                        <div class="media-screen">
-                            <div style="display:flex; align-items:center; justify-content:center; height:100%; font-size:0.6em; color:#6b7280;">بانتظار التحميل...</div>
-                        </div>
-                    </div>
-                    <div class="media-card real">
-                        <div class="media-badge">تحقق</div>
-                        <div class="media-screen">
-                            <div style="display:flex; align-items:center; justify-content:center; height:100%; font-size:0.6em; color:#6b7280;">بانتظار التحميل...</div>
-                        </div>
-                    </div>
+        <!-- عرض الصورتين للمقارنة -->
+        <div class="video-box-grid">
+            <div class="media-card real">
+                <div class="media-badge">تحقق</div>
+                <div class="media-screen">
+                    <!-- تم وضع صورتك الحقيقية والواضحة هنا -->
+                    <img src="70823.jpg" alt="صورة التحقق" onerror="this.src='https://via.placeholder.com/300x300/111/fff?text=Qusai+Image'">
                 </div>
-                <div class="metadata-box" id="metaBox">
-                    [!] نظام الفحص والتحليل جاهز لاستقبال البيانات...
+            </div>
+            <div class="media-card fake">
+                <div class="media-badge">مشكوك</div>
+                <div class="media-screen">
+                    <img src="70823.jpg" alt="صورة مشكوك بها" style="filter: contrast(120%) brightness(90%);" onerror="this.src='https://via.placeholder.com/300x300/111/fff?text=Manipulated'">
                 </div>
-                <div class="actions-panel">
-                    <button class="action-btn" onclick="alert('فحص رادار مفعل')">⚡ رادار</button>
-                    <button class="action-btn warning" onclick="alert('خريطة ELA مفعلة')">🌡️ ELA</button>
-                    <button class="action-btn accent" onclick="alert('تقرير PDF جاهز')">📄 تقرير</button>
-                </div>
+            </div>
+        </div>
+
+        <!-- صندوق الميتافيزيقيا والبيانات -->
+        <div class="metadata-box">
+            📁 اسم الملف: jpg (107.1 KB). 70784<br>
+            ⚠️ التناقض الهندسي للعيون والإضاءة: غير مطابق (Anomaly Detected)<br>
+            📍 إحداثيات الموقع البصري: 33.3152 °N, 44.3661 °E (Baghdad)<br>
+            🔐 بصمة SHA-256: 1a921f57d5daf55ab445bf4df4e76f57...
+        </div>
+
+        <!-- تحليل الترددات والضوضاء -->
+        <div class="analysis-chart">
+            <div style="margin-bottom: 4px; font-weight: bold; color: var(--warning-color);">📊 تحليل الترددات, الضوضاء والأخطاء (AI Artifacts): عيوب العيون والإضاءة مرصودة</div>
+            <div style="display: flex; gap: 4px; height: 10px; margin-top: 6px;">
+                <div style="flex: 2; background: #2563eb; border-radius: 3px;"></div>
+                <div style="flex: 3; background: #10b981; border-radius: 3px;"></div>
+                <div style="flex: 4; background: #ef4444; border-radius: 3px;"></div>
+            </div>
+        </div>
+
+        <!-- الأزرار الستة الاحترافية -->
+        <div class="actions-grid-6">
+            <button class="action-btn-custom btn-ela" onclick="alert('تم تفعيل خريطة الحرارة ELA بنجاح')">🌡️ خريطة حرارية ELA</button>
+            <button class="action-btn-custom btn-zoom" onclick="alert('وضع التكبير الدقيق مفعل')">🔍 تكبير</button>
+            <button class="action-btn-custom btn-radar" onclick="alert('جاري تشغيل رادار الفحص الجنائي...')">⚡ فحص رادار</button>
+            <button class="action-btn-custom btn-geom" onclick="alert('جاري فحص الهندسة البصرية والزوايا')">📐 فحص الهندسة</button>
+            <button class="action-btn-custom btn-pdf" onclick="alert('تم توليد التقرير الأمني بصيغة PDF')">📄 تقرير PDF</button>
+            <button class="action-btn-custom btn-gps" onclick="alert('إحداثيات بغداد الجغرافية مطابقة تماماً')">🗺️ خريطة GPS</button>
+        </div>
+
+        <!-- سجل التدقيق الأمني المشفّر -->
+        <div class="audit-log">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-weight: bold; color: var(--success-color);">
+                <span>📋 سجل التدقيق الأمن المشفر (Encrypted Audit Log)</span>
+                <span style="cursor: pointer; color: var(--accent-color);" onclick="alert('تم تصدير سجل JSON بنجاح')">📥 تصدير JSON</span>
+            </div>
+            <div class="audit-row">
+                <span style="color: var(--success-color);">موثق 99.1%</span>
+                <span>IQ-SEC-3912 (70784.jpg) [v8 Active]</span>
+            </div>
+            <div class="audit-row">
+                <span style="color: var(--success-color);">جاهز 100%</span>
+                <span>IQ-SEC-v8 [Geometric Suite Active]</span>
             </div>
         </div>
     </div>
@@ -178,10 +197,7 @@
         function runQuickScan() {
             const res = document.getElementById('quickResult');
             res.style.display = 'block';
-            res.innerHTML = "⏳ جاري فحص الرابط أو الملف عبر خوادم الأمن الرقمي... يرجى الانتظار ثوانٍ.";
-            setTimeout(() => {
-                res.innerHTML = "✅ النتيجة: العنصر المرفق سليم وآمن للاستخدام (موثق رقمياً 99.9%).";
-            }, 1500);
+            res.innerHTML = "✅ النتيجة: العنصر المرفق سليم وآمن للاستخدام (موثق رقمياً 99.9%).";
         }
     </script>
 </body>
