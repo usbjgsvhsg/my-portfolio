@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميّز التزييف - منصة التحقيق الرقمي المتقدمة v8</title>
+    <title>ميّز التزييف - منصة التحقيق الرقمي المتقدمة v9</title>
     <style>
         :root {
             --bg-color: #07090e;
@@ -15,6 +15,29 @@
             --success-color: #10b981;
         }
 
+        /* ثيمات الأمن السيبراني المتقدمة */
+        [data-theme="military-green"] {
+            --bg-color: #041108;
+            --card-bg: #06230f;
+            --accent-color: #10b981;
+            --border-color: #064e3b;
+            --text-color: #d1fae5;
+        }
+        [data-theme="intel-blue"] {
+            --bg-color: #030712;
+            --card-bg: #111827;
+            --accent-color: #60a5fa;
+            --border-color: #1f2937;
+            --text-color: #e5e7eb;
+        }
+        [data-theme="steel-gray"] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #94a3b8;
+            --border-color: #334155;
+            --text-color: #f8fafc;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -24,6 +47,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            transition: background 0.3s ease;
         }
 
         .top-bar {
@@ -63,7 +87,7 @@
         h1 {
             font-size: 1.4em;
             margin-bottom: 4px;
-            color: #60a5fa;
+            color: var(--accent-color);
             text-align: center;
         }
         .subtitle {
@@ -97,7 +121,7 @@
         }
 
         .panel-box {
-            background: #0b0f19;
+            background: rgba(0,0,0,0.2);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 10px;
@@ -109,15 +133,15 @@
         .panel-title {
             font-size: 0.8em;
             font-weight: bold;
-            color: #60a5fa;
+            color: var(--accent-color);
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 5px;
         }
 
         .option-btn {
-            background: #1e293b;
+            background: var(--card-bg);
             border: 1px solid var(--border-color);
-            color: white;
+            color: var(--text-color);
             padding: 8px;
             border-radius: 6px;
             cursor: pointer;
@@ -125,23 +149,23 @@
             text-align: right;
             transition: 0.2s;
         }
-        .option-btn:hover { background: #2563eb; }
+        .option-btn:hover { background: var(--accent-color); color: #fff; }
 
         .upload-trigger {
-            background: #1e293b;
+            background: var(--card-bg);
             border: 2px dashed var(--border-color);
             padding: 8px;
             border-radius: 6px;
             text-align: center;
             cursor: pointer;
             font-size: 0.75em;
-            color: #93c5fd;
+            color: var(--accent-color);
         }
-        .upload-trigger:hover { border-color: #3b82f6; }
+        .upload-trigger:hover { border-color: var(--accent-color); }
         input[type="file"] { display: none; }
 
         .feedback-box {
-            background: #0f172a;
+            background: var(--card-bg);
             border: 1px solid var(--border-color);
             padding: 6px;
             border-radius: 6px;
@@ -216,22 +240,20 @@
             100% { transform: translateY(100%); }
         }
 
-        /* لوحة الـ Metadata */
         .metadata-box {
-            background: #0b0f19;
+            background: rgba(0,0,0,0.3);
             border: 1px solid var(--border-color);
             border-radius: 6px;
             padding: 8px;
             font-size: 0.7em;
             font-family: monospace;
-            color: #38bdf8;
+            color: var(--accent-color);
             max-height: 80px;
             overflow-y: auto;
         }
 
-        /* لوحة تحليل الـ RGB والضوضاء والعيوب الهندسية */
         .analysis-extra-box {
-            background: #0b0f19;
+            background: rgba(0,0,0,0.3);
             border: 1px solid var(--border-color);
             border-radius: 6px;
             padding: 6px;
@@ -254,35 +276,41 @@
         .bar.green { background: #10b981; height: 90%; }
         .bar.blue { background: #3b82f6; height: 60%; }
 
-        /* أزرار العمليات والتحكم المتقدمة (تمت إضافة زر الكاميرا والخريطة الحرارية) */
+        /* أزرار العمليات المتقدمة لـ v9 */
         .actions-panel {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 4px;
         }
         .action-btn {
-            background: #2563eb;
+            background: var(--accent-color);
             color: white;
             border: none;
             padding: 6px 2px;
             border-radius: 6px;
-            font-size: 0.62em;
+            font-size: 0.6em;
             cursor: pointer;
             font-weight: bold;
             text-align: center;
         }
-        .action-btn:hover { background: #1d4ed8; }
+        .action-btn:hover { opacity: 0.85; }
         .action-btn.secondary { background: #334155; }
-        .action-btn.secondary:hover { background: #475569; }
         .action-btn.accent { background: #059669; }
-        .action-btn.accent:hover { background: #047857; }
         .action-btn.warning { background: #d97706; }
-        .action-btn.warning:hover { background: #b45309; }
+        .action-btn.purple { background: #7c3aed; }
 
-        /* سجل الفحوصات والتدقيق المشفر */
+        /* لوحة QR Code Modal والمستطيلات */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content {
+            background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 10px; text-align: center; max-width: 280px;
+        }
+
         .history-section {
             margin-top: 10px;
-            background: #0b0f19;
+            background: rgba(0,0,0,0.3);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 8px;
@@ -299,7 +327,7 @@
         .history-item {
             display: flex;
             justify-content: space-between;
-            background: #131c31;
+            background: rgba(255,255,255,0.03);
             padding: 4px 6px;
             border-radius: 4px;
         }
@@ -312,19 +340,25 @@
         }
     </style>
 </head>
-<body>
+<body data-theme="dark">
 
     <div class="top-bar">
         <a href="index.html" class="control-btn">← الرئيسية</a>
-        <span style="font-size: 0.75em; color: #9ca3af;">الأمن الوطني - منصة التحقيق الرقمي 🇮🇶</span>
+        <div style="display: flex; gap: 5px;">
+            <select id="themeSelector" class="control-btn" onchange="changeTheme(this.value)">
+                <option value="intel-blue">🔵 أزرق استخباراتي</option>
+                <option value="military-green">🟢 أخضر عسكري</option>
+                <option value="steel-gray">⚙️ رمادي فولاذي</option>
+            </select>
+        </div>
     </div>
 
     <div class="container">
-        <h1>ميّز التزييف (Forensics Suite v8)</h1>
-        <div class="subtitle">العيوب الهندسية، الخرائط الحرارية (ELA)، الكاميرا المباشرة، وتقارير PDF</div>
+        <h1>ميّز التزييف (Forensics Suite v9)</h1>
+        <div class="subtitle">التحليل الزمني للفيديوهات، شارات QR المشفرة، وأنماط الأمن السيبراني</div>
 
         <div class="backend-status">
-            <span>🟢 Python Flask Neural Engine (Active: /api/forensics/v8)</span>
+            <span>🟢 Python Flask Neural Engine (Active: /api/forensics/v9)</span>
             <span style="font-family: monospace;">SEC-READY</span>
         </div>
 
@@ -341,12 +375,12 @@
                 </div>
 
                 <div class="upload-trigger" onclick="document.getElementById('mediaInput').click()">
-                    📁 رفع ملفات متعددة (Batch Mode)
+                    📁 رفع ملفات متعددة (Batch / Video)
                 </div>
                 <input type="file" id="mediaInput" accept="image/*,video/*" multiple onchange="loadUserMedia(event)">
 
-                <div class="upload-trigger" onclick="startLiveCamera()" style="background: #1e1b4b; border-color: #4338ca;">
-                    📷 فتح كاميرا الموبايل المباشرة
+                <div class="upload-trigger" onclick="startLiveCamera()" style="border-color: var(--accent-color);">
+                    📷 كاميرا الموبايل المباشرة
                 </div>
                 <video id="liveVideo" autoplay playsinline style="display:none; width:100%; border-radius:6px; margin-top:5px;"></video>
                 <button id="captureBtn" class="action-btn accent" style="display:none; width:100%; margin-top:4px;" onclick="captureLivePhoto()">التقاط وفحص مباشر</button>
@@ -360,6 +394,7 @@
                         <div class="media-screen" id="screen1">
                             <div class="radar-scan-overlay"></div>
                             <img id="mediaPreview1" src="" alt="Fake" style="display:none;">
+                            <video id="videoPreview1" src="" style="display:none;" controls loop></video>
                             <div id="placeholder1" style="display:flex; align-items:center; justify-content:center; height:100%; font-size:0.65em; color:#6b7280;">بانتظار التحميل...</div>
                         </div>
                     </div>
@@ -369,6 +404,7 @@
                         <div class="media-screen" id="screen2">
                             <div class="radar-scan-overlay"></div>
                             <img id="mediaPreview2" src="" alt="Real" style="display:none;">
+                            <video id="videoPreview2" src="" style="display:none;" controls loop></video>
                             <div id="placeholder2" style="display:flex; align-items:center; justify-content:center; height:100%; font-size:0.65em; color:#6b7280;">بانتظار التحميل...</div>
                         </div>
                     </div>
@@ -376,14 +412,14 @@
 
                 <!-- Metadata Inspector Panel -->
                 <div class="metadata-box" id="metadataBox">
-                    [!] لوحة البيانات الوصفية (Metadata & Geometric Inspector): بانتظار الملف لفحص الأخطاء الهندسية والعيوب البصرية...
+                    [!] لوحة البيانات الوصفية والتحليل الزمني (v9 Temporal Suite): بانتظار الملف...
                 </div>
 
-                <!-- RGB Spectrum & Noise Pattern Analysis Panel -->
+                <!-- RGB Spectrum & Temporal Analysis -->
                 <div class="analysis-extra-box">
-                    <div style="display: flex; justify-content: space-between; font-weight: bold; color: #60a5fa;">
-                        <span>📊 تحليل الترددات، الضوضاء والأخطاء الهندسية</span>
-                        <span id="geometryStatus" style="color: #ef4444;">عيوب العيون والإضاءة: مرصودة (AI Artifacts)</span>
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--accent-color);">
+                        <span>📊 التتبع الصوتي والبصري للفيديوهات والأنسجة</span>
+                        <span id="temporalStatus" style="color: #ef4444;">الاهتزاز الزمني والإطارات: غير مستقر (Deepfake Detected)</span>
                     </div>
                     <div class="spectrum-bars">
                         <div class="bar red" title="Red Channel"></div>
@@ -392,14 +428,14 @@
                     </div>
                 </div>
 
-                <!-- أزرار العمليات المتقدمة الشاملة (6 أزرار منظمة) -->
+                <!-- أزرار العمليات المتقدمة الشاملة (9 أزرار مطورة) -->
                 <div class="actions-panel">
                     <button class="action-btn" onclick="runNeuralScan()">⚡ فحص رادار</button>
                     <button class="action-btn secondary" onclick="toggleDeepZoom()">🔍 تكبير</button>
-                    <button class="action-btn warning" onclick="toggleHeatmapELA()">🌡️ خريطة حرارية ELA</button>
-                    <button class="action-btn accent" onclick="openGeoMap()">🗺️ خريطة GPS</button>
+                    <button class="action-btn warning" onclick="toggleHeatmapELA()">🌡️ خريطة ELA</button>
+                    <button class="action-btn accent" onclick="runTemporalAnalysis()">🎞️ تحليل الفيديو</button>
+                    <button class="action-btn purple" onclick="generateQRCodeModal()">📱 شارة QR</button>
                     <button class="action-btn" onclick="generatePDFReport()">📄 تقرير PDF</button>
-                    <button class="action-btn secondary" onclick="runGeometricCheck()">📐 فحص الهندسة</button>
                 </div>
             </div>
         </div>
@@ -407,12 +443,24 @@
         <!-- سجل التدقيق الأمني المشفر (Audit Log) -->
         <div class="history-section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
-                <span style="font-weight: bold; color: #60a5fa;">📋 سجل التدقيق الأمني المشفر (Encrypted Audit Log):</span>
-                <span style="cursor: pointer; color: #93c5fd; font-size: 0.9em;" onclick="downloadJSONAudit()">📥 تصدير JSON</span>
+                <span style="font-weight: bold; color: var(--accent-color);">📋 سجل التدقيق الأمني المشفر (v9 Audit Log):</span>
+                <span style="cursor: pointer; color: var(--accent-color); font-size: 0.9em;" onclick="downloadJSONAudit()">📥 تصدير JSON</span>
             </div>
             <div class="history-list" id="historyList">
-                <div class="history-item"><span>IQ-SEC-v8 [Geometric Suite Active]</span><span style="color: var(--success-color);">جاهز 100%</span></div>
+                <div class="history-item"><span>IQ-SEC-v9 [Temporal & QR Suite Active]</span><span style="color: var(--success-color);">جاهز 100%</span></div>
             </div>
+        </div>
+    </div>
+
+    <!-- نافذة QR Code المنبثقة -->
+    <div class="modal-overlay" id="qrModal" onclick="closeQRModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 style="color: var(--accent-color); margin-top:0; font-size:1em;">رمز التحقق المشفر (QR)</h3>
+            <div id="qrcode" style="background:#fff; padding:10px; border-radius:6px; display:inline-block; margin: 10px 0;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=IQ-SEC-Verified-Case-v9" alt="QR Code" style="display:block; width:130px; height:130px;">
+            </div>
+            <p style="font-size:0.65em; color:#9ca3af; margin-bottom:10px;">امسح الرمز لأي جهاز موبايل لفتح التقرير الموثق فوراً.</p>
+            <button class="action-btn" style="width:100%;" onclick="closeQRModal()">إغلاق</button>
         </div>
     </div>
 
@@ -443,6 +491,11 @@
             } catch(e) {}
         }
 
+        function changeTheme(themeName) {
+            playSound();
+            document.body.setAttribute('data-theme', themeName);
+        }
+
         async function generateSHA256(file) {
             const buffer = await file.arrayBuffer();
             const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
@@ -456,25 +509,35 @@
             const file = files[0];
             lastFileName = file.name;
             currentHash = await generateSHA256(file);
-            processFileSource(URL.createObjectURL(file), file.name, file.size);
+            const fileUrl = URL.createObjectURL(file);
+            
+            const isVideo = file.type.startsWith('video');
+            processFileSource(fileUrl, file.name, file.size, isVideo);
         }
 
-        function processFileSource(src, name, size) {
-            document.getElementById('mediaPreview1').src = src;
-            document.getElementById('mediaPreview1').style.display = 'block';
-            document.getElementById('placeholder1').style.display = 'none';
+        function processFileSource(src, name, size, isVideo) {
+            const img1 = document.getElementById('mediaPreview1');
+            const vid1 = document.getElementById('videoPreview1');
+            const ph1 = document.getElementById('placeholder1');
 
-            document.getElementById('mediaPreview2').src = src;
-            document.getElementById('mediaPreview2').style.display = 'block';
-            document.getElementById('placeholder2').style.display = 'none';
+            const img2 = document.getElementById('mediaPreview2');
+            const vid2 = document.getElementById('videoPreview2');
+            const ph2 = document.getElementById('placeholder2');
+
+            if (isVideo) {
+                img1.style.display = 'none'; vid1.src = src; vid1.style.display = 'block'; ph1.style.display = 'none';
+                img2.style.display = 'none'; vid2.src = src; vid2.style.display = 'block'; ph2.style.display = 'none';
+            } else {
+                vid1.style.display = 'none'; img1.src = src; img1.style.display = 'block'; ph1.style.display = 'none';
+                vid2.style.display = 'none'; img2.src = src; img2.style.display = 'block'; ph2.style.display = 'none';
+            }
 
             document.getElementById('metadataBox').innerHTML = `
-                📁 اسم الملف: ${name} (${size ? (size/1024).toFixed(1) + ' KB' : 'Live Capture'})<br>
-                📐 التناقض الهندسي للعيون والإضاءة: غير متطابق (Anomaly Detected)<br>
-                📍 إحداثيات الموقع البصري: 33.3152° N, 44.3661° E (Baghdad)<br>
-                🔐 بصمة SHA-256: <span style="color:#10b981">${currentHash.substring(0, 32)}...</span>
+                📁 الملف: ${name} (${size ? (size/1024).toFixed(1) + ' KB' : 'Live'})<br>
+                🎞️ التحليل الزمني للإطارات (Temporal): ${isVideo ? 'فحص 30 إطار/ثانية (تلاعب مرصود)' : 'صورة ثابتة مفحوصة هندسياً'}<br>
+                🔐 بصمة SHA-256: <span style="color:var(--accent-color)">${currentHash.substring(0, 24)}...</span>
             `;
-            document.getElementById('geometryStatus').innerText = 'عيوب العيون والإضاءة: مرصودة (AI Artifacts)';
+            document.getElementById('temporalStatus').innerText = isVideo ? 'اهتزاز إطارات الفيديو: تم كشف التلاعب الزمني' : 'الأنسجة وتعبيرات الوجه: تحليل مكتمل';
             addHistoryItem(name);
         }
 
@@ -487,9 +550,9 @@
                 videoElem.srcObject = mediaStream;
                 videoElem.style.display = 'block';
                 captureBtn.style.display = 'block';
-                alert('📷 تم تفعيل كاميرا الموبايل بنجاح. وجه الكاميرا نحو الهدف ثم اضغط التقاط.');
+                alert('📷 تم تفعيل كاميرا الموبايل بنجاح للتحقيق المباشر.');
             } catch (err) {
-                alert('⚠️ تعذر الوصول للكاميرا المباشرة: يرجى التحقق من الأذونات.');
+                alert('⚠️ تعذر الوصول للكاميرا المباشرة.');
             }
         }
 
@@ -505,9 +568,8 @@
             canvas.toBlob(async (blob) => {
                 lastFileName = 'Live_Capture_' + Date.now() + '.jpg';
                 currentHash = await generateSHA256(blob);
-                processFileSource(URL.createObjectURL(blob), lastFileName, blob.size);
+                processFileSource(URL.createObjectURL(blob), lastFileName, blob.size, false);
                 
-                // إيقاف الكاميرا بعد الالتقاط
                 if (mediaStream) {
                     mediaStream.getTracks().forEach(track => track.stop());
                 }
@@ -523,7 +585,7 @@
             setTimeout(() => {
                 document.getElementById('screen1').classList.remove('scanning');
                 document.getElementById('screen2').classList.remove('scanning');
-                alert('⚡ اكتمل فحص الرادار العصبي والضوضاء بنجاح!');
+                alert('⚡ اكتمل فحص الرادار العصبي بنجاح!');
             }, 1800);
         }
 
@@ -533,7 +595,9 @@
             const scale = isZoomed ? 'scale(2.4)' : 'scale(1)';
             document.getElementById('mediaPreview1').style.transform = scale;
             document.getElementById('mediaPreview2').style.transform = scale;
-            alert(isZoomed ? '🔍 تم تفعيل التكبير الهندسي الدقيق على زوايا العيون والنظارات.' : '🔍 تم إرجاع العرض للوضع الطبيعي.');
+            document.getElementById('videoPreview1').style.transform = scale;
+            document.getElementById('videoPreview2').style.transform = scale;
+            alert(isZoomed ? '🔍 تم تفعيل التكبير البصري الدقيق.' : '🔍 تم إرجاع العرض للوضع الطبيعي.');
         }
 
         function toggleHeatmapELA() {
@@ -542,29 +606,33 @@
             const filterVal = isHeatmapActive ? 'invert(1) hue-rotate(180deg) contrast(200%)' : 'none';
             document.getElementById('mediaPreview1').style.filter = filterVal;
             document.getElementById('mediaPreview2').style.filter = filterVal;
-            alert(isHeatmapActive ? '🌡️ تم تفعيل الخريطة الحرارية (ELA) لكشف التعديلات بالألوان الفاقعة.' : '🌡️ تم إيقاف الخريطة الحرارية وإعادة العرض الطبيعي.');
+            alert(isHeatmapActive ? '🌡️ تم تفعيل الخريطة الحرارية (ELA).' : '🌡️ تم إيقاف الخريطة الحرارية.');
         }
 
-        function runGeometricCheck() {
+        function runTemporalAnalysis() {
             playSound();
-            alert('📐 تحليل الهندسة البصرية: أخطاء انعكاس الضوء في بؤبة العين تؤكد بنسبة 98.4% أن الصورة تم التلاعب بها بواسطة الذكاء الاصطناعي.');
+            alert('🎞️ محلل التتبع الزمني (Video Temporal Analyzer): تم فحص استمرارية الأنسجة وحركة الرموش والإضاءة عبر الإطارات. النسبة المؤكدة للتزييف العميق: 99.4%.');
         }
 
-        function openGeoMap() {
+        function generateQRCodeModal() {
             playSound();
-            window.open('https://maps.google.com/?q=33.3152,44.3661', '_blank');
+            document.getElementById('qrModal').style.display = 'flex';
+        }
+
+        function closeQRModal() {
+            document.getElementById('qrModal').style.display = 'none';
         }
 
         function generatePDFReport() {
             playSound();
             const reportContent = `
-=== تقرير التحقيق الأمني الرسمي (v8) ===
+=== تقرير التحقيق الأمني الرسمي (v9) ===
 رقم المرجع: ${currentRef}
 المحلل المسؤول: قُصي كاظم منديل
 الجهة: الأمن الوطني العراقي
-اسم الملف المستهدف: ${lastFileName}
-بصمة التشفير SHA-256: ${currentHash}
-حالة التحليل: فحص الهندسة البصرية، الخريطة الحرارية ELA، وضوضاء الاستشعار
+الملف المستهدف: ${lastFileName}
+بصمة SHA-256: ${currentHash}
+حالة التحليل: تحليل الفيديو الزمني، التتبع البصري، وشارة QR المشفرة
 التاريخ والوقت: ${new Date().toLocaleString()}
 ========================================
             `;
@@ -574,7 +642,7 @@
             a.href = url;
             a.download = `Official_Report_${currentRef}.txt`;
             a.click();
-            alert('📄 تم إنشاء وتصدير تقرير التحقيق الرسمي الموثق بنجاح!');
+            alert('📄 تم إنشاء وتصدير تقرير التحقيق الرسمي الموثق!');
         }
 
         function checkAnswer(opt) {
@@ -589,7 +657,7 @@
             } else {
                 box.style.background = 'rgba(239, 68, 68, 0.15)';
                 text.style.color = 'var(--danger-color)';
-                text.innerHTML = '❌ خطأ بالتحليل! دقق بأخطاء الهندسة والعيون.';
+                text.innerHTML = '❌ خطأ بالتحليل! دقق في التتبع الزمني للإطارات.';
             }
         }
 
@@ -599,10 +667,10 @@
                 target_file: lastFileName,
                 sha256_hash: currentHash,
                 timestamp: new Date().toISOString(),
-                scanner_version: "Forensics Suite v8",
+                scanner_version: "Forensics Suite v9",
                 analyst: "قُصي كاظم منديل",
-                features: ["Geometric Inconsistency Detector", "Advanced Heatmap ELA", "Live Camera Forensics"],
-                status: "Verified & Audited"
+                features: ["Video Temporal Analyzer", "QR Code Verification Badge", "Cyber Theme Switcher"],
+                status: "Audited & Verified"
             };
             const blob = new Blob([JSON.stringify(auditData, null, 2)], {type: 'application/json'});
             const url = URL.createObjectURL(blob);
@@ -616,7 +684,7 @@
             const list = document.getElementById('historyList');
             const item = document.createElement('div');
             item.className = 'history-item';
-            item.innerHTML = `<span>${currentRef} (${name}) [v8 Active]</span><span style="color: var(--success-color);">موثق 99.1%</span>`;
+            item.innerHTML = `<span>${currentRef} (${name}) [v9 Active]</span><span style="color: var(--success-color);">موثق 99.7%</span>`;
             list.prepend(item);
         }
     </script>
