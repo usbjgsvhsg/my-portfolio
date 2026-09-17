@@ -113,19 +113,18 @@
             <input type="file" id="mediaInput" accept="image/*,video/*">
         </div>
 
-        <!-- عرض الصورتين للمقارنة -->
+        <!-- عرض الصورتين للمقارنة (تم تعديل الترتيب: مشكوك يسار، تحقق يمين) -->
         <div class="video-box-grid">
-            <div class="media-card real">
-                <div class="media-badge">تحقق</div>
-                <div class="media-screen">
-                    <!-- تم وضع صورتك الحقيقية والواضحة هنا -->
-                    <img src="70823.jpg" alt="صورة التحقق" onerror="this.src='https://via.placeholder.com/300x300/111/fff?text=Qusai+Image'">
-                </div>
-            </div>
             <div class="media-card fake">
                 <div class="media-badge">مشكوك</div>
                 <div class="media-screen">
-                    <img src="70823.jpg" alt="صورة مشكوك بها" style="filter: contrast(120%) brightness(90%);" onerror="this.src='https://via.placeholder.com/300x300/111/fff?text=Manipulated'">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400" alt="صورة مشكوك بها" style="filter: contrast(120%) brightness(90%);" onerror="this.src='https://via.placeholder.com/300x300/111/fff?text=Manipulated'">
+                </div>
+            </div>
+            <div class="media-card real">
+                <div class="media-badge">تحقق</div>
+                <div class="media-screen">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" alt="صورة التحقق" onerror="this.src='https://via.placeholder.com/300x300/111/fff?text=Verified'">
                 </div>
             </div>
         </div>
@@ -150,12 +149,12 @@
 
         <!-- الأزرار الستة الاحترافية -->
         <div class="actions-grid-6">
-            <button class="action-btn-custom btn-ela" onclick="alert('تم تفعيل خريطة الحرارة ELA بنجاح')">🌡️ خريطة حرارية ELA</button>
-            <button class="action-btn-custom btn-zoom" onclick="alert('وضع التكبير الدقيق مفعل')">🔍 تكبير</button>
             <button class="action-btn-custom btn-radar" onclick="alert('جاري تشغيل رادار الفحص الجنائي...')">⚡ فحص رادار</button>
-            <button class="action-btn-custom btn-geom" onclick="alert('جاري فحص الهندسة البصرية والزوايا')">📐 فحص الهندسة</button>
-            <button class="action-btn-custom btn-pdf" onclick="alert('تم توليد التقرير الأمني بصيغة PDF')">📄 تقرير PDF</button>
+            <button class="action-btn-custom btn-zoom" onclick="alert('وضع التكبير الدقيق مفعل')">🔍 تكبير</button>
+            <button class="action-btn-custom btn-ela" onclick="alert('تم تفعيل خريطة الحرارة ELA بنجاح')">🌡️ خريطة حرارية ELA</button>
             <button class="action-btn-custom btn-gps" onclick="alert('إحداثيات بغداد الجغرافية مطابقة تماماً')">🗺️ خريطة GPS</button>
+            <button class="action-btn-custom btn-pdf" onclick="alert('تم توليد التقرير الأمني بصيغة PDF')">📄 تقرير PDF</button>
+            <button class="action-btn-custom btn-geom" onclick="alert('جاري فحص الهندسة البصرية والزوايا')">📐 فحص الهندسة</button>
         </div>
 
         <!-- سجل التدقيق الأمني المشفّر -->
