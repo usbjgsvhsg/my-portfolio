@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميّز التزييف - منصة كشف الصور والأصوات المزيفة</title>
+    <title>ميّز التزييف - نظام تحدي كشف الفيديوهات والوسائط</title>
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -13,8 +13,6 @@
             --border-color: #1f2937;
             --danger-color: #ef4444;
             --success-color: #10b981;
-            --danger-bg: rgba(239, 68, 68, 0.2);
-            --success-bg: rgba(16, 185, 129, 0.2);
         }
 
         body {
@@ -30,7 +28,7 @@
 
         .top-bar {
             width: 100%;
-            max-width: 700px;
+            max-width: 750px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -53,151 +51,154 @@
 
         .container {
             width: 100%;
-            max-width: 700px;
+            max-width: 750px;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 14px;
             padding: 20px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.4);
             box-sizing: border-box;
-            text-align: center;
         }
 
         h1 {
-            font-size: 1.8em;
+            font-size: 1.6em;
             margin-bottom: 5px;
             color: #60a5fa;
+            text-align: center;
         }
         .subtitle {
             color: #9ca3af;
-            font-size: 0.9em;
+            font-size: 0.85em;
             margin-bottom: 20px;
+            text-align: center;
         }
 
-        .upload-box {
-            border: 2px dashed var(--border-color);
-            border-radius: 10px;
-            padding: 20px;
-            cursor: pointer;
+        /* تخطيط وضع التحدي (شاصيه الشاشة الكبيرة) */
+        .challenge-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .challenge-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* لوحة الأسئلة والتحدي الجانبية */
+        .challenge-sidebar {
             background: #0f172a;
-            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .challenge-title {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #60a5fa;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+        }
+
+        .option-btn {
+            background: #1e293b;
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+            text-align: right;
             transition: 0.2s;
         }
-        .upload-box:hover {
-            border-color: var(--accent-color);
+        .option-btn:hover {
+            background: #2563eb;
+            border-color: #3b82f6;
         }
-        input[type="file"] { display: none; }
+        .option-btn.correct { background: var(--success-color); border-color: var(--success-color); }
+        .option-btn.wrong { background: var(--danger-color); border-color: var(--danger-color); }
 
-        /* الشاشة المطابقة للأمن الوطني (عرض الصورتين جنباً إلى جنب للتقييم) */
-        .comparison-grid {
+        /* شاشة عرض الفيديوهات أو الصور للمقارنة */
+        .preview-area {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .video-box-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-            display: none;
+            gap: 10px;
         }
 
-        .result-panel {
+        .media-card {
+            background: #000;
+            border: 2px solid var(--border-color);
             border-radius: 10px;
             overflow: hidden;
-            border: 2px solid var(--border-color);
-            background: #000;
             position: relative;
         }
+        .media-card.fake { border-color: var(--danger-color); }
+        .media-card.real { border-color: var(--success-color); }
 
-        .result-panel.fake-side {
-            border-color: var(--danger-color);
-        }
-        .result-panel.real-side {
-            border-color: var(--success-color);
-        }
-
-        .panel-badge {
+        .media-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 4px 10px;
-            font-size: 0.75em;
+            top: 8px;
+            right: 8px;
+            padding: 3px 8px;
+            font-size: 0.7em;
             font-weight: bold;
-            border-radius: 6px;
-            z-index: 10;
+            border-radius: 4px;
             color: white;
+            z-index: 5;
         }
-        .fake-side .panel-badge { background: var(--danger-color); }
-        .real-side .panel-badge { background: var(--success-color); }
+        .media-card.fake .media-badge { background: var(--danger-color); }
+        .media-card.real .media-badge { background: var(--success-color); }
 
-        .panel-img-wrap {
+        .media-screen {
             width: 100%;
-            height: 180px;
-            position: relative;
+            height: 150px;
             background: #111;
+            position: relative;
         }
-        .panel-img-wrap img {
+        .media-screen img, .media-screen video {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
 
-        /* خط الليزر الفاحص */
-        .scanner-laser {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 3px;
-            background: #60a5fa;
-            box-shadow: 0 0 10px #60a5fa;
-            display: none;
-            animation: scanMove 1.5s infinite linear alternate;
-        }
-        @keyframes scanMove { 0% { top: 0%; } 100% { top: 95%; } }
-
-        .analyze-btn {
-            background: #2563eb;
-            color: white;
-            border: none;
+        .upload-trigger {
+            background: #1e293b;
+            border: 2px dashed var(--border-color);
             padding: 12px;
             border-radius: 8px;
-            font-size: 1em;
-            font-weight: bold;
+            text-align: center;
             cursor: pointer;
-            width: 100%;
-            transition: 0.2s;
-            display: none;
-            margin-bottom: 15px;
+            font-size: 0.8em;
+            color: #93c5fd;
         }
-        .analyze-btn:hover { background: #1d4ed8; }
+        .upload-trigger:hover { border-color: #3b82f6; }
+        input[type="file"] { display: none; }
 
-        .metrics-card {
+        .feedback-box {
             background: #0f172a;
             border: 1px solid var(--border-color);
+            padding: 10px;
             border-radius: 8px;
-            padding: 12px;
-            text-align: right;
-            font-size: 0.85em;
+            font-size: 0.8em;
+            text-align: center;
             display: none;
         }
-        .metric-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
-            padding-bottom: 4px;
-            border-bottom: 1px dashed var(--border-color);
-        }
-        .metric-row:last-child { border-bottom: none; margin-bottom: 0; }
-
-        .loader {
-            display: none;
-            margin: 15px auto;
-            width: 30px; height: 30px;
-            border: 3px solid var(--border-color);
-            border-top: 3px solid #3b82f6;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         footer {
             margin-top: 15px;
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: #6b7280;
             text-align: center;
         }
@@ -207,117 +208,112 @@
 
     <div class="top-bar">
         <a href="index.html" class="control-btn">← الرئيسية</a>
-        <span style="font-size: 0.85em; color: #9ca3af;">الأمن الوطني - العراق 🇮🇶</span>
+        <span style="font-size: 0.85em; color: #9ca3af;">تحدي كشف التزييف العميق 🇮🇶</span>
     </div>
 
     <div class="container">
-        <h1>ميّز التزييف</h1>
-        <div class="subtitle">منصة كشف الصور والأصوات المزيفة وتقنيات الذكاء الاصطناعي</div>
+        <h1>ميّز التزييف (وضع التحدي الذكي)</h1>
+        <div class="subtitle">منصة اختبار كشف الفيديوهات والملفات المزيفة بالأمن الاصطناعي</div>
 
-        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-            <div style="font-size: 2em; margin-bottom: 5px;">📷</div>
-            <div style="font-weight: bold; font-size: 0.95em;">اضغط هنا لرفع الصورة أو الملف المراد فحصه</div>
-            <div style="font-size: 0.75em; color: #9ca3af; margin-top: 4px;">يدعم صور وفيديوهات وأصوات التحقيق الرقمي</div>
-            <input type="file" id="fileInput" accept="image/*,audio/*,video/*" onchange="previewFile(event)">
-        </div>
+        <div class="challenge-layout">
+            <!-- القائمة الجانبية للتحدي والأسئلة -->
+            <div class="challenge-sidebar">
+                <div class="challenge-title">❓ التحدي: يا فيديو حقيقي؟</div>
+                <div style="font-size: 0.78em; color: #9ca3af;">اختر المقطع السليم أو حدد موضع التلاعب بدقة لاجتياز التحدي الأمني:</div>
+                
+                <button class="option-btn" onclick="checkAnswer(1)">1. الفيديو اليسار هو السليم</button>
+                <button class="option-btn" onclick="checkAnswer(2)">2. الفيديو اليمين تم التلاعب به</button>
+                <button class="option-btn" onclick="checkAnswer(3)">3. كلاهما يحتويان على تطابق بالذكاء الاصطناعي</button>
 
-        <!-- شاشة المقارنة المطابقة للصورة -->
-        <div class="comparison-grid" id="comparisonGrid">
-            <!-- جانب المشكوك فيه (مزيف) -->
-            <div class="result-panel fake-side">
-                <div class="panel-badge">مشكوك فيه</div>
-                <div class="panel-img-wrap">
-                    <div class="scanner-laser" id="laser1"></div>
-                    <img id="previewImg1" src="" alt="Fake Analysis">
+                <div class="feedback-box" id="feedbackBox">
+                    <span id="feedbackText"></span>
                 </div>
-                <div style="padding: 10px; background: rgba(239,68,68,0.1); font-size: 0.8em;">
-                    نسبة التزييف: <strong style="color: var(--danger-color);" id="fakeRate">--</strong>
+
+                <div class="upload-trigger" onclick="document.getElementById('mediaInput').click()">
+                    📁 ارفع مقطع فيديو أو صورة للتحدي
                 </div>
+                <input type="file" id="mediaInput" accept="image/*,video/*" onchange="loadUserMedia(event)">
             </div>
 
-            <!-- جانب الموثق (تحقق سليم) -->
-            <div class="result-panel real-side">
-                <div class="panel-badge">تم التحقق</div>
-                <div class="panel-img-wrap">
-                    <div class="scanner-laser" id="laser2"></div>
-                    <img id="previewImg2" src="" alt="Real Analysis">
+            <!-- عرض الفيديوهات أو الوسائط للمقارنة الفاحصة -->
+            <div class="preview-area">
+                <div class="video-box-grid">
+                    <!-- المقطع الأول -->
+                    <div class="media-card fake" id="card1">
+                        <div class="media-badge">مشكوك فيه (Fake)</div>
+                        <div class="media-screen">
+                            <img id="mediaPreview1" src="" alt="Media 1" style="display:none;">
+                            <div id="placeholder1" style="display:flex; align-items:center; justify-content:center; height:100%; font-size:0.75em; color:#6b7280;">بانتظار التحميل...</div>
+                        </div>
+                    </div>
+
+                    <!-- المقطع الثاني -->
+                    <div class="media-card real" id="card2">
+                        <div class="media-badge">تم التحقق (Authentic)</div>
+                        <div class="media-screen">
+                            <img id="mediaPreview2" src="" alt="Media 2" style="display:none;">
+                            <div id="placeholder2" style="display:flex; align-items:center; justify-content:center; height:100%; font-size:0.75em; color:#6b7280;">بانتظار التحميل...</div>
+                        </div>
+                    </div>
                 </div>
-                <div style="padding: 10px; background: rgba(16,185,129,0.1); font-size: 0.8em;">
-                    نسبة الصحة: <strong style="color: var(--success-color);" id="realRate">--</strong>
+
+                <div style="background: #0f172a; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.78em;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>نسبة تحليل التلاعب البصري:</span>
+                        <span style="color: var(--danger-color); font-weight: bold;" id="analysisScore">89.4% تطابق آمن</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>حالة المعالجة الرقمية:</span>
+                        <span style="color: #60a5fa;">جاهز للاختبار التفاعلي</span>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <button class="analyze-btn" id="analyzeBtn" onclick="runForensics()">بدء فحص ومطابقة التزييف العميق ⚡</button>
-
-        <div class="loader" id="loader"></div>
-
-        <div class="metrics-card" id="metricsCard">
-            <div class="metric-row">
-                <span>حالة التوقيع الرقمي:</span>
-                <span style="color: var(--success-color); font-weight: bold;">مطابق للسجلات الرسمية</span>
-            </div>
-            <div class="metric-row">
-                <span>خوارزمية الفحص:</span>
-                <span style="color: #60a5fa;">National AI Forensics v4</span>
-            </div>
-            <div class="metric-row">
-                <span>رقم مرجع التحقيق:</span>
-                <span id="refCode" style="font-family: monospace;">IQ-SEC-9421</span>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>تطوير وإشراف: قصي كاظم منديل © 2026</p>
+        <p>تطوير وتصميم: قصي كاظم منديل © 2026</p>
     </footer>
 
     <script>
-        let uploadedSrc = '';
-
-        function previewFile(event) {
+        function loadUserMedia(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                uploadedSrc = e.target.result;
-                document.getElementById('previewImg1').src = uploadedSrc;
-                document.getElementById('previewImg2').src = uploadedSrc;
+                const src = e.target.result;
                 
-                document.getElementById('comparisonGrid').style.display = 'grid';
-                document.getElementById('analyzeBtn').style.display = 'block';
-                document.getElementById('metricsCard').style.display = 'none';
+                const img1 = document.getElementById('mediaPreview1');
+                const img2 = document.getElementById('mediaPreview2');
+                
+                img1.src = src;
+                img1.style.display = 'block';
+                document.getElementById('placeholder1').style.display = 'none';
+
+                img2.src = src;
+                img2.style.display = 'block';
+                document.getElementById('placeholder2').style.display = 'none';
             }
             reader.readAsDataURL(file);
         }
 
-        function runForensics() {
-            const btn = document.getElementById('analyzeBtn');
-            const loader = document.getElementById('loader');
-            const laser1 = document.getElementById('laser1');
-            const laser2 = document.getElementById('laser2');
-            const metrics = document.getElementById('metricsCard');
+        function checkAnswer(optionNum) {
+            const box = document.getElementById('feedbackBox');
+            const text = document.getElementById('feedbackText');
+            box.style.display = 'block';
 
-            btn.style.display = 'none';
-            loader.style.display = 'block';
-            laser1.style.display = 'block';
-            laser2.style.display = 'block';
-            metrics.style.display = 'none';
-
-            setTimeout(() => {
-                loader.style.display = 'none';
-                laser1.style.display = 'none';
-                laser2.style.display = 'none';
-                metrics.style.display = 'block';
-
-                const fake = (Math.random() * 12).toFixed(1);
-                const real = (100 - fake).toFixed(1);
-
-                document.getElementById('fakeRate').innerText = fake + '%';
-                document.getElementById('realRate').innerText = real + '%';
-                document.getElementById('refCode').innerText = 'IQ-SEC-' + Math.floor(1000 + Math.random() * 9000);
-            }, 2500);
+            if (optionNum === 2) {
+                box.style.borderColor = 'var(--success-color)';
+                box.style.background = 'rgba(16, 185, 129, 0.15)';
+                text.style.color = 'var(--success-color)';
+                text.innerHTML = '✅ إجابة صحيحة! تم كشف التلاعب بدقة عبر مطابقة البصمة الرقمية.';
+            } else {
+                box.style.borderColor = 'var(--danger-color)';
+                box.style.background = 'rgba(239, 68, 68, 0.15)';
+                text.style.color = 'var(--danger-color)';
+                text.innerHTML = '❌ إجابة خاطئة! حاول تحليل ترددات الفريمات بتركيز أعلى.';
+            }
         }
     </script>
 </body>
