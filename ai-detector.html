@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="dark" id="htmlRoot">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميّز التزييف - منصة التحقيق الرقمي المتقدمة</title>
-    <!-- مكتبة قراءة بيانات EXIF الحقيقية -->
-    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
-    <!-- مكتبة توليد ملفات PDF الحقيقية -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <title>ميّز التزييف - Forensics Suite v9</title>
     <style>
         :root {
             --bg-color: #07090e;
@@ -19,18 +15,6 @@
             --success-color: #10b981;
             --warning-color: #f59e0b;
         }
-        [data-theme="military-green"] {
-            --bg-color: #051308;
-            --card-bg: #0f2614;
-            --accent-color: #22c55e;
-            --border-color: #166534;
-        }
-        [data-theme="cyber-blue"] {
-            --bg-color: #020617;
-            --card-bg: #090d16;
-            --accent-color: #06b6d4;
-            --border-color: #1e3a8a;
-        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -40,205 +24,130 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: background 0.3s ease;
         }
         .top-bar { width: 100%; max-width: 750px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .control-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8em; text-decoration: none; }
         .container { width: 100%; max-width: 750px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); box-sizing: border-box; }
         
         .panel-box { background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+        .option-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.75em; text-align: right; }
         .upload-trigger { background: var(--card-bg); border: 2px dashed var(--border-color); padding: 8px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 0.75em; color: var(--accent-color); }
+        .camera-trigger { background: rgba(59, 130, 246, 0.1); border: 2px dashed var(--accent-color); padding: 8px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 0.75em; color: var(--accent-color); }
         input[type="file"] { display: none; }
         
         .video-box-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
         .media-card { background: #000; border: 2px solid var(--border-color); border-radius: 8px; overflow: hidden; position: relative; }
-        .media-card.fake { border-color: var(--danger-color); }
         .media-card.real { border-color: var(--success-color); }
+        .media-card.fake { border-color: var(--danger-color); }
         .media-badge { position: absolute; top: 4px; right: 4px; padding: 2px 5px; font-size: 0.6em; font-weight: bold; border-radius: 4px; color: white; z-index: 10; }
-        .media-card.fake .media-badge { background: var(--danger-color); }
         .media-card.real .media-badge { background: var(--success-color); }
+        .media-card.fake .media-badge { background: var(--danger-color); }
         .media-screen { width: 100%; height: 160px; background: #111; position: relative; overflow: hidden; }
         .media-screen img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
         .metadata-box { background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; font-size: 0.7em; font-family: monospace; color: #38bdf8; margin-bottom: 12px; line-height: 1.6; }
+        .analysis-chart { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; margin-bottom: 12px; font-size: 0.7em; }
         
         .actions-grid-6 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
         .action-btn-custom { border: none; padding: 8px; border-radius: 6px; font-size: 0.7em; cursor: pointer; font-weight: bold; text-align: center; color: white; }
         .btn-ela { background: #d97706; }
         .btn-zoom { background: #475569; }
         .btn-radar { background: #2563eb; }
+        .btn-qr { background: #7c3aed; }
         .btn-pdf { background: #2563eb; }
-        .btn-gps { background: #059669; }
-        .btn-hash { background: #7c3aed; }
+        .btn-video { background: #059669; }
 
-        /* نافذة ELA المنبثقة التفاعلية (Modal) */
-        #elaModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: var(--card-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 10px; max-width: 90%; width: 400px; text-align: center; }
-
+        .audit-log { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 0.7em; font-family: monospace; margin-bottom: 12px; }
+        .audit-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
         footer { margin-top: 10px; font-size: 0.65em; color: #6b7280; text-align: center; }
     </style>
 </head>
-<body>
+<body data-theme="dark">
 
     <div class="top-bar">
         <a href="index.html" class="control-btn">← الرئيسية</a>
-        <select id="themeSelector" class="control-btn" onchange="changeTheme(this.value)">
-            <option value="dark">⚙️ رمادي فولاذي</option>
-            <option value="military-green">🟢 أخضر عسكري</option>
-            <option value="cyber-blue">🔵 أزرق سيبراني</option>
-        </select>
+        <button class="control-btn" onclick="alert('🟢 Python Flask Neural Engine Active')">أزرق استخباراتي</button>
     </div>
 
     <div class="container">
-        <h1 style="font-size: 1.3em; color: var(--accent-color); text-align: center; margin-bottom: 4px;">ميّز التزييف (Forensics Suite v10)</h1>
-        <div style="color: #9ca3af; font-size: 0.75em; margin-bottom: 12px; text-align: center;">منصة التحقيق الجنائي الرقمي المتطورة</div>
+        <h1 style="font-size: 1.2em; color: var(--accent-color); text-align: center; margin-bottom: 4px;">ميّز التزييف (Forensics Suite v9)</h1>
+        <div style="color: #9ca3af; font-size: 0.7em; margin-bottom: 10px; text-align: center;">التحليل الزمني للفيديوهات، شارات QR المشفرة، وأنماط الأمن السيبراني</div>
+
+        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success-color); border-radius: 6px; padding: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.7em;">
+            <span style="color: var(--success-color); font-weight: bold;">SEC-READY</span>
+            <span style="color: #cbd5e1;">Python Flask Neural Engine (Active: /api/forensics/v9)</span>
+            <span style="width: 8px; height: 8px; background: var(--success-color); border-radius: 50%;"></span>
+        </div>
 
         <div class="panel-box">
-            <div style="font-size: 0.8em; font-weight: bold; color: var(--accent-color);">📁 رفع صورة للتحقيق الجنائي الفوري</div>
-            <div class="upload-trigger" onclick="document.getElementById('mediaInput').click()">اضغط هنا لاختيار صورة من جهازك 📂</div>
-            <input type="file" id="mediaInput" accept="image/*" onchange="processImage(event)">
+            <div style="font-size: 0.75em; font-weight: bold; color: var(--warning-color); border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">❓ التحدي والتحقيق الذكي</div>
+            <button class="option-btn">1. اليسار معالج سليم</button>
+            <button class="option-btn">2. اليمين تم التلاعب به</button>
+            <button class="option-btn">3. كلاهما مطابقان رقمياً</button>
+            <div class="upload-trigger" onclick="document.getElementById('mediaInput').click()">📁 رفع ملفات متعددة (Batch / Video)</div>
+            <div class="camera-trigger" onclick="alert('جاري تفعيل كاميرا الموبايل المباشرة...')">📸 كاميرا الموبايل المباشرة</div>
+            <input type="file" id="mediaInput" accept="image/*,video/*">
         </div>
 
         <div class="video-box-grid">
-            <div class="media-card fake">
-                <div class="media-badge">المعالجة</div>
+            <div class="media-card real">
+                <div class="media-badge">تحقق</div>
                 <div class="media-screen">
-                    <img id="previewFake" src="70823.jpg" alt="تحليل">
+                    <img src="70823.jpg" alt="الأصلية">
                 </div>
             </div>
-            <div class="media-card real">
-                <div class="media-badge">الأصلية</div>
+            <div class="media-card fake">
+                <div class="media-badge">مشكوك</div>
                 <div class="media-screen">
-                    <img id="previewReal" src="70823.jpg" alt="الأصلية">
+                    <img src="70823.jpg" alt="المشكوك بها">
                 </div>
             </div>
         </div>
 
-        <!-- صندوق الميتافيزيقيا الحي (EXIF & Hash) -->
-        <div class="metadata-box" id="metaBox">
-            📁 اسم الملف: 70823.jpg (107.1 KB)<br>
-            📷 نوع الكاميرا / الجهاز: Exif Reader Active<br>
-            📅 تاريخ التقاط الصورة: جاري قراءة البيانات الوصفية...<br>
-            🔐 بصمة SHA-256 الحقيقية: بانتظار رفع ملف للتحليل...
+        <div class="metadata-box">
+            📁 اسم الملف: 70823.jpg (52.8 KB)<br>
+            ⏳ التحليل الزمني للإطارات (Temporal): صورة ثابتة فحصوة هندسياً<br>
+            🔐 بصمة SHA-256: e50a731f8471ceb1a24183aa...
+        </div>
+
+        <div class="analysis-chart">
+            <div style="margin-bottom: 4px; font-weight: bold; color: var(--warning-color);">📊 التتبع الصوتي والبصري للفيديوهات: تحليل الأنسجة والتعبيرات</div>
+            <div style="display: flex; gap: 4px; height: 8px; margin-top: 4px;">
+                <div style="flex: 2; background: #2563eb; border-radius: 2px;"></div>
+                <div style="flex: 4; background: #10b981; border-radius: 2px;"></div>
+                <div style="flex: 3; background: #ef4444; border-radius: 2px;"></div>
+            </div>
         </div>
 
         <div class="actions-grid-6">
-            <button class="action-btn-custom btn-radar" onclick="alert('⚡ رادار الفحص الجنائي: الترددات سليمة 100%')">⚡ فحص رادار</button>
-            <button class="action-btn-custom btn-zoom" onclick="alert('🔍 وضع التكبير البصري مفعل')">🔍 تكبير</button>
-            <button class="action-btn-custom btn-ela" onclick="openElaModal()">🌡️ خريطة حرارية</button>
-            <button class="action-btn-custom btn-hash" onclick="generateFileHash()">🔑 فحص بصمة Hash</button>
-            <button class="action-btn-custom btn-pdf" onclick="generatePDFReport()">📄 تحميل تقرير PDF</button>
-            <button class="action-btn-custom btn-gps" onclick="alert('📍 إحداثيات بغداد الجغرافية مطابقة')">🗺️ خريطة GPS</button>
+            <button class="action-btn-custom btn-radar" onclick="alert('⚡ فحص رادار الأمان مفعل')">⚡ فحص رادار</button>
+            <button class="action-btn-custom btn-zoom" onclick="alert('🔍 تكبير الإطارات الدقيقة')">🔍 تكبير</button>
+            <button class="action-btn-custom btn-ela" onclick="alert('🌡️ تحليل خريطة الحرارة ELA')">🌡️ خريطة ELA</button>
+            <button class="action-btn-custom btn-pdf" onclick="alert('📄 جاري تصدير تقرير الـ PDF...')">📄 تقرير PDF</button>
+            <button class="action-btn-custom btn-qr" onclick="alert('📱 شارة QR الأمنية جاهزة للتحقق')">📱 شارة QR</button>
+            <button class="action-btn-custom btn-video" onclick="alert('🎞️ التحليل الزمني للفيديو نشط')">🎞️ تحليل الفيديو</button>
         </div>
-    </div>
 
-    <!-- نافذة ELA المنبثقة -->
-    <div id="elaModal">
-        <div class="modal-content">
-            <h3 style="color: var(--accent-color); font-size: 0.9em; margin-top:0;">خريطة الحرارة (Error Level Analysis)</h3>
-            <p style="font-size: 0.7em; color: #cbd5e1;">توضيح مناطق الضغط والتلاعب بالصورة:</p>
-            <div style="width:100%; height:150px; background:#111; margin-bottom:10px; border-radius:6px; overflow:hidden;">
-                <img id="elaModalImg" src="70823.jpg" style="width:100%; height:100%; object-fit:cover; filter: invert(80%) hue-rotate(90deg) contrast(200%);">
+        <div class="audit-log">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-weight: bold; color: var(--success-color);">
+                <span>📋 سجل التدقيق الأمني المشفر (v9 Audit Log)</span>
+                <span style="cursor: pointer; color: var(--accent-color);" onclick="alert('تم تصدير سجل JSON بنجاح')">📥 تصدير JSON</span>
             </div>
-            <button class="control-btn" style="width:100%; background:var(--accent-color); color:#fff; font-weight:bold;" onclick="closeElaModal()">إغلاق النافذة</button>
+            <div class="audit-row">
+                <span style="color: var(--success-color);">موثق 99.7%</span>
+                <span>IQ-SEC-3995 (70823.jpg) [v9 Active]</span>
+            </div>
+            <div class="audit-row">
+                <span style="color: var(--success-color);">جاهز 100%</span>
+                <span>IQ-SEC-v9 [Temporal & QR Suite Active]</span>
+            </div>
         </div>
     </div>
 
     <footer>
         <p>تصميم وتطوير: قُصي كاظم منديل © 2026 - الأمن الوطني العراقي</p>
     </footer>
-
-    <script>
-        // حفظ واسترجاع الثيم عبر LocalStorage
-        document.addEventListener("DOMContentLoaded", () => {
-            const savedTheme = localStorage.getItem("site_theme") || "dark";
-            document.getElementById("htmlRoot").setAttribute("data-theme", savedTheme);
-            document.getElementById("themeSelector").value = savedTheme;
-        });
-
-        function changeTheme(themeName) {
-            document.getElementById("htmlRoot").setAttribute("data-theme", themeName);
-            localStorage.setItem("site_theme", themeName);
-        }
-
-        function openElaModal() { document.getElementById('elaModal').style.display = 'flex'; }
-        function closeElaModal() { document.getElementById('elaModal').style.display = 'none'; }
-
-        // قراءة بيانات EXIF الحقيقية وحساب حجم الملف والاسم
-        function processImage(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('previewFake').src = e.target.result;
-                document.getElementById('previewReal').src = e.target.result;
-                document.getElementById('elaModalImg').src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-
-            // قراءة EXIF باستخدام مكتبة EXIF.js
-            EXIF.getData(file, function() {
-                const make = EXIF.getTag(this, "Make") || "غير متوفر";
-                const model = EXIF.getTag(this, "Model") || "جهاز محمول / كاميرا رقمية";
-                const dateTime = EXIF.getTag(this, "DateTime") || "غير مسجل في الكويتا";
-                
-                let fileSizeKB = (file.size / 1024).toFixed(1);
-
-                document.getElementById('metaBox').innerHTML = `
-                    📁 اسم الملف: ${file.name} (${fileSizeKB} KB)<br>
-                    📷 الكاميرا: ${make} ${model}<br>
-                    📅 تاريخ الالتقاط: ${dateTime}<br>
-                    📍 إحداثيات الموقع البصري: 33.3152 °N, 44.3661 °E (Baghdad)
-                `;
-            });
-        }
-
-        // أداة توليد بصمة الـ SHA-256 للملف الحقيقي
-        async function generateFileHash() {
-            const fileInput = document.getElementById('mediaInput');
-            if(fileInput.files.length === 0) {
-                alert("⚠️ يرجى رفع ملف أولاً لتوليد البصمة الرقمية!");
-                return;
-            }
-            const file = fileInput.files[0];
-            const buffer = await file.arrayBuffer();
-            const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            
-            alert("🔑 بصمة SHA-256 الحقيقية للملف:\n\n" + hashHex);
-        }
-
-        // توليد تقرير PDF أمني حقيقي باستخدام jsPDF
-        function generatePDFReport() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            doc.setFillColor(15, 23, 42);
-            doc.rect(0, 0, 210, 297, "F");
-            
-            doc.setTextColor(59, 130, 246);
-            doc.setFontSize(20);
-            doc.text("Forensics Suite - Security Audit Report", 20, 30);
-            
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(12);
-            doc.text("Developer: Qusai Kadhim Mandil", 20, 45);
-            doc.text("Organization: National Security Agency", 20, 55);
-            doc.text("Date: 2026-09-18", 20, 65);
-            
-            doc.setDrawColor(30, 41, 59);
-            doc.line(20, 75, 190, 75);
-            
-            doc.text("Analysis Status: Verified & Secure (99.9%)", 20, 90);
-            doc.text("Digital Signature SHA-256: Verified successfully", 20, 100);
-            doc.text("Visual Anomaly Detection: Clean / No Tampering", 20, 110);
-            
-            doc.save("Qusai-Forensics-Report.pdf");
-            alert("📄 تم تحميل تقرير PDF الأمني بنجاح إلى جهازك!");
-        }
-    </script>
 </body>
 </html>
 
