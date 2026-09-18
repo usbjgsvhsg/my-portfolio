@@ -1,26 +1,19 @@
-// دالة لإضافة زر المشاركة تحت زر "فحص صورة أخرى" بدقة
-function addShareButton() {
-    // إذا كان الزر موجوداً مسبقاً، فلا داعي لتكراره
+// مراقبة ظهور صندوق النتائج وإضافة زر المشاركة داخله فوراً
+function injectShareButton() {
+    // التحقق من عدم تكرار الزر
     if (document.getElementById('share-result-btn')) return;
 
-    // نبحث عن زر "فحص صورة أخرى" الموجود في واجهة النتائج
-    const buttons = document.querySelectorAll('button, .upload-box, div');
-    let targetElement = null;
+    // البحث عن حاوية الأزرار أو النتيجة النهائية في الصفحة
+    const actionButton = document.querySelector('button'); 
+    const container = document.querySelector('.container') || document.body;
 
-    for (let el of buttons) {
-        if (el.innerText && el.innerText.includes('فحص صورة أخرى')) {
-            targetElement = el;
-            break;
-        }
-    }
-
-    // إنشاء زر المشاركة بتصميم متناسق مع الموقع
+    // إنشاء زر المشاركة بتصميم متناسق 100% مع واجهة v1.0 Neural Core
     const shareBtn = document.createElement('button');
     shareBtn.id = 'share-result-btn';
     shareBtn.innerText = '📤 مشاركة النتيجة';
 
     shareBtn.style.width = '100%';
-    shareBtn.style.marginTop = '12px';
+    shareBtn.style.marginTop = '15px';
     shareBtn.style.padding = '12px';
     shareBtn.style.backgroundColor = '#38bdf8';
     shareBtn.style.color = '#0b0f19';
@@ -33,7 +26,7 @@ function addShareButton() {
     shareBtn.onmouseover = () => shareBtn.style.backgroundColor = '#7dd3fc';
     shareBtn.onmouseout = () => shareBtn.style.backgroundColor = '#38bdf8';
 
-    // تفعيل عملية المشاركة أو النسخ عند الضغط
+    // حدث الضغط ومشاركة الرابط أو نسخه
     shareBtn.onclick = async () => {
         const shareData = {
             title: 'AI Image Authenticator Result',
@@ -53,16 +46,19 @@ function addShareButton() {
         }
     };
 
-    // إدراج زر المشاركة مباشرة تحت زر إعادة الفحص أو في نهاية الحاوية
-    if (targetElement && targetElement.parentNode) {
-        targetElement.parentNode.insertBefore(shareBtn, targetElement.nextSibling);
-    } else {
-        const container = document.querySelector('.container') || document.body;
+    // إدراج الزر بداخل الحاوية الرئيسية للنتائج لتضمن ظهوره دائماً
+    if (container) {
         container.appendChild(shareBtn);
     }
 }
 
-// تشغيل الدالة تلقائياً عند ظهور شاشة النتائج
-setTimeout(addShareButton, 1000);
-console.log("Share Button Script Updated Successfully");
+// فحص دوري لتفعيل الدالة بمجرد ظهور واجهة النتائج
+const observer = new MutationObserver(() => {
+    if (document.body.innerText.includes('نتيجة التحليل النهائي')) {
+        injectShareButton();
+    }
+});
+
+observer.observe(document.body, { childList: true, subtree: true });
+console.log("Direct Share Injector Loaded");
 
