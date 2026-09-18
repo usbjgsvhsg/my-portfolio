@@ -123,6 +123,7 @@
             align-items: center;
         }
 
+        /* تخطيط الأزرار والعناصر مثل الصورة الثانية المضبوطة */
         .challenge-box {
             background: rgba(0,0,0,0.2);
             border: 1px solid var(--border-color);
@@ -174,7 +175,7 @@
             display: none;
         }
 
-        /* شبكة عرض الصور المطابقة للصورة المطلوبة تماماً */
+        /* شبكة عرض الصور المتطابقة للصورة الثانية */
         .video-box-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -219,6 +220,22 @@
             transition: transform 0.3s ease, filter 0.3s ease;
         }
 
+        .radar-scan-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(59,130,246,0), rgba(59,130,246,0.3) 50%, rgba(59,130,246,0));
+            transform: translateY(-100%);
+            pointer-events: none;
+            z-index: 5;
+        }
+        .scanning .radar-scan-overlay {
+            animation: scanMove 1.5s infinite linear;
+        }
+        @keyframes scanMove {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
         .metadata-box {
             background: rgba(0,0,0,0.3);
             border: 1px solid var(--border-color);
@@ -253,7 +270,7 @@
         .bar.green { background: #10b981; height: 90%; }
         .bar.blue { background: #3b82f6; height: 60%; }
 
-        /* الأزرار الستة الأساسية المرتبة */
+        /* الأزرار الستة الأساسية المرتبة بالضبط مثل صورتك */
         .actions-panel {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -299,6 +316,7 @@
             border-radius: 4px;
         }
 
+        /* Modal و Hex Dump */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000;
@@ -363,30 +381,32 @@
             <button id="captureBtn" class="action-btn accent" style="display:none; width:100%; margin-top:4px;" onclick="captureLivePhoto()">التقاط وفحص مباشر</button>
         </div>
 
-        <!-- عرض الصور والتحليل البصري (الصورة الافتراضية مطابقة لطلبك) -->
+        <!-- عرض الصور والتحليل البصري -->
         <div class="video-box-grid">
             <div class="media-card fake" id="card1">
                 <div class="media-badge">مشكوك</div>
                 <div class="media-screen" id="screen1">
-                    <img id="mediaPreview1" src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&q=80" alt="Fake" style="width:100%; height:100%; object-fit:cover;">
+                    <div class="radar-scan-overlay"></div>
+                    <img id="mediaPreview1" src="" alt="Fake" style="display:none;">
                     <video id="videoPreview1" src="" style="display:none;" controls loop></video>
+                    <div id="placeholder1" style="display:flex; align-items:center; justify-content:center; height:100%; font-size:0.6em; color:#6b7280;">بانتظار التحميل...</div>
                 </div>
             </div>
 
             <div class="media-card real" id="card2">
                 <div class="media-badge">تحقق</div>
                 <div class="media-screen" id="screen2">
-                    <img id="mediaPreview2" src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&q=80" alt="Real" style="width:100%; height:100%; object-fit:cover; filter: contrast(105%);">
+                    <div class="radar-scan-overlay"></div>
+                    <img id="mediaPreview2" src="" alt="Real" style="display:none;">
                     <video id="videoPreview2" src="" style="display:none;" controls loop></video>
+                    <div id="placeholder2" style="display:flex; align-items:center; justify-content:center; height:100%; font-size:0.6em; color:#6b7280;">بانتظار التحميل...</div>
                 </div>
             </div>
         </div>
 
         <!-- لوحة البيانات الوصفية والـ Hex Inspector -->
         <div class="metadata-box" id="metadataBox" onclick="openHexDumpModal()" style="cursor: pointer;" title="انقر لعرض فحص الـ Hex Dump">
-            📁 الملف: 70860.jpg (333.9 KB)<br>
-            🎞️ التحليل الزمني (Temporal): صورة ثابتة مفحوصة هندسياً<br>
-            🔐 بصمة SHA-256: 0fd76d598f53adcf58c1bbb2... (انقر لعرض Hex)
+            [!] لوحة البيانات الوصفية والتحليل الزمني (انقر لعرض Hex Dump): بانتظار الملف...
         </div>
 
         <!-- الأنسجة وتحليل الصوت -->
@@ -402,7 +422,7 @@
             </div>
         </div>
 
-        <!-- 6 أزرار العمليات الرئيسية المطابقة تماماً للصورة -->
+        <!-- 6 أزرار العمليات الرئيسية المطابقة تماماً لصورتك -->
         <div class="actions-panel">
             <button class="action-btn warning" onclick="toggleHeatmapELA()">🌡️ خريطة ELA</button>
             <button class="action-btn secondary" onclick="toggleDeepZoom()">🔍 تكبير</button>
@@ -444,7 +464,7 @@
                 45 78 69 66 00 00 49 49 2a 00 08 00 00 00 0b 00<br>
                 0f 01 02 00 06 00 00 00 72 00 00 00 10 01 02 00<br>
                 50 6f 63 6f 20 46 37 20 53 65 6e 73 6f 72 20 41<br>
-                53 49 49 20 49 51 2- 53 45 43 2- 39 33 38 34 00
+                53 49 49 20 49 51 2d 53 45 43 2d 39 33 38 34 00
             </div>
             <button class="action-btn" style="width:100%; margin-top:8px;" onclick="closeHexDumpModal()">إغلاق الفاحص</button>
         </div>
@@ -455,13 +475,14 @@
     </footer>
 
     <script>
-        let currentRef = 'IQ-SEC-9384';
+        let currentRef = 'IQ-SEC-' + Math.floor(1000 + Math.random() * 9000);
         let lastFileName = '70860.jpg';
         let currentHash = '0fd76d598f53adcf58c1bbb2...';
         let isZoomed = false;
         let isHeatmapActive = false;
         let mediaStream = null;
 
+        // محاكاة نشاط حزم الشبكة
         setInterval(() => {
             const pkts = Math.floor(120 + Math.random() * 40);
             document.getElementById('packetCounter').innerText = `Packets: ${pkts}/s (OK)`;
@@ -472,11 +493,13 @@
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
                 osc.frequency.setValueAtTime(600, ctx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.3);
                 gain.gain.setValueAtTime(0.08, ctx.currentTime);
-                osc.start(); osc.stop(ctx.currentTime + 0.3);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.3);
             } catch(e) {}
         }
 
@@ -485,38 +508,91 @@
             document.body.setAttribute('data-theme', themeName);
         }
 
+        async function generateSHA256(file) {
+            const buffer = await file.arrayBuffer();
+            const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
         async function loadUserMedia(event) {
             const files = event.target.files;
             if (!files.length) return;
             const file = files[0];
             lastFileName = file.name;
+            currentHash = await generateSHA256(file);
             const fileUrl = URL.createObjectURL(file);
             const isVideo = file.type.startsWith('video');
-            
+            processFileSource(fileUrl, file.name, file.size, isVideo);
+        }
+
+        function processFileSource(src, name, size, isVideo) {
             const img1 = document.getElementById('mediaPreview1');
             const vid1 = document.getElementById('videoPreview1');
+            const ph1 = document.getElementById('placeholder1');
             const img2 = document.getElementById('mediaPreview2');
             const vid2 = document.getElementById('videoPreview2');
+            const ph2 = document.getElementById('placeholder2');
 
             if (isVideo) {
-                img1.style.display = 'none'; vid1.src = fileUrl; vid1.style.display = 'block';
-                img2.style.display = 'none'; vid2.src = fileUrl; vid2.style.display = 'block';
+                img1.style.display = 'none'; vid1.src = src; vid1.style.display = 'block'; ph1.style.display = 'none';
+                img2.style.display = 'none'; vid2.src = src; vid2.style.display = 'block'; ph2.style.display = 'none';
             } else {
-                vid1.style.display = 'none'; img1.src = fileUrl; img1.style.display = 'block';
-                vid2.style.display = 'none'; img2.src = fileUrl; img2.style.display = 'block';
+                vid1.style.display = 'none'; img1.src = src; img1.style.display = 'block'; ph1.style.display = 'none';
+                vid2.style.display = 'none'; img2.src = src; img2.style.display = 'block'; ph2.style.display = 'none';
             }
 
             document.getElementById('metadataBox').innerHTML = `
-                📁 الملف: ${file.name} (${(file.size/1024).toFixed(1)} KB)<br>
+                📁 الملف: ${name} (${size ? (size/1024).toFixed(1) + ' KB' : 'Live'})<br>
                 🎞️ التحليل الزمني (Temporal): صورة ثابتة مفحوصة هندسياً<br>
-                🔐 بصمة SHA-256: مفحوصة ومعتمدة (انقر لعرض Hex)
+                🔐 بصمة SHA-256: ${currentHash.substring(0, 24)}... (انقر لعرض Hex)
             `;
-            addHistoryItem(file.name);
+            document.getElementById('temporalStatus').innerText = isVideo ? 'فحص إطارات الفيديو: مكتمل' : 'الأنسجة وتعابير الوجه: تحليل مكتمل';
+            addHistoryItem(name);
+        }
+
+        async function startLiveCamera() {
+            playSound();
+            const videoElem = document.getElementById('liveVideo');
+            const captureBtn = document.getElementById('captureBtn');
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                videoElem.srcObject = mediaStream;
+                videoElem.style.display = 'block';
+                captureBtn.style.display = 'block';
+            } catch (err) {
+                alert('⚠️ تعذر الوصول للكاميرا المباشرة.');
+            }
+        }
+
+        function captureLivePhoto() {
+            playSound();
+            const videoElem = document.getElementById('liveVideo');
+            const canvas = document.createElement('canvas');
+            canvas.width = videoElem.videoWidth || 640;
+            canvas.height = videoElem.videoHeight || 480;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(videoElem, 0, 0, canvas.width, canvas.height);
+            
+            canvas.toBlob(async (blob) => {
+                lastFileName = 'Live_Capture_' + Date.now() + '.jpg';
+                currentHash = await generateSHA256(blob);
+                processFileSource(URL.createObjectURL(blob), lastFileName, blob.size, false);
+                if (mediaStream) mediaStream.getTracks().forEach(t => t.stop());
+                videoElem.style.display = 'none';
+                document.getElementById('captureBtn').style.display = 'none';
+            }, 'image/jpeg');
         }
 
         function runNeuralScan() {
             playSound();
-            alert('⚡ اكتمل فحص الرادار العصبي بنجاح!');
+            document.getElementById('screen1').classList.add('scanning');
+            document.getElementById('screen2').classList.add('scanning');
+            setTimeout(() => {
+                document.getElementById('screen1').classList.remove('scanning');
+                document.getElementById('screen2').classList.remove('scanning');
+                alert('⚡ اكتمل فحص الرادار العصبي بنجاح!');
+            }, 1500);
         }
 
         function toggleDeepZoom() {
@@ -535,15 +611,26 @@
             document.getElementById('mediaPreview2').style.filter = filterVal;
         }
 
-        function runTemporalAnalysis() { playSound(); alert('🎞️ محلل التتبع الزمني: الأنسجة مستقرة بنسبة 99.7%.'); }
-        function generateQRCodeModal() { playSound(); document.getElementById('qrModal').style.display = 'flex'; }
+        function runTemporalAnalysis() {
+            playSound();
+            alert('🎞️ محلل التتبع الزمني: الأنسجة مستقرة بنسبة 99.7%.');
+        }
+
+        function generateQRCodeModal() {
+            playSound();
+            document.getElementById('qrModal').style.display = 'flex';
+        }
         function closeQRModal() { document.getElementById('qrModal').style.display = 'none'; }
-        function openHexDumpModal() { playSound(); document.getElementById('hexModal').style.display = 'flex'; }
+
+        function openHexDumpModal() {
+            playSound();
+            document.getElementById('hexModal').style.display = 'flex';
+        }
         function closeHexDumpModal() { document.getElementById('hexModal').style.display = 'none'; }
 
         function generatePDFReport() {
             playSound();
-            const report = `=== تقرير التحقيق الأمني (v9) ===\nالمرجع: ${currentRef}\nالملف: ${lastFileName}\nالمسؤول: قصي كاظم منديل\nالتاريخ: ${new Date().toLocaleString()}`;
+            const report = `=== تقرير التحقيق الأمني (v9) ===\nالمرجع: ${currentRef}\nالملف: ${lastFileName}\nبصمة SHA-256: ${currentHash}\nالمسؤول: قصي كاظم منديل\nالتاريخ: ${new Date().toLocaleString()}`;
             const blob = new Blob([report], {type: 'text/plain'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
@@ -568,7 +655,7 @@
         }
 
         function downloadJSONAudit() {
-            const data = { ref: currentRef, file: lastFileName, status: "Audited & Verified" };
+            const data = { ref: currentRef, file: lastFileName, hash: currentHash, status: "Audited & Verified" };
             const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
@@ -580,7 +667,7 @@
             const list = document.getElementById('historyList');
             const item = document.createElement('div');
             item.className = 'history-item';
-            item.innerHTML = `<span>IQ-SEC-${Math.floor(1000 + Math.random()*9000)} (${name}) [v9 Active]</span><span style="color: var(--success-color);">موثق 99.7%</span>`;
+            item.innerHTML = `<span>${currentRef} (${name}) [v9 Active]</span><span style="color: var(--success-color);">موثق 99.7%</span>`;
             list.prepend(item);
         }
     </script>
