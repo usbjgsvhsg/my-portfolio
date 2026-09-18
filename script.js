@@ -1,16 +1,26 @@
-// دالة لإنشاء وإضافة زر المشاركة برمجياً بعد ظهور النتيجة
+// دالة لإضافة زر المشاركة تحت زر "فحص صورة أخرى" بدقة
 function addShareButton() {
-    // تأكد أن الزر غير موجود مسبقاً حتى ما يتكرر
-    if (document.getElementById('share-btn')) return;
+    // إذا كان الزر موجوداً مسبقاً، فلا داعي لتكراره
+    if (document.getElementById('share-result-btn')) return;
 
-    // إنشاء عنصر الزر
+    // نبحث عن زر "فحص صورة أخرى" الموجود في واجهة النتائج
+    const buttons = document.querySelectorAll('button, .upload-box, div');
+    let targetElement = null;
+
+    for (let el of buttons) {
+        if (el.innerText && el.innerText.includes('فحص صورة أخرى')) {
+            targetElement = el;
+            break;
+        }
+    }
+
+    // إنشاء زر المشاركة بتصميم متناسق مع الموقع
     const shareBtn = document.createElement('button');
-    shareBtn.id = 'share-btn';
+    shareBtn.id = 'share-result-btn';
     shareBtn.innerText = '📤 مشاركة النتيجة';
 
-    // تنسيق الزر برمجياً ليتطابق مع تصميم الموقع الحالي
     shareBtn.style.width = '100%';
-    shareBtn.style.marginTop = '15px';
+    shareBtn.style.marginTop = '12px';
     shareBtn.style.padding = '12px';
     shareBtn.style.backgroundColor = '#38bdf8';
     shareBtn.style.color = '#0b0f19';
@@ -23,33 +33,36 @@ function addShareButton() {
     shareBtn.onmouseover = () => shareBtn.style.backgroundColor = '#7dd3fc';
     shareBtn.onmouseout = () => shareBtn.style.backgroundColor = '#38bdf8';
 
-    // حدث الضغط على زر المشاركة
+    // تفعيل عملية المشاركة أو النسخ عند الضغط
     shareBtn.onclick = async () => {
         const shareData = {
-           title: 'AI Image Authenticator Result',
-           text: 'تم فحص الصورة بنجاح عبر نظام Neural Core. تحقق من النتيجة!',
-           url: window.location.href
+            title: 'AI Image Authenticator Result',
+            text: 'تم فحص الصورة بنجاح عبر نظام Neural Core. تحقق من تفاصيل التحليل!',
+            url: window.location.href
         };
 
         try {
             if (navigator.share) {
                 await navigator.share(shareData);
             } else {
-                // نسخ الرابط كبديل إذا لم تكن ميزة المشاركة مدعومة
                 await navigator.clipboard.writeText(window.location.href);
-                alert('تم نسخ رابط النتيجة إلى الحافظة!');
+                alert('تم نسخ رابط النتيجة إلى الحافظة بنجاح!');
             }
         } catch (err) {
             console.log('خطأ في المشاركة:', err);
         }
     };
 
-    // إيجاد مكان مناسب لإدراج الزر (مثلاً بعد زر الفحص الأخير)
-    const container = document.querySelector('.container') || document.body;
-    container.appendChild(shareBtn);
+    // إدراج زر المشاركة مباشرة تحت زر إعادة الفحص أو في نهاية الحاوية
+    if (targetElement && targetElement.parentNode) {
+        targetElement.parentNode.insertBefore(shareBtn, targetElement.nextSibling);
+    } else {
+        const container = document.querySelector('.container') || document.body;
+        container.appendChild(shareBtn);
+    }
 }
 
-// استدعاء الدالة عند اكتمال التحليل أو ظهور النتائج
-// (يمكنك ربطها بدالة عرض النتائج الأصلية لديك)
-console.log("Share Feature Script Loaded Safely");
+// تشغيل الدالة تلقائياً عند ظهور شاشة النتائج
+setTimeout(addShareButton, 1000);
+console.log("Share Button Script Updated Successfully");
 
